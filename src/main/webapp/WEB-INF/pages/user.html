@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome</title>
+</head>
+<body>
+<script>
+</script>
+<h2 th:text="${user.getFirstname()} + ', this is your homepage'">Welcome!</h2>
+
+<table th:border="1">
+    <tr>
+        <th>Name</th>
+        <th>Lastname</th>
+        <th>Age</th>
+        <th>Email</th>
+        <th>Username</th>
+        <th>Password</th>
+    </tr>
+    <tr>
+        <td th:text="${user.getFirstname()}">name</td>
+        <td th:text="${user.getLastname()}">surname</td>
+        <td th:text="${user.getAge()}">age</td>
+        <td th:text="${user.getEmail()}">email</td>
+        <td th:text="${user.getUsername()}">username</td>
+        <td th:text="${user.getPassword()}">password</td>
+    </tr>
+</table>
+<br>
+
+<br>
+<button type="button" sec:authentication="" onclick="location.href = '/welcome';">Welcome page</button>
+<button type="button" sec:authorize="hasAnyRole('ROLE_ADMIN')" onclick="location.href = '/admin';">User database
+</button>
+<button type="button" onclick="location.href = '/logout';">Logout</button>
+</body>
+</html>
+

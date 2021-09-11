@@ -1,0 +1,50 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create</title>
+</head>
+<body>
+<form th:method="post" th:action="@{/admin/new}" th:object="${user}">
+    <br>
+    <label for="username">Username: </label><br>
+    <input type="text" th:field="*{username}" id="username">
+    <label style="color:red" th:if="${#fields.hasErrors('username')}" th:utext="${#fields.errors('username').get(0)}"></label>
+    <br><br>
+    <label for="password">Password: </label><br>
+    <input type="text" th:field="*{password}" id="password">
+    <label style="color:red" th:if="${#fields.hasErrors('password')}" th:utext="${#fields.errors('password').get(0)}"></label>
+    <br><br>
+    <label for="firstname">Name:</label><br>
+    <input type="text" th:field="*{firstname}" id="firstname">
+    <label style="color:red" th:if="${#fields.hasErrors('firstname')}" th:utext="${#fields.errors('firstname').get(0)}"></label>
+    <br><br>
+    <label for="lastname">Lastname: </label><br>
+    <input type="text" th:field="*{lastname}" id="lastname">
+    <label style="color:red" th:if="${#fields.hasErrors('lastname')}" th:utext="${#fields.errors('lastname').get(0)}"></label>
+    <br><br>
+    <label for="age">Age: </label><br>
+    <input type="text" th:field="*{age}" id="age">
+    <label style="color:red" th:if="${#fields.hasErrors('age')}">Age should be between 0 and 199 years</label>
+    <br><br>
+    <label for="email">Email: </label><br>
+    <input type="text" th:field="*{email}" id="email">
+    <label style="color:red" th:if="${#fields.hasErrors('email')}" th:utext="${#fields.errors('email').get(0)}"></label>
+    <br><br>
+
+    <label>Roles</label>
+    <br>
+    <div th:each="r : ${roles}">
+        <label>
+            <input type="checkbox" name="index" th:value="${r.id}"/>
+        </label>
+        <label th:text="${r.role}"></label>
+        <br>
+    </div>
+    <br><br>
+
+    <button type="button" onclick="location.href = '/admin';">Return</button>&nbsp;
+    <input type="submit" value="Create"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Info</title>
+    </head>
+    <body>
+        <script>
+            addEventListener("keydown", function(event) {
+                switch(event.keyCode) {
+                    case 82: location.href = '/admin'; break;
+                    case 68: location.href = '/admin/delete=[[${user.getId()}]]'; break;
+                    case 69: location.href += '/edit'; break;
+                }
+            });
+        </script>
+        <table th:border="1">
+            <tr>
+                <th>Name</th>
+                <th>Lastname</th>
+                <th>Age</th>
+                <th>Email</th>
+                <th>Username</th>
+                <th>Password</th>
+            </tr>
+            <tr>
+                <td th:text="${user.getFirstname()}">name</td>
+                <td th:text="${user.getLastname()}">surname</td>
+                <td th:text="${user.getAge()}">age</td>
+                <td th:text="${user.getEmail()}">email</td>
+                <td th:text="${user.getUsername()}">username</td>
+                <td th:text="${user.getPassword()}">password</td>
+            </tr>
+        </table>
+
+        <br>
+        <label>Roles</label>
+        <br>
+        <div th:each="r : ${roles}">
+            <label>
+                <input type="checkbox" th:checked="${user.hasRole(r)}" name="index" th:value="${r.id}" disabled/>
+            </label>
+            <label th:text="${r.role}"></label>
+            <br>
+        </div>
+        <br><br>
+
+        <button type="button" onclick="location.href = '/admin';">Return</button>
+        <button type="button" th:onclick="'location.href = \'/admin/delete=' + ${user.getId()} + '\''">Delete</button>
+        <button type="button" onclick="location.href += '/edit';">Edit</button>
+    </body>
+</html>

@@ -1,0 +1,168 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+<body>
+    <script src="/js/jquery-3.3.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+    <script>
+        addEventListener("keydown", function (event) {
+            switch (event.keyCode) {
+                case 37:
+                case 38:
+                    document.getElementById("prevPage").click();
+                    break;
+                case 39:
+                case 40:
+                    document.getElementById("nextPage").click();
+                    break;
+                case 78:
+                case 67:
+                    location.href = '/admin/new';
+                    break;
+                case 70:
+                    location.href = '/admin/filter';
+                    break;
+                case 83:
+                    location.href = '/admin/search';
+                    break;
+                case 82:
+                    location.href = '/admin/removeFilter';
+                    break;
+                case 72:
+                    location.href = '/welcome';
+                    break;
+                case 77:
+                case 85:
+                    location.href = '/user';
+                    break;
+                case 76:
+                    location.href = '/logout';
+                    break;
+            }
+        });
+    </script>
+
+
+    <div class="p-2 bg-dark text-white row" style="margin-right: 0;"> <!-- Верхняя серая строчка -->
+        <div class="col-md-11">
+            <span><b>&nbsp;[[${principal.getEmail()}]]</b> with roles: [[${principal.getUserRole()}]]</span>
+        </div>
+        <div class="col-md-1">
+            <h5><a class="small" style="color: #6c757d" onmouseover="this.style.color='#8c959d'" onmouseout="this.style.color='#6c757d'" href="/logout">Logout</a></h5>
+        </div>
+    </div> <!-- /Верхняя серая строчка -->
+
+
+
+    <!-- Sidebar -->
+    <nav id="sidebar" style="float: left; padding: 0px; margin-top: 11px;" class="col-2">
+        <a><div style="padding:10px; display: block; background-color: #007bff; color: white; border-radius: 3px; font-weight: normal; cursor: pointer;" onmouseover="this.style.color='black'" onmouseout="this.style.color='white'">&nbsp;Admin</div></a>
+        <a><div style="padding:10px; display: block; color: #007bff; border-radius: 3px; font-weight: normal; cursor: pointer;" onmouseover="this.style.color='black'" onmouseout="this.style.color='#007bff'">&nbsp;User</div></a>
+    </nav>
+
+    <div class="col-10" style="display: inline-block; background-color: #f9f9f9;" th:with="userPages = ((${users.size()} - (${users.size()} % 19)))/19 + 1">
+        <div th:with="userPages = ((${users.size()} - (${users.size()} % 19)))/19 + 1">
+            <h2 style="padding: 11px; margin-top: 5px">Admin panel</h2>
+                <div style="border: 1px solid lightgray; border-radius: 4px; background-color: white">
+                    <div style="font-size: large; font-weight: 600; padding: 10px;">&nbsp;All users</div>
+                        <table  class="table table-striped  table-hover">
+                            <tr>
+                                <th style="min-width: 60px;">ID</th>
+                                <th style="min-width: 100px;">First Name</th>
+                                <th style="min-width: 100px;">Last Name</th>
+                                <th style="min-width: 60px;">Age</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Info</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                            <tr th:each="user, itemStat : ${users}"
+                                th:if="((${itemStat.count}>((${pageNum}*19)-19)) and (${itemStat.count}<((${pageNum}*19))) )">
+                                <td th:text="'&nbsp;'+${user.getId()}">id</td>
+                                <td th:text="${user.getFirstname()}">name</td>
+                                <td th:text="${user.getLastname()}">lastname</td>
+                                <td th:text="${user.getAge()}">age</td>
+                                <td th:text="${user.getEmail()}">email</td>
+                                <td th:text="${user.getUserRole()}">role</td>
+                                <td>
+                                    <a th:href="@{/admin/{id}(id=${user.getId()})}">
+                                        <button type="button" class="btn btn-sm btn-info">Info</button>
+                                    </a>
+                                </td>
+                                <td><a th:href="@{/admin/{id}/edit(id=${user.getId()})}">
+                                    <button type="button" class="btn btn-sm btn-info">Edit</button>
+                                </a></td>
+                                <td><a th:href="@{/admin/delete={id}(id=${user.getId()})}">
+                                    <button type="button" class="btn btn-sm btn-danger">Delete</button>
+                                </a></td>
+                            </tr>
+                            <tr th:if="${(users.size()<=0)&&isFilterActive}">
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td><a>Info</a></td>
+                                <td><a>Edit</a></td>
+                                <td><a>Delete</a></td>
+                            </tr>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <div id="content" style="font-size: smaller">
+                                            <div>page [[${pageNum}]] of [[${userPages}]], users: [[${users.size()}]]</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </table>
+                    </div>
+                </div>
+            <div style="margin-top: 0.6em;">
+                <label th:if="${(users.size()<=0)&&isFilterActive}">No entries found<br><br></label>
+                <button th:if="${pageNum > 1}" type="button" id="prevPage">Prev page</button>
+                <button th:if="${pageNum <= 1}" type="button" disabled>Prev page</button>
+                <button th:if="${pageNum} < ${userPages}" type="button" id="nextPage">Next page</button>
+                <button th:if="${pageNum} >= ${userPages}" type="button" disabled>Next page</button>
+                <button th:if="${!isFilterActive}" id="refresh" type="button">Refresh</button>
+                <script type="text/javascript">
+                    document.getElementById("prevPage").onclick = function () {
+                        location.href = '/admin?page=[[${pageNum-1}]]'};
+                </script>
+                <script type="text/javascript">
+                    document.getElementById("nextPage").onclick = function () {
+                        location.href = '/admin?page=[[${pageNum+1}]]'};
+                </script>
+                <script type="text/javascript">
+                    document.getElementById("refresh").onclick = function () {
+                        location.href = '/admin'};
+                </script>
+            </div>
+            <div style="margin-top: 0.6em">
+                <button type="button" onclick="location.href = '/admin/new';">New User</button>
+                <button type="button" onclick="location.href = '/admin/filter';">Filter</button>
+                <button type="button" onclick="location.href = '/admin/search';">Search</button>
+                <button th:if="${isFilterActive}" type="button" onclick="location.href = '/admin/removeFilter';">Remove Filter</button>
+            </div>
+            <div style="margin-top: 0.6em">
+                <button type="button" onclick="location.href = '/welcome';">Homepage</button>
+                <button type="button" onclick="location.href = '/user';">My profile</button>
+                <button type="button" onclick="location.href = '/logout';">Logout</button>
+            </div>
+            <br>
+            <br>
+        </div>
+    </div>
+</body>
+</html>
