@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.w3.org/1999/xhtml">
@@ -52,17 +52,7 @@
     </script>
 
 
-
-<!--    <div class="d-flex bg-dark py-2 px-4 justify-content-between align-items-center">-->
-<!--        <h4 class="text-light">-->
-<!--            admin@mail.ru-->
-<!--            <small class="text-light">with roles: ADMIN USER</small>-->
-<!--        </h4>-->
-<!--        <a class="text-light text-decoration-none" href="#">Logout</a>-->
-<!--    </div>-->
-
-    <!-- Верхняя серая строчка -->
-    <div class="p-2 px-3 row bg-dark text-light justify-content-between align-items-center" style="margin-right: 0;">
+    <div class="p-2 bg-dark text-white row" style="margin-right: 0;"> <!-- Верхняя серая строчка -->
         <div class="col-md-11">
             <span><b>&nbsp;[[${principal.getEmail()}]]</b> with roles: [[${principal.getUserRole()}]]</span>
         </div>
@@ -71,10 +61,12 @@
         </div>
     </div> <!-- /Верхняя серая строчка -->
 
-    <!-- боковая панель -->
-    <nav style="float: left" class="nav col-2 p-0 pt-3 flex-column nav-pills">
-        <a class="nav-link active" style="cursor: pointer">Admin</a>
-        <a class="nav-link" href="/user">User</a>
+
+
+    <!-- Sidebar -->
+    <nav id="sidebar" style="float: left; padding: 0px; margin-top: 11px;" class="col-2">
+        <a><div style="padding:10px; display: block; background-color: #007bff; color: white; border-radius: 3px; font-weight: normal; cursor: pointer;" onmouseover="this.style.color='black'" onmouseout="this.style.color='white'">&nbsp;Admin</div></a>
+        <a><div style="padding:10px; display: block; color: #007bff; border-radius: 3px; font-weight: normal; cursor: pointer;" onmouseover="this.style.color='black'" onmouseout="this.style.color='#007bff'">&nbsp;User</div></a>
     </nav>
 
     <div class="col-10" style="display: inline-block; background-color: #f9f9f9;" th:with="userPages = ((${users.size()} - (${users.size()} % 19)))/19 + 1">
