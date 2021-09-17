@@ -78,7 +78,7 @@ public class Startup {
             roleService.add(role2);
             roleService.add(role3);
 
-            User user1 = new User("ADMIN", "ADMIN", "Саша", "Moiseev", "36", "admin@mail.ru", role1, role2);
+            User user1 = new User("ADMIN", "ADMIN", "Са ша", "Moiseev", "36", "admin@mail.ru", role1, role2);
             User user2 = new User("USER", "USER", "Патрик", "Douglas", "77", "pat33@yandex.ru", role2, role3);
             User user3 = new User("GUEST", "GUEST", "Casper", "Johnson", "22", "casper_chost@yahoo.com", role3);
             User user4 = new User("АДМИН", "АДМИН", "Сумерадмин", "Lerok", "32", "moiseeva_val89@bk.ru", role1);

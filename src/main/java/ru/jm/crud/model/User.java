@@ -186,6 +186,8 @@ public class User implements UserDetails {
         } else {
             strRoles.append("NONE");
         }
+
+        System.out.println("Returned role: "+strRoles);
         return strRoles.toString();
     }
 
