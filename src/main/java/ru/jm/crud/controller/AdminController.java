@@ -27,6 +27,7 @@ import java.util.List;
 public class AdminController {
     final UserService service;
     final RoleService roleService;
+    int modalWindowId = 0;
 
     @Autowired
     public AdminController(UserService service, RoleService roleService) {
@@ -34,171 +35,66 @@ public class AdminController {
         this.roleService = roleService;
     }
 
-    int modalWindowId = 0;
-
     @GetMapping("")
-    public String showIndexPages(@RequestParam(name = "page", required = false, defaultValue = "1") String strParam,
-                                 Principal pr, Authentication authentication, Model model) {
-        User principal = service.getByUsername(pr.getName());
-        if (principal==null) {
-            principal = new User();
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            principal.setEmail(userDetails.getUsername());
-            ArrayList<GrantedAuthority> authArr = new ArrayList<>(userDetails.getAuthorities());
-            for (GrantedAuthority auth: authArr) {
-                principal.addRole(new UserRole(auth.getAuthority()));
-            }
-        }
+    public String indexGet(@RequestParam(name = "page", required = false, defaultValue = "1") String strPageNum,
+                           Principal pr, Authentication authentication,
+                           Model model) {
 
-
-        int pageNum = strParam.matches("\\d+") ? Integer.parseInt(strParam) : 1;
-        model.addAttribute("pageNum", pageNum);
-        List<User> users = (pageNum == 1) ? service.getFilterUsers(false) : service.getFilterUsers(true);
-        model.addAttribute("users", users);
-        model.addAttribute("principal", principal);
-        model.addAttribute("isFilterActive", service.isFilterSet());
-        ArrayList<UserRole> roles = roleService.getRoles();
-        model.addAttribute("roles", roles);
-
-        model.addAttribute("modalWindowId", modalWindowId);
-        User user = new User();
-        model.addAttribute("user", user);
+        viewInput(strPageNum, pr, authentication, model);
+        model.addAttribute("user", new User());
         return "index";
     }
 
-    @PostMapping("")
-    public String showIndexPages(@RequestParam(name = "page", required = false, defaultValue = "1") String strParam,
-                                 Principal pr,
-                                 @ModelAttribute("user") @Valid User user, BindingResult bindingResult,
-                             @RequestParam(value = "index", required = false) Integer[] index,
+    @PatchMapping("")
+    public String indexPatch(@RequestParam(name = "page", required = false, defaultValue = "1") String strPageNum,
+                             @ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                             @RequestParam(value = "index", required = false) Integer[] roleIds,
+                             Principal pr, Authentication authentication,
                              Model model) {
-        User principal = service.getByUsername(pr.getName());
-        int pageNum = strParam.matches("\\d+") ? Integer.parseInt(strParam) : 1;
-        model.addAttribute("pageNum", pageNum);
-        List<User> users = (pageNum == 1) ? service.getFilterUsers(false) : service.getFilterUsers(true);
-        model.addAttribute("users", users);
-        model.addAttribute("principal", principal);
-        model.addAttribute("isFilterActive", service.isFilterSet());
-        ArrayList<UserRole> roles = roleService.getRoles();
-        model.addAttribute("roles", roles);
+
+        modalWindowId = 1;
+        viewInput(strPageNum, pr, authentication, model);
+        return viewOutput(user, bindingResult, roleIds);
+    }
+
+    @PostMapping("")
+    public String indexPost(@RequestParam(name = "page", required = false, defaultValue = "1") String strPageNum,
+                            @ModelAttribute("user") @Valid User user, BindingResult bindingResult,
+                            @RequestParam(value = "index", required = false) Integer[] roleIds,
+                            Principal pr, Authentication authentication,
+                            Model model) {
 
         modalWindowId = 2;
+        viewInput(strPageNum, pr, authentication, model);
+        return viewOutput(user, bindingResult, roleIds);
+    }
+
+    private void viewInput(@RequestParam(name = "page", required = false, defaultValue = "1") String strPageNum, Principal pr, Authentication authentication, Model model) {
         model.addAttribute("modalWindowId", modalWindowId);
+        int page = getPageNum(strPageNum);
+        model.addAttribute("pageNum", page);
+        model.addAttribute("users", service.getFilterUsers(page != 1));
+        model.addAttribute("roles", roleService.getRoles());
+        model.addAttribute("principal", getPrincipal(pr, authentication));
+        model.addAttribute("isFilterActive", service.isFilterSet());
+    }
 
-        if (index != null) {
-            for (Integer i : index) {
-                user.addRole(roleService.getRole(i));
-            }
-        }
+    private String viewOutput(User user, BindingResult bindingResult, Integer[] roleIds) {
+        setUserRoles(user, roleIds);
 
-        if (service.getByUsername(user.getUsername()) != null) {
-            bindingResult.addError(new FieldError("username", "username", "Username already taken"));
-
-        }
-
-        if (service.getByEmail(user.getEmail()) != null) {
-            bindingResult.addError(new FieldError("email", "email", "User with this email already exists"));
-        }
+        checkUserFields(user, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            System.out.println(user);
+            System.out.println("bindingResult.hasErrors: " + user);
             return "index";
         }
 
         service.update(user);
-
         modalWindowId = 0;
         return "redirect:/admin";
     }
 
-
-//    @GetMapping("{id}")
-//    public String showUserById(@PathVariable("id") Long id, Model model) {
-//        model.addAttribute("user", service.getById(id));
-//        ArrayList<UserRole> roles = roleService.getRoles();
-//        model.addAttribute("roles", roles);
-//        return "show";
-//    }
-
-
-//    @GetMapping("{id}/edit")
-//    public String editUser(@PathVariable("id") Long id, Model model) {
-//        User user = service.getById(id);
-//        model.addAttribute("user", user);
-//        model.addAttribute("userOrig", user);
-//        ArrayList<UserRole> roles = roleService.getRoles();
-//        model.addAttribute("roles", roles);
-//        return "edit";
-//    }
-
-
-//    @PatchMapping("{id}/edit")
-//    public String updateUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
-//                             @RequestParam(value = "index", required = false) Integer[] index,
-//                             @PathVariable("id") Long id,
-//                             Model model) {
-//        ArrayList<UserRole> roles = roleService.getRoles();
-//        model.addAttribute("roles", roles);
-//        User userOrig = service.getById(id);
-//        model.addAttribute("userOrig", userOrig);
-//
-//        if (bindingResult.hasErrors()) {
-//            System.out.println(user);
-//            return "edit";
-//        }
-//
-//        User editedUser = service.getByUsername(user.getUsername());
-//        if ((editedUser != null) && (!editedUser.getId().equals(user.getId()))) {
-//            bindingResult.addError(new FieldError("username", "username", "Username already taken"));
-//            user.setUsername("");
-//            return "edit";
-//        }
-//
-//        editedUser = service.getByEmail(user.getEmail());
-//        if ((editedUser != null) && (!editedUser.getId().equals(user.getId()))) {
-//            bindingResult.addError(new FieldError("email", "email", "User with this email already exists"));
-//            user.setEmail("");
-//            return "edit";
-//        }
-//
-//        if (index != null) {
-//            for (Integer i : index) {
-//                user.addRole(roleService.getRole(i));
-//            }
-//        }
-//
-//        service.update(user);
-//        return "redirect:/admin";
-//    }
-
-    @PatchMapping("/")
-    public String updateUsr(@RequestParam(name = "page", required = false, defaultValue = "1") String strParam,
-                            @ModelAttribute("user") @Valid User user, BindingResult bindingResult,
-                            @RequestParam(value = "index", required = false) Integer[] index,
-                            Principal pr, Model model) {
-
-        modalWindowId = 1;
-        model.addAttribute("modalWindowId", modalWindowId);
-
-        int pageNum = strParam.matches("\\d+") ? Integer.parseInt(strParam) : 1;
-        model.addAttribute("pageNum", pageNum);
-        List<User> users = (pageNum == 1) ? service.getFilterUsers(false) : service.getFilterUsers(true);
-        model.addAttribute("users", users);
-
-        User principal = service.getByUsername(pr.getName());
-        model.addAttribute("principal", principal);
-
-        model.addAttribute("isFilterActive", service.isFilterSet());
-
-        ArrayList<UserRole> roles = roleService.getRoles();
-        model.addAttribute("roles", roles);
-
-        if (index != null) {
-            for (Integer i : index) {
-                user.addRole(roleService.getRole(i));
-            }
-        }
-
+    private void checkUserFields(User user, BindingResult bindingResult) {
         User editedUser = service.getByUsername(user.getUsername());
         if ((editedUser != null) && (!editedUser.getId().equals(user.getId()))) {
             bindingResult.addError(new FieldError("username", "username", "Username already taken"));
@@ -208,17 +104,33 @@ public class AdminController {
         if ((editedUser != null) && (!editedUser.getId().equals(user.getId()))) {
             bindingResult.addError(new FieldError("email", "email", "User with this email already exists"));
         }
-
-        if (bindingResult.hasErrors()) {
-            System.out.println(user);
-            return "index";
-        }
-
-        service.update(user);
-        modalWindowId = 0;
-        return "redirect:/admin";
     }
 
+    private int getPageNum(String strParam) {
+        return strParam.matches("\\d+") ? Integer.parseInt(strParam) : 1;
+    }
+
+    private void setUserRoles(User user, Integer[] roleIds) {
+        if (roleIds != null) {
+            for (Integer i : roleIds) {
+                user.addRole(roleService.getRole(i));
+            }
+        }
+    }
+
+    private User getPrincipal(Principal pr, Authentication authentication) {
+        User principal = service.getByUsername(pr.getName());
+        if (principal == null) {
+            principal = new User();
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            principal.setEmail(userDetails.getUsername());
+            ArrayList<GrantedAuthority> authArr = new ArrayList<>(userDetails.getAuthorities());
+            for (GrantedAuthority auth : authArr) {
+                principal.addRole(new UserRole(auth.getAuthority()));
+            }
+        }
+        return principal;
+    }
 
     @GetMapping("/new")
     public String addNewUserPage(Model model) {
@@ -226,9 +138,9 @@ public class AdminController {
         model.addAttribute("roles", roles);
         User user = new User();
         model.addAttribute("user", user);
+        modalWindowId = 0;
         return "create";
     }
-
 
     @PostMapping("/new")
     public String createUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
@@ -261,7 +173,7 @@ public class AdminController {
         }
 
         service.update(user);
-
+        modalWindowId = 0;
         return "redirect:/admin";
     }
 
@@ -269,6 +181,7 @@ public class AdminController {
     public String filterPage(@ModelAttribute("user") User user, Model model) {
         ArrayList<UserRole> roles = roleService.getRoles();
         model.addAttribute("roles", roles);
+        modalWindowId = 0;
         return "filter";
     }
 
@@ -276,6 +189,7 @@ public class AdminController {
     public String searchPage(@ModelAttribute("user") User user, Model model) {
         ArrayList<UserRole> roles = roleService.getRoles();
         model.addAttribute("roles", roles);
+        modalWindowId = 0;
         return "search";
     }
 
@@ -289,6 +203,7 @@ public class AdminController {
             }
         }
         service.setFilter(user, true);
+        modalWindowId = 0;
         return "redirect:/admin";
     }
 
@@ -302,6 +217,7 @@ public class AdminController {
             }
         }
         service.setFilter(user, false);
+        modalWindowId = 0;
         return "redirect:/admin";
     }
 
@@ -309,12 +225,14 @@ public class AdminController {
     public String removeFilter() {
         service.removeFilter();
         System.out.println("Removed filter");
+        modalWindowId = 0;
         return "redirect:/admin";
     }
 
     @GetMapping("/delete={id}")
     public String deleteUserById(@PathVariable("id") Long id) {
         service.delete(id);
+        modalWindowId = 0;
         return "redirect:/admin";
     }
 }

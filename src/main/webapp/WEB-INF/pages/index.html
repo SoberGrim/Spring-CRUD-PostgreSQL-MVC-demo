@@ -6,17 +6,12 @@
     <title>Users</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
-
 </head>
 <body th:with="userPages = ((${users.size()} - (${users.size()} % 19)))/19 + 1">
     <script src="/js/jquery-3.3.1.slim.min.js"></script>
     <script src="/js/popper.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-
     <script th:inline="javascript">
-        var cm=2;
-        var tm = /*[[2]]*/;
-
         //<script th:inline="javascript">
         // addEventListener("keydown", function (event) {
         //     switch (event.keyCode) {
@@ -62,8 +57,6 @@
         <div class="col-md-11">
             <a class="text-light text-decoration-none" href="/user">
                 <b>[[${principal.getEmail()}]]</b> with roles: [[${principal.getUserRole()}]]
-<!--                123 <a th:href="@{__${#httpServletRequest.getMethod()}__/store/}">Click to More</a>-->
-<!--                <a th:href="@{__${#httpServletRequest.requestURI}__/store/}">Click to More</a>-->
             </a>
         </div>
         <div class="col-md-1">
@@ -78,26 +71,26 @@
     </nav>
 
     <!-- основной блок -->
-    <div class="col-10 d-inline-block bg-light" th:with="currUser=5">
+    <div class="col-10 d-inline-block bg-light" th:with="currUser=0">
         <h2 class="p-2 mt-2">Admin panel</h2>
 
         <!-- Tabs -->
-        <div class="tabs" >
+        <div class="tabs" id="mainTabs">
+
             <!-- Tab titles -->
             <ul class="nav nav-tabs">
                 <li class="nav-item border-bottom">
-                    <a id="tableTab" class="nav-link" data-toggle="tab" href="#table">Users Table</a>
+                    <a id="tableTab" class="nav-link" data-toggle="tab" role="tab" href="#table">Users Table</a>
                 </li>
                 <li class="nav-item border-bottom">
-                    <a id="newTab" class="nav-link" data-toggle="tab" href="#new">New User</a>
+                    <a id="newTab" class="nav-link" data-toggle="tab" role="tab" href="#new">New User</a>
                 </li>
             </ul>
 
-            <!-- Tab content -->
+            <!-- Tabs content -->
             <div class="tab-content">
 
-
-<!--                    th:class="${#httpServletRequest.getMethod()}==POST? '' : 'show active'"-->
+                <!-- Users tab content -->
                 <div class="tab-pane fade" id="table">
                     <div class="p-3 border border-top-0">
                         <h5 class="my-0">All Users</h5>
@@ -106,87 +99,101 @@
                     <div class="p-3 bg-white border border-top-0">
                         <table class="table table-striped">
                             <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
-                                    <th>Age</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Info</th>
-                                    <th>Edit</th>
-                                    <th>Delete</th>
-                                </tr>
+                            <tr>
+                                <th>ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Age</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Info</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="user, itemStat : ${users}"
-                                    th:with="uId=${user.getId()}, uName=${user.getFirstname()}, uLname=${user.getLastname()} , uAge=${user.getAge()} , uEmail=${user.getEmail()}, uUsername=${user.getUsername()} , uPassword=${user.getPassword()} , uRoles=${user.getUserRole()}"
-                                    th:if="((${itemStat.count}>((${pageNum}*19)-19)) and (${itemStat.count}<((${pageNum}*19))) )">
-                                    <td th:text="'&nbsp;'+${uId}">id</td>
-                                    <td th:text="${uName}">name</td>
-                                    <td th:text="${uLname}">lastname</td>
-                                    <td th:text="${uAge}">age</td>
-                                    <td th:text="${uEmail}">email</td>
-                                    <td th:text="${uRoles}">role</td>
+                            <tr th:each="user, itemStat : ${users}"
+                                th:with="uId=${user.getId()}, uName=${user.getFirstname()}, uLname=${user.getLastname()} , uAge=${user.getAge()} , uEmail=${user.getEmail()}, uUsername=${user.getUsername()} , uPassword=${user.getPassword()} , uRoles=${user.getUserRole()}"
+                                th:if="((${itemStat.count}>((${pageNum}*19)-19)) and (${itemStat.count}<((${pageNum}*19))) )">
+                                <td th:text="'&nbsp;'+${uId}">id</td>
+                                <td th:text="${uName}">name</td>
+                                <td th:text="${uLname}">lastname</td>
+                                <td th:text="${uAge}">age</td>
+                                <td th:text="${uEmail}">email</td>
+                                <td th:text="${uRoles}">role</td>
+                                <td>
+                                    <a th:href="@{/admin/{id}(id=${user.getId()})}">
+                                        <button th:text="${uId}" type="button" class="btn btn-sm btn-info">Info</button>
+                                    </a>
+                                </td>
+                                <td>
+                                    <a>
+                                        <button type="button" class="btn btn-sm btn-info" data-toggle="modal"
+                                                th:data-id=@{{i}(i=${uId})} th:data-name=@{{i}(i=${uName})}
+                                                th:data-lname=@{{i}(i=${uLname})}
+                                                th:data-age=${uAge} th:data-email=@{{i}(i=${uEmail})}
+                                                th:data-username=@{{i}(i=${uUsername})}
+                                                th:data-password=@{{i}(i=${uPassword})}
+                                                th:data-roles=@{{i}(i=${uRoles})} data-target="#modalEdit">Edit
+                                        </button>
+                                    </a>
+                                </td>
+                                <td><a th:href="@{/admin/delete={id}(id=${user.getId()})}">
+                                    <button type="button" class="btn btn-sm btn-danger">Delete</button>
+                                </a></td>
+                            </tr>
+                            <tr th:if="${(users.size()<=0)&&isFilterActive}">
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                            </tr>
+                            <table>
+                                <tr>
                                     <td>
-                                        <a th:href="@{/admin/{id}(id=${user.getId()})}">
-                                            <button th:text="${uId}" type="button" class="btn btn-sm btn-info">Info</button>
-                                        </a>
+                                        <div style="font-size: smaller">page [[${pageNum}]] of [[${userPages}]], users:
+                                            [[${users.size()}]]
+                                        </div>
                                     </td>
-                                    <td>
-                                        <a>
-                                            <button type="button" class="btn btn-sm btn-info" data-toggle="modal"
-                                                    th:data-id=${uId} th:data-name=@{{i}(i=${uName})} th:data-lname=@{{i}(i=${uLname})}
-                                                    th:data-age=${uAge} th:data-email=@{{i}(i=${uEmail})}
-                                                    th:data-username=@{{i}(i=${uUsername})} th:data-password=@{{i}(i=${uPassword})}
-                                                    th:data-roles=@{{i}(i=${uRoles})} data-target="#modalEdit">Edit</button>
-                                        </a>
-                                    </td>
-                                    <td><a th:href="@{/admin/delete={id}(id=${user.getId()})}">
-                                        <button type="button" class="btn btn-sm btn-danger">Delete</button>
-                                    </a></td>
                                 </tr>
-                                <tr th:if="${(users.size()<=0)&&isFilterActive}">
-                                    <td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td>
-                                </tr>
-                                <table>
-                                    <tr>
-                                        <td>
-                                            <div id="content" style="font-size: smaller">
-                                                <div>page [[${pageNum}]] of [[${userPages}]], users: [[${users.size()}]]</div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                </table>
+                            </table>
                             </tbody>
                         </table>
                     </div>
                     <label th:if="${(users.size()<=0)&&isFilterActive}"><br>No entries found<br></label>
                     <div style="margin-top: 0.6em;">
                         <button th:if="${pageNum > 1}" type="button" id="prevPage">Prev page</button>
-                        <button th:if="${pageNum <= 1}" type="button" disabled>Prev page</button>
+                        <button th:if="${pageNum <= 1}" type="button" id="prevPage" disabled>Prev page</button>
                         <button th:if="${pageNum} < ${userPages}" type="button" id="nextPage">Next page</button>
-                        <button th:if="${pageNum} >= ${userPages}" type="button" disabled>Next page</button>
+                        <button th:if="${pageNum} >= ${userPages}" type="button" id="nextPage" disabled>Next page</button>
                         <button type="button" onclick="location.href = '/admin/filter';">Filter</button>
                         <button type="button" onclick="location.href = '/admin/search';">Search</button>
                         <button th:if="${!isFilterActive}" id="refresh" type="button">Refresh</button>
                         <button th:if="${isFilterActive}" type="button" onclick="location.href = '/admin/removeFilter';">Remove Filter</button>
                         <script type="text/javascript">
                             document.getElementById("prevPage").onclick = function () {
-                                location.href = '/admin?page=[[${pageNum-1}]]'};
+                                location.href = '/admin?page=[[${pageNum-1}]]'
+                            };
                         </script>
                         <script type="text/javascript">
                             document.getElementById("nextPage").onclick = function () {
-                                location.href = '/admin?page=[[${pageNum+1}]]'};
+                                location.href = '/admin?page=[[${pageNum+1}]]'
+                            };
                         </script>
                         <script type="text/javascript">
                             document.getElementById("refresh").onclick = function () {
-                                location.href = '/admin'};
+                                location.href = '/admin'
+                            };
                         </script>
                     </div>
                 </div>
 
-                <!--New User-->
+                <!--New User tab content-->
                 <div class="tab-pane fade" id="new">
                     <div class="p-3 border border-top-0">
                         <h5 class="my-0">Add New User</h5>
@@ -195,218 +202,222 @@
 
                         <form class="text-center" th:method="post" th:action="@{/admin/}" th:object="${user}">
 
-                            <label for="firstname" class="font-weight-bolder mb-1">First name</label><br>
+                            <input id="idNew" style="display: none" type="text" name="id">
+                            <div id="idNewError" style="display: none"></div>
+
+                            <label class="font-weight-bolder mb-1">First name</label><br>
                             <input class="border rounded"
                                    th:style="${#fields.hasErrors('firstname')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                                   th:field="*{firstname}" type="text" id="firstname">
-                            <div th:if="${#fields.hasErrors('firstname')}" class="small text-danger" th:utext="${#fields.errors('firstname').get(0)}"></div>
+                                   th:field="*{firstname}" type="text" id="firstnameNew">
+                            <div id="firstnameNewError" th:if="${#fields.hasErrors('firstname')}" class="small text-danger"
+                                 th:utext="${#fields.errors('firstname').get(0)}"></div>
                             <div th:unless="${#fields.hasErrors('firstname')}"></div>
 
-                            <label for="lastname" class="font-weight-bolder mt-3 mb-1">Last name</label><br>
+                            <label class="font-weight-bolder mt-3 mb-1">Last name</label><br>
                             <input class="border rounded"
                                    th:style="${#fields.hasErrors('lastname')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                                   th:field="*{lastname}" type="text" id="lastname">
-                            <div th:if="${#fields.hasErrors('lastname')}" class="small text-danger" th:utext="${#fields.errors('lastname').get(0)}"></div>
+                                   th:field="*{lastname}" type="text" id="lastnameNew">
+                            <div id="lastnameNewError" th:if="${#fields.hasErrors('lastname')}" class="small text-danger"
+                                 th:utext="${#fields.errors('lastname').get(0)}"></div>
                             <div th:unless="${#fields.hasErrors('lastname')}"></div>
 
-                            <label for="age" class="font-weight-bolder mt-3 mb-1">Age</label><br>
+                            <label class="font-weight-bolder mt-3 mb-1">Age</label><br>
                             <input class="border rounded"
                                    th:style="${#fields.hasErrors('age')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                                   th:field="*{age}" type="text" id="age">
-                            <div th:if="${#fields.hasErrors('age')}" class="small text-danger">Age should be between 0 and 199 years</div>
+                                   th:field="*{age}" type="text" id="ageNew">
+                            <div id="ageNewError" th:if="${#fields.hasErrors('age')}" class="small text-danger">Age should be between 0 and 199 years</div>
                             <div th:unless="${#fields.hasErrors('age')}"></div>
 
-                            <label for="email" class="font-weight-bolder mt-3 mb-1">Email</label><br>
+                            <label class="font-weight-bolder mt-3 mb-1">Email</label><br>
                             <input class="border rounded"
                                    th:style="${#fields.hasErrors('email')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                                   th:field="*{email}" type="text" id="email">
-                            <div th:if="${#fields.hasErrors('email')}" class="small text-danger" th:utext="${#fields.errors('email').get(0)}"></div>
+                                   th:field="*{email}" type="text" id="emailNew">
+                            <div id="emailNewError" th:if="${#fields.hasErrors('email')}" class="small text-danger"
+                                 th:utext="${#fields.errors('email').get(0)}"></div>
                             <div th:unless="${#fields.hasErrors('email')}"></div>
 
-                            <label for="username" class="font-weight-bolder mt-3 mb-1">Username</label><br>
+                            <label class="font-weight-bolder mt-3 mb-1">Username</label><br>
                             <input class="border rounded"
                                    th:style="${#fields.hasErrors('username')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                                   th:field="*{username}" type="text" id="username">
-                            <div th:if="${#fields.hasErrors('username')}" class="small text-danger" th:utext="${#fields.errors('username').get(0)}"></div>
+                                   th:field="*{username}" type="text" id="usernameNew">
+                            <div id="usernameNewError" th:if="${#fields.hasErrors('username')}" class="small text-danger"
+                                 th:utext="${#fields.errors('username').get(0)}"></div>
                             <div th:unless="${#fields.hasErrors('username')}"></div>
 
-                            <label for="password" class="font-weight-bolder mt-3 mb-1">Password</label><br>
+                            <label class="font-weight-bolder mt-3 mb-1">Password</label><br>
                             <input class="border rounded"
                                    th:style="${#fields.hasErrors('password')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                                   th:field="*{password}" type="text" id="password">
-                            <div th:if="${#fields.hasErrors('password')}" class="small text-danger" th:utext="${#fields.errors('password').get(0)}"></div>
+                                   th:field="*{password}" type="text" id="passwordNew">
+                            <div id="passwordNewError" th:if="${#fields.hasErrors('password')}" class="small text-danger"
+                                 th:utext="${#fields.errors('password').get(0)}"></div>
                             <div th:unless="${#fields.hasErrors('password')}"></div>
 
                             <label class="font-weight-bolder mt-3 mb-1">Roles</label>
                             <div th:each="r : ${roles}">
                                 <label class="mb-1" style="cursor: pointer;">
-                                    <input style="width: calc(1vw); height: calc(1vw); vertical-align: middle; cursor: pointer" type="checkbox" name="index" th:checked="${user.hasRole(r)}" th:value="${r.id}"/>
+                                    <input th:id="${'checkboxNew-'+r.id}"
+                                           style="width: calc(1vw); height: calc(1vw); vertical-align: middle; cursor: pointer"
+                                           type="checkbox" name="index" th:checked="${user.hasRole(r)}" th:value="${r.id}"/>
                                     <span th:text="${r.role}"></span>
                                 </label>
                             </div>
                             <input class="mt-3 mb-4 btn btn-success" type="submit" value="Add new user"/>
                         </form>
                     </div>
+                    <script type="text/javascript">
+                        if ([[${modalWindowId}]] < 2) {
+                            document.getElementById("table").classList.add('active', 'show');
+                            document.getElementById("tableTab").classList.add('active');
+                        }
+                        if ([[${modalWindowId}]] === 2) {
+                            document.getElementById("new").classList.add('active', 'show');
+                            document.getElementById("newTab").classList.add('active');
+                        }
+                    </script>
                 </div>
-                <script type="text/javascript">
-                    if ([[${modalWindowId}]]<2) {
-                        document.getElementById("table").classList.add('active', 'show');
-                        document.getElementById("tableTab").classList.add('active');
-                    }
-                    if ([[${modalWindowId}]]===2) {
-                        document.getElementById("new").classList.add('active', 'show');
-                        document.getElementById("newTab").classList.add('active');
-                    }
-                </script>
+
             </div>
 
-
-            <div style="margin-top: 0.6em">
+            <!--Footer buttons Home\Profile\Logout-->
+            <div class="mb-5" style="margin-top: 0.6em">
                 <button type="button" onclick="location.href = '/welcome';">Homepage</button>
                 <button type="button" onclick="location.href = '/user';">My profile</button>
                 <button type="button" onclick="location.href = '/logout';">Logout</button>
             </div>
-            <br><br>
+
         </div>
 
         <!-- Edit modal window-->
         <div id="modalEdit" class="modal" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <form class="text-center" th:method="patch" th:action="@{/admin/}" th:with="user=${users[currUser]}" th:object="${user}">
-                        <label>
-                            <input id="idEdit" type="text" hidden="false" name="id"></label>
-                        <br>
+                    <form class="text-center" th:method="patch" th:action="@{/admin/}" th:object="${user}">
 
-                        <label for="firstname" class="font-weight-bolder mb-1 mt-1">First name</label><br>
+                        <label class="font-weight-bolder mt-4 mb-1">Id</label><br>
+                        <input id="idEdit" class="border rounded"
+                               th:style="'width: 19rem;'"
+                               th:value=${user.getId()} type="text" name="id">
+                        <div id="idEditError"></div>
+
+                        <label class="font-weight-bolder mt-3 mb-1">First name</label><br>
                         <input id="firstnameEdit" class="border rounded"
                                th:style="${#fields.hasErrors('firstname')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                               th:value = ${users[currUser].getFirstname()} type="text" name="firstname">
-                        <div th:if="${#fields.hasErrors('firstname')}" class="small text-danger" th:utext="${#fields.errors('firstname').get(0)}"></div>
+                               th:field="*{firstname}"  type="text" >
+                        <div id="firstnameEditError" th:if="${#fields.hasErrors('firstname')}" class="small text-danger"
+                             th:utext="${#fields.errors('firstname').get(0)}"></div>
                         <div th:unless="${#fields.hasErrors('firstname')}"></div>
 
-                        <label for="lastname" class="font-weight-bolder mt-3 mb-1">Last name</label><br>
+                        <label class="font-weight-bolder mt-3 mb-1">Last name</label><br>
                         <input id="lastnameEdit" class="border rounded"
                                th:style="${#fields.hasErrors('lastname')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                               th:value = ${user.getLastname()} type="text" name="lastname">
-                        <div th:if="${#fields.hasErrors('lastname')}" class="small text-danger" th:utext="${#fields.errors('lastname').get(0)}"></div>
+                               th:field="*{lastname}" type="text">
+                        <div id="lastnameEditError" th:if="${#fields.hasErrors('lastname')}" class="small text-danger"
+                             th:utext="${#fields.errors('lastname').get(0)}"></div>
                         <div th:unless="${#fields.hasErrors('lastname')}"></div>
 
-                        <label for="age" class="font-weight-bolder mt-3 mb-1">Age</label><br>
+                        <label class="font-weight-bolder mt-3 mb-1">Age</label><br>
                         <input id="ageEdit" class="border rounded"
                                th:style="${#fields.hasErrors('age')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                               th:value = ${user.getAge()} type="text" name="age">
-                        <div th:if="${#fields.hasErrors('age')}" class="small text-danger">Age should be between 0 and 199 years</div>
+                               th:field="*{age}" type="text">
+                        <div id="ageEditError" th:if="${#fields.hasErrors('age')}" class="small text-danger">Age should be between 0 and 199
+                            years
+                        </div>
                         <div th:unless="${#fields.hasErrors('age')}"></div>
 
-                        <label for="email" class="font-weight-bolder mt-3 mb-1">Email</label><br>
+                        <label class="font-weight-bolder mt-3 mb-1">Email</label><br>
                         <input id="emailEdit" class="border rounded"
                                th:style="${#fields.hasErrors('email')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                               th:value = ${user.getEmail()} type="text" name="email">
-                        <div th:if="${#fields.hasErrors('email')}" class="small text-danger" th:utext="${#fields.errors('email').get(0)}"></div>
+                               th:field="*{email}" type="text">
+                        <div id="emailEditError" th:if="${#fields.hasErrors('email')}" class="small text-danger"
+                             th:utext="${#fields.errors('email').get(0)}"></div>
                         <div th:unless="${#fields.hasErrors('email')}"></div>
 
-                        <label for="username" class="font-weight-bolder mt-3 mb-1">Username</label><br>
+                        <label class="font-weight-bolder mt-3 mb-1">Username</label><br>
                         <input id="usernameEdit" class="border rounded"
                                th:style="${#fields.hasErrors('username')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                               th:value = ${user.getUsername()} type="text" name="username">
-                        <div th:if="${#fields.hasErrors('username')}" class="small text-danger" th:utext="${#fields.errors('username').get(0)}"></div>
+                               th:field="*{username}" type="text">
+                        <div id="usernameEditError" th:if="${#fields.hasErrors('username')}" class="small text-danger"
+                             th:utext="${#fields.errors('username').get(0)}"></div>
                         <div th:unless="${#fields.hasErrors('username')}"></div>
 
-                        <label for="password" class="font-weight-bolder mt-3 mb-1">Password</label><br>
+                        <label class="font-weight-bolder mt-3 mb-1">Password</label><br>
                         <input id="passwordEdit" class="border rounded"
                                th:style="${#fields.hasErrors('password')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                               th:value = ${user.getPassword()} type="text" name="password">
-                        <div th:if="${#fields.hasErrors('password')}" class="small text-danger" th:utext="${#fields.errors('password').get(0)}"></div>
+                               th:field="*{password}" type="text">
+                        <div id="passwordEditError" th:if="${#fields.hasErrors('password')}" class="small text-danger"
+                             th:utext="${#fields.errors('password').get(0)}"></div>
                         <div th:unless="${#fields.hasErrors('password')}"></div>
 
                         <label class="font-weight-bolder mt-3 mb-1">Roles</label>
                         <div th:each="r : ${roles}">
                             <label class="mb-1" style="cursor: pointer;">
-                                <input th:id="${'checkboxEdit-'+r.id}" style="width: calc(1vw); height: calc(1vw); vertical-align: middle; cursor: pointer" type="checkbox" name="index" th:value="${r.id}"/>
+                                <input th:id="${'checkboxEdit-'+r.id}"
+                                       style="width: calc(1vw); height: calc(1vw); vertical-align: middle; cursor: pointer"
+                                       type="checkbox" name="index" th:checked="${user.hasRole(r)}" th:value="${r.id}"/>
                                 <span th:text="${r.role}"></span>
                             </label>
                         </div>
-                        <input class="mt-3 mb-5 btn btn-success" type="submit" onclick="$('#modalEdit').modal('hide');" value="Update"/>
+                        <input class="mt-3 mb-5 btn btn-success" type="submit" onclick="$('#modalEdit').modal('hide');"
+                               value="Update"/>
 
                         <script type="text/javascript">
-                            if ([[${modalWindowId}]]===2) {
+                            if ([[${modalWindowId}]] === 2) {
                                 document.getElementById("modalEdit").style.display = "display-block";
                             }
                         </script>
                     </form>
                 </div>
             </div>
-            <script type="text/javascript">
-                if ([[${modalWindowId}]]===1) {
+            <script type="text/javascript" th:inline="javascript">
+
+                if ([[${modalWindowId}]] === 1) {
                     $('#modalEdit').modal('show');
                 }
+
+                $("#modalEdit").on('show.bs.modal', function (e) {
+                    const modal = $(e.relatedTarget);
+                    function setFieldValue(fName, dataName) {
+                        document.getElementById(fName).style.backgroundColor = '#FFFFFF';
+                        $('#'+fName).val(decodeURIComponent(modal.data(dataName)));
+                        $('#'+fName+'Error').text(' ');
+                    }
+
+                    setFieldValue('idEdit', 'id');
+                    setFieldValue('firstnameEdit', 'name');
+                    setFieldValue('lastnameEdit', 'lname');
+                    setFieldValue('ageEdit', 'age');
+                    setFieldValue('emailEdit', 'email');
+                    setFieldValue('usernameEdit', 'username');
+                    setFieldValue('passwordEdit', 'password');
+
+                    let roles = modal.data('roles');
+
+                    document.getElementById("checkboxEdit-1").checked = (roles.indexOf('ADMIN') != -1);
+                    document.getElementById("checkboxEdit-2").checked = (roles.indexOf('USER') != -1);
+                    document.getElementById("checkboxEdit-3").checked = (roles.indexOf('GUEST') != -1);
+                });
+
+                $('#newTab').on('show.bs.tab', function (e) {
+                    function clearFieldValue(fName) {
+                        document.getElementById(fName).style.backgroundColor = '#FFFFFF';
+                        $('#'+fName).val('');
+                        $('#'+fName+'Error').text(' ');
+                    }
+
+                    clearFieldValue('idNew');
+                    clearFieldValue('firstnameNew');
+                    clearFieldValue('lastnameNew');
+                    clearFieldValue('ageNew');
+                    clearFieldValue('emailNew');
+                    clearFieldValue('usernameNew');
+                    clearFieldValue('passwordNew');
+
+                    document.getElementById("checkboxNew-1").checked = false;
+                    document.getElementById("checkboxNew-2").checked = false;
+                    document.getElementById("checkboxNew-3").checked = false;
+                });
             </script>
         </div>
-
-        <script type="text/javascript" th:inline="javascript">
-            $("#modalEdit").on('show.bs.modal', function(e) {
-
-                var modal = $(e.relatedTarget);
-                function setFieldValue (fName,dataName) {
-                    $(fName).val(decodeURIComponent(modal.data(dataName)));
-                }
-
-                setFieldValue('#idEdit','id');
-                setFieldValue('#firstnameEdit','name');
-                setFieldValue('#lastnameEdit','lname');
-                setFieldValue('#ageEdit','age');
-                setFieldValue('#emailEdit','email');
-                setFieldValue('#usernameEdit','username');
-                setFieldValue('#passwordEdit','password');
-
-                let json = modal.data('roles');
-                //modal.data('roles');
-
-               // alert(decodeURIComponent(json));
-
-
-                document.getElementById("checkboxEdit-1").checked = (json.indexOf('ADMIN')!=-1);
-                document.getElementById("checkboxEdit-2").checked = (json.indexOf('USER')!=-1);
-                document.getElementById("checkboxEdit-3").checked = (json.indexOf('GUEST')!=-1);
-
-                //modal.data('person');
-                //let data = JSON.parse(json);
-
-                //alert(data.name);
-                //alert(userId+"onshow");
-                //var message =/*[[${users[1].getId()}]]*/ 'defaultanyvalue';
-                //alert([[${users[1].getId()}]]+"msg");
-                // var cols = $('#user-' + userId + ' td');
-                // var firstName = $(cols[0]).text();
-                // var lastName = $(cols[1]).text();
-                // var email = $(cols[2]).text();
-                //
-            });
-
-            $("#myModal").on('hidden.bs.modal', function() {
-                var form = $(this).find('form');
-                form[0].reset();
-            });
-        </script>
-
-<!--        <script>-->
-<!--            $("#modalEdit").on('show.bs.modal', function(){-->
-<!--                // $('#modalEdit').removeData('bs.modal');-->
-<!--                // alert(currUser + "event");-->
-<!--                // var test = -1;-->
-<!--                // alert(test)-->
-
-<!--                // alert("Hello World!");-->
-<!--                // alert("Hello World!");-->
-<!--                //     var myBookId = $(this).attr('data-id');-->
-<!--                var myBookId = $(this).data('id');-->
-<!--                 alert(myBookId)-->
-<!--                // alert($(this).dataset);-->
-<!--                //   $(".modal-body #bookId").val( myBookId );-->
-
-<!--            });-->
-<!--        </script>-->
 
     </div>
 </body>

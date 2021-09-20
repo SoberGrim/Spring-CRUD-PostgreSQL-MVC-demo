@@ -240,4 +240,18 @@ public class User implements UserDetails {
         userRoles.add(role);
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", firstname='" + firstname + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", age='" + age + '\'' +
+                ", email='" + email + '\'' +
+                ", userRoles=" + userRoles +
+                '}';
+    }
+
 }
