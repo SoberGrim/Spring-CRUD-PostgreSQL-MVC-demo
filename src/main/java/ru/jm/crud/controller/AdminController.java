@@ -193,17 +193,19 @@ public class AdminController {
         return "search";
     }
 
-    @PostMapping("filter")
+    @PatchMapping("filter")
     public String filterApply(@ModelAttribute("user") User user,
                               @RequestParam(value = "index", required = false) Integer[] index) {
         System.out.println("Setting filter");
+        modalWindowId = 3;
         if (index != null) {
             for (Integer i : index) {
                 user.addRole(roleService.getRole(i));
             }
+            System.out.println("Filtered roles set:"+user.getUserRoles());
         }
         service.setFilter(user, true);
-        modalWindowId = 0;
+        //modalWindowId = 0;
         return "redirect:/admin";
     }
 

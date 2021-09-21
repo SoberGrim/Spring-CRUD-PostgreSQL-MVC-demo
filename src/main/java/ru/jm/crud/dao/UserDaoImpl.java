@@ -168,7 +168,7 @@ public class UserDaoImpl implements UserDao {
 
 
     private List<User> getStrictFilterUsers() {
-        System.out.println("Filtering users in user cache");
+        System.out.println("Strict filtering users in user cache");
         List<User> list = this.userCache;
         List<User> outList = new LinkedList<>();
 
@@ -213,12 +213,14 @@ public class UserDaoImpl implements UserDao {
             if ((this.filterRoles != null) && (this.filterRoles.size() != 0)) {
                 boolean userHasSearchedRoles = false;
                 List<UserRole> userRoles = user.getUserRoles();
-                for (UserRole userRole : userRoles) {
-                    if (this.filterRoles.contains(userRole)) {
-                        userHasSearchedRoles = true;
-                    } else {
-                        userHasSearchedRoles = false;
-                        break;
+                if (userRoles.size()==this.filterRoles.size()) {
+                    for (UserRole userRole : userRoles) {
+                        if (this.filterRoles.contains(userRole)) {
+                            userHasSearchedRoles = true;
+                        } else {
+                            userHasSearchedRoles = false;
+                            break;
+                        }
                     }
                 }
                 found = userHasSearchedRoles;

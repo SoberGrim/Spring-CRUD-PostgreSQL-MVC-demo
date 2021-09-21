@@ -1,8 +1,12 @@
 package ru.jm.crud.controller;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import ru.jm.crud.model.User;
+import ru.jm.crud.model.UserRole;
 import ru.jm.crud.service.RoleService;
 import ru.jm.crud.service.UserService;
 
@@ -33,19 +37,34 @@ public class MainController {
         return "login";
     }
 
-    @GetMapping("welcome")
-    public String welcome(Principal principal, Model model) {
-        User user = new User();
-        user.setFirstname(principal.getName());
-        model.addAttribute("user", user);
-        return "welcome";
+    @GetMapping("guest")
+    public String welcome(Principal pr, Authentication authentication, Model model) {
+        model.addAttribute("principal", getPrincipal(pr,authentication));
+        model.addAttribute("user", getPrincipal(pr,authentication));
+        return "guest";
     }
 
     @GetMapping("user")
-    public String user(Principal principal, Model model) {
-        User user = service.getByUsername(principal.getName());
-        model.addAttribute("user", user);
+    public String user(Principal pr, Authentication authentication, Model model) {
+        model.addAttribute("principal", getPrincipal(pr,authentication));
+        model.addAttribute("user", getPrincipal(pr,authentication));
         return "user";
+    }
+
+    private User getPrincipal(Principal pr, Authentication authentication) {
+        User principal = service.getByUsername(pr.getName());
+        if (principal == null) {
+            principal = new User();
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String prUsername = userDetails.getUsername();
+            principal.setEmail(prUsername);
+            principal.setUsername(prUsername);
+            ArrayList<GrantedAuthority> authArr = new ArrayList<>(userDetails.getAuthorities());
+            for (GrantedAuthority auth : authArr) {
+                principal.addRole(new UserRole(auth.getAuthority()));
+            }
+        }
+        return principal;
     }
 
     @GetMapping("/register")
