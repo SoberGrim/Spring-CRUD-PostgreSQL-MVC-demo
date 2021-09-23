@@ -405,15 +405,32 @@
                         $('#'+fName+'Error').text(' ');
 
                         if ((modal.data('origin')==='editButton')||(modal.data('origin')==='filterButton')||(modal.data('origin')==='searchButton')) {
-                            $('#'+fName).removeClass('text-muted').removeAttr('disabled', 'disabled');
+                            $('#'+fName).removeClass('text-muted').removeAttr('disabled', 'disabled').removeAttr('readonly','readonly');
                         } else {
-                            $('#'+fName).addClass('text-muted').attr('disabled', 'disabled'); //document.getElementById(fName).classList.add('бутстрэп класс');
+                            //$('#'+fName).addClass('text-muted').attr('disabled', 'disabled');
+                            // document.getElementById(fName).classList.add('бутстрэп класс');
                         }
                     }
                     function clearFieldValue(fName) {
                         document.getElementById(fName).style.backgroundColor = '#FFFFFF';
                         $('#'+fName).val('');
                         $('#'+fName+'Error').text(' ');
+                        $('#'+fName).removeClass('text-muted').removeAttr('disabled', 'disabled').removeAttr('readonly','readonly');
+                    }
+
+                    function readonlyField(fieldId) {
+                        $('#'+fieldId).addClass('text-muted').attr('readonly', 'readonly').removeClass('bg-white');
+                        document.getElementById(fieldId).style.backgroundColor = '#EEEEEE';
+                    }
+
+                    function muteField(fieldId) {
+                        $('#'+fieldId).addClass('text-muted').attr('disabled', 'disabled');
+                    }
+
+                    function disableField(fieldId) {
+                        muteField(fieldId);
+                        $('#'+fieldId).removeClass('bg-white');
+                        document.getElementById(fieldId).style.backgroundColor = '#EEEEEE';
                     }
 
                     if ((modal.data('origin')==='editButton')||(modal.data('origin')==='filterButton')||(modal.data('origin')==='searchButton')) {
@@ -448,6 +465,7 @@
                         document.getElementById('userEditForm').action = '/admin/search';
                     }
 
+
                     if ((modal.data('origin')!=='filterButton')&&(modal.data('origin')!=='searchButton')){
                         setFieldValue('idEdit', 'id');
                         setFieldValue('firstnameEdit', 'name');
@@ -474,6 +492,28 @@
                         document.getElementById("checkboxEdit-1").checked = false;
                         document.getElementById("checkboxEdit-2").checked = false;
                         document.getElementById("checkboxEdit-3").checked = false;
+                    }
+
+                    if (modal.data('origin')==='editButton') {
+                        readonlyField('idEdit');
+                    }
+                    if (modal.data('origin')==='deleteButton') {
+                        disableField('idEdit');
+                        disableField('firstnameEdit');
+                        disableField('lastnameEdit');
+                        disableField('ageEdit');
+                        disableField('emailEdit');
+                        disableField('usernameEdit');
+                        disableField('passwordEdit');
+                    }
+                    if (modal.data('origin')==='infoButton') {
+                        muteField('idEdit');
+                        muteField('firstnameEdit');
+                        muteField('lastnameEdit');
+                        muteField('ageEdit');
+                        muteField('emailEdit');
+                        muteField('usernameEdit');
+                        muteField('passwordEdit');
                     }
                 });
 

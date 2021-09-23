@@ -205,7 +205,6 @@ public class AdminController {
             System.out.println("Filtered roles set:"+user.getUserRoles());
         }
         service.setFilter(user, true);
-        //modalWindowId = 0;
         return "redirect:/admin";
     }
 
@@ -220,7 +219,6 @@ public class AdminController {
             }
         }
         service.setFilter(user, false);
-        //modalWindowId = 0;
         return "redirect:/admin";
     }
 
