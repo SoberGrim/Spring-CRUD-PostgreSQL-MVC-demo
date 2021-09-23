@@ -405,10 +405,7 @@
                         $('#'+fName+'Error').text(' ');
 
                         if ((modal.data('origin')==='editButton')||(modal.data('origin')==='filterButton')||(modal.data('origin')==='searchButton')) {
-                            $('#'+fName).removeClass('text-muted').removeAttr('disabled', 'disabled').removeAttr('readonly','readonly');
-                        } else {
-                            //$('#'+fName).addClass('text-muted').attr('disabled', 'disabled');
-                            // document.getElementById(fName).classList.add('бутстрэп класс');
+                            $('#' + fName).removeClass('text-muted').removeAttr('disabled', 'disabled').removeAttr('readonly', 'readonly');
                         }
                     }
                     function clearFieldValue(fName) {
