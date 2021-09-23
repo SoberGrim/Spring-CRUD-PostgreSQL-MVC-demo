@@ -184,17 +184,15 @@
                     </div>
                     <label th:if="${(users.size()<=0)&&isFilterActive}"><br>No entries found<br></label>
                     <div style="margin-top: 0.6em;">
-                        <button th:if="${pageNum > 1}" type="button" id="prevPage">Prev page</button>
-                        <button th:if="${pageNum <= 1}" type="button" id="prevPage" disabled>Prev page</button>
-                        <button th:if="${pageNum} < ${userPages}" type="button" id="nextPage">Next page</button>
-                        <button th:if="${pageNum} >= ${userPages}" type="button" id="nextPage" disabled>Next page</button>
+                        <button th:if="${pageNum > 1}" type="button" id="prevPage" class="btn-info btn-sm">Prev page</button>
+                        <button th:if="${pageNum <= 1}" type="button" disabled class="btn-outline-secondary btn-sm border-white border-top">Prev page</button>
+                        <button th:if="${pageNum} < ${userPages}" type="button" id="nextPage" class="btn-info btn-sm">Next page</button>
+                        <button th:if="${pageNum} >= ${userPages}" type="button" disabled class="btn-outline-secondary btn-sm border-light">Next page</button>
 
-                        <button type="button" data-toggle="modal"
-                                th:data-origin="filterButton" data-target="#modalWindow">Filter</button>
-
-                        <button type="button" onclick="location.href = '/admin/search';">Search</button>
-                        <button th:if="${!isFilterActive}" id="refresh" type="button">Refresh</button>
-                        <button th:if="${isFilterActive}" type="button" onclick="location.href = '/admin/removeFilter';">Remove Filter</button>
+                        <button type="button" data-toggle="modal" th:data-origin="filterButton" data-target="#modalWindow" class="btn-info btn-sm">Filter</button>
+                        <button type="button" data-toggle="modal" th:data-origin="searchButton" data-target="#modalWindow" class="btn-info btn-sm">Search</button>
+                        <button th:if="${!isFilterActive}" id="refresh" type="button" class="btn-info btn-sm">Refresh</button>
+                        <button th:if="${isFilterActive}" type="button" onclick="location.href = '/admin/removeFilter';" class="btn-info btn-sm">Remove Filter</button>
                         <script type="text/javascript">
                             document.getElementById("prevPage").onclick = function () {
                                 location.href = '/admin?page=[[${pageNum-1}]]'
@@ -297,11 +295,8 @@
 
             </div>
 
-            <!--Footer buttons Home\Profile\Logout-->
+            <!--Footer -->
             <div class="mb-5" style="margin-top: 0.6em">
-                <button type="button" onclick="location.href = '/welcome';">Homepage</button>
-                <button type="button" onclick="location.href = '/user';">My profile</button>
-                <button type="button" onclick="location.href = '/logout';">Logout</button>
             </div>
 
         </div>
@@ -397,6 +392,9 @@
                 if ([[${modalWindowId}]] === 3) {
                     document.getElementById('tabTitle').innerText = 'Filtered users';
                 }
+                if ([[${modalWindowId}]] === 4) {
+                    document.getElementById('tabTitle').innerText = 'Search result';
+                }
 
                 $("#modalWindow").on('show.bs.modal', function (e) {
                     const modal = $(e.relatedTarget);
@@ -406,7 +404,7 @@
                             .val(decodeURIComponent(modal.data(dataName)));
                         $('#'+fName+'Error').text(' ');
 
-                        if (modal.data('origin')==='editButton') {
+                        if ((modal.data('origin')==='editButton')||(modal.data('origin')==='filterButton')||(modal.data('origin')==='searchButton')) {
                             $('#'+fName).removeClass('text-muted').removeAttr('disabled', 'disabled');
                         } else {
                             $('#'+fName).addClass('text-muted').attr('disabled', 'disabled'); //document.getElementById(fName).classList.add('бутстрэп класс');
@@ -418,7 +416,7 @@
                         $('#'+fName+'Error').text(' ');
                     }
 
-                    if ((modal.data('origin')==='editButton')||(modal.data('origin')==='filterButton')) {
+                    if ((modal.data('origin')==='editButton')||(modal.data('origin')==='filterButton')||(modal.data('origin')==='searchButton')) {
                         $('#checkboxEdit-1').removeAttr('disabled', 'disabled');
                         $('#checkboxEdit-2').removeAttr('disabled', 'disabled');
                         $('#checkboxEdit-3').removeAttr('disabled', 'disabled');
@@ -432,24 +430,25 @@
 
                     if (modal.data('origin')==='infoButton') {
                         document.getElementById("formSubmit").hidden=true;
+                        $('#formSubmit').val('Edit').removeClass('btn-secondary btn-danger btn-primary').addClass('btn-info');
                     } else if (modal.data('origin')==='editButton') {
                         document.getElementById("formSubmit").hidden=false;
-                        $('#formSubmit').val('Edit').removeClass('btn-secondary btn-danger').addClass('btn-primary');
+                        $('#formSubmit').val('Edit').removeClass('btn-secondary btn-danger btn-info').addClass('btn-primary');
                     } else if (modal.data('origin')==='deleteButton') {
                         document.getElementById("formSubmit").hidden=false;
-                        $('#formSubmit').val('Delete').removeClass('btn-secondary btn-primary').addClass('btn-danger');
+                        $('#formSubmit').val('Delete').removeClass('btn-secondary btn-primary btn-info').addClass('btn-danger');
                         document.getElementById("formSubmit").onclick = function(){location.href = '/admin/delete='+modal.data('id')}
                     } else if (modal.data('origin')==='filterButton') {
                         document.getElementById("formSubmit").hidden=false;
-                        $('#formSubmit').val('Filter').removeClass('btn-secondary btn-primary').addClass('btn-danger');
+                        $('#formSubmit').val('Filter').removeClass('btn-secondary btn-danger btn-info').addClass('btn-primary');
                         document.getElementById('userEditForm').action = '/admin/filter';
-                       // document.getElementById('tabTitle').innerText = 'Filtered users';
-                      //  $('#tabTitle').val('Filter');
-                      //  document.getElementById("change").innerHTML="it is changed";
-                    //    alert(document.getElementById("change").innerHTML="123");
+                    } else if (modal.data('origin')==='searchButton') {
+                        document.getElementById("formSubmit").hidden=false;
+                        $('#formSubmit').val('Search').removeClass('btn-secondary btn-danger btn-info').addClass('btn-primary');
+                        document.getElementById('userEditForm').action = '/admin/search';
                     }
 
-                    if (modal.data('origin')!=='filterButton') {
+                    if ((modal.data('origin')!=='filterButton')&&(modal.data('origin')!=='searchButton')){
                         setFieldValue('idEdit', 'id');
                         setFieldValue('firstnameEdit', 'name');
                         setFieldValue('lastnameEdit', 'lname');
@@ -471,6 +470,10 @@
                         clearFieldValue('emailEdit');
                         clearFieldValue('usernameEdit');
                         clearFieldValue('passwordEdit');
+
+                        document.getElementById("checkboxEdit-1").checked = false;
+                        document.getElementById("checkboxEdit-2").checked = false;
+                        document.getElementById("checkboxEdit-3").checked = false;
                     }
                 });
 

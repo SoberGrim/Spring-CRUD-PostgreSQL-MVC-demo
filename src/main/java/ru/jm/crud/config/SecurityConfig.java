@@ -50,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 .successHandler((request, response, auth) ->
                         response.sendRedirect(inRole.test(auth, "ROLE_ADMIN") ? "/admin"
-                                : inRole.test(auth, "ROLE_USER") ? "/user" : "/welcome"))
+                                : inRole.test(auth, "ROLE_USER") ? "/user" : "/guest"))
                 .loginProcessingUrl("/login")
                 .usernameParameter("j_username")
                 .passwordParameter("j_password")
@@ -67,11 +67,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 //страницы аутентификаци доступна всем
-                .antMatchers("/register").anonymous();
+                .antMatchers("/register").anonymous()
+                .antMatchers("/css/*","/js/*").anonymous()
+                .antMatchers("/*.js","/*.css").anonymous();
 
         http
                 .authorizeRequests()
                 .antMatchers("/register").permitAll()
+                .antMatchers("/css/*","/js/*").permitAll()
                 .antMatchers("/*.js","/*.css").permitAll();
 
         http

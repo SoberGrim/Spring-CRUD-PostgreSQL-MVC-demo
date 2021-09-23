@@ -4,8 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Please sign in</title>
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
   <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
+  <script src="/js/jquery-3.3.1.slim.min.js"></script>
+  <script src="/js/popper.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
 </head>
 <body>
 <div class="container">
@@ -21,7 +24,76 @@
     </p>
     ADMIN:ADMIN<br>USER:USER<br>GUEST:GUEST<br>АДМИН:АДМИН<br>ЮЗЕР:ЮЗЕР<br><br>
     <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-    <button class="btn btn-sm btn-primary btn-block" type="button" onclick="location.href = '/register';">Register</button>
+    <button class="btn btn-sm btn-primary btn-block" type="button" data-toggle="modal" th:data-origin="registerButton" data-target="#modalWindow">Register</button>
   </form>
+</div>
+
+<!-- Edit modal window-->
+<div id="modalWindow" class="modal" style="font-size: 0.80em;" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form name="userEditForm" id="userEditForm" class="text-center" th:method="post" th:action="@{/register}" th:object="${user}">
+
+        <label for="firstnameEdit" class="font-weight-bolder mt-3 mb-1">First name</label><br>
+        <input id="firstnameEdit" class="border rounded"
+               th:style="${#fields.hasErrors('firstname')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
+               th:field="*{firstname}"  type="text" >
+        <div id="firstnameEditError" th:if="${#fields.hasErrors('firstname')}" class="small text-danger"
+             th:utext="${#fields.errors('lastname').get(0)}" ></div>
+        <div th:unless="${#fields.hasErrors('firstname')}"></div>
+
+        <label for="lastnameEdit" class="font-weight-bolder mt-3 mb-1">Last name</label><br>
+        <input id="lastnameEdit" class="border rounded"
+               th:style="${#fields.hasErrors('lastname')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
+               th:field="*{lastname}" type="text">
+        <div id="lastnameEditError" th:if="${#fields.hasErrors('lastname')}" class="small text-danger"
+             th:utext="${#fields.errors('lastname').get(0)}"></div>
+        <div th:unless="${#fields.hasErrors('lastname')}"></div>
+
+        <label for="ageEdit" class="font-weight-bolder mt-3 mb-1">Age</label><br>
+        <input id="ageEdit" class="border rounded"
+               th:style="${#fields.hasErrors('age')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
+               th:field="*{age}" type="text">
+        <div id="ageEditError" th:if="${#fields.hasErrors('age')}" class="small text-danger">Age should be between 0 and 199
+          years
+        </div>
+        <div th:unless="${#fields.hasErrors('age')}"></div>
+
+        <label for="emailEdit" class="font-weight-bolder mt-3 mb-1">Email</label><br>
+        <input id="emailEdit" class="border rounded"
+               th:style="${#fields.hasErrors('email')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
+               th:field="*{email}" type="text">
+        <div id="emailEditError" th:if="${#fields.hasErrors('email')}" class="small text-danger"
+             th:utext="${#fields.errors('email').get(0)}"></div>
+        <div th:unless="${#fields.hasErrors('email')}"></div>
+
+        <label for="usernameEdit" class="font-weight-bolder mt-3 mb-1">Username</label><br>
+        <input id="usernameEdit" class="border rounded"
+               th:style="${#fields.hasErrors('username')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
+               th:field="*{username}" type="text">
+        <div id="usernameEditError" th:if="${#fields.hasErrors('username')}" class="small text-danger"
+             th:utext="${#fields.errors('username').get(0)}"></div>
+        <div th:unless="${#fields.hasErrors('username')}"></div>
+
+        <label for="passwordEdit" class="font-weight-bolder mt-3 mb-1">Password</label><br>
+        <input id="passwordEdit" class="border rounded"
+               th:style="${#fields.hasErrors('password')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
+               th:field="*{password}" type="text">
+        <div id="passwordEditError" th:if="${#fields.hasErrors('password')}" class="small text-danger mb-1"
+             th:utext="${#fields.errors('password').get(0)}"></div>
+        <div th:unless="${#fields.hasErrors('password')}" class="mb-2"></div>
+
+        <input id='formCancel' class="mt-3 mb-5 btn btn-secondary" type="button" onclick="$('#modalWindow').modal('hide');"
+               value="Close"/>
+        <input id='formSubmit' class="mt-3 mb-5 btn btn-info" type="submit" onclick="$('#modalWindow').modal('hide');"
+               value="Register"/>
+      </form>
+    </div>
+  </div>
+  <script type="text/javascript" th:inline="javascript">
+    if ([[${modalWindowId}]] === 1) {
+      $('#modalWindow').modal('show');
+    }
+  </script>
 </div>
 </body></html>
