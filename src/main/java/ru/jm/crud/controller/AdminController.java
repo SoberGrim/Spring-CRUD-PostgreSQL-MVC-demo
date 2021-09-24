@@ -46,7 +46,7 @@ public class AdminController {
     }
 
     @PatchMapping("")
-    public String indexPatch(@RequestParam(name = "page", required = false, defaultValue = "1") String strPageNum,
+    public String indexModalWindow(@RequestParam(name = "page", required = false, defaultValue = "1") String strPageNum,
                              @ModelAttribute("user") @Valid User user, BindingResult bindingResult,
                              @RequestParam(value = "index", required = false) Integer[] roleIds,
                              Principal pr, Authentication authentication,
@@ -58,7 +58,7 @@ public class AdminController {
     }
 
     @PostMapping("")
-    public String indexPost(@RequestParam(name = "page", required = false, defaultValue = "1") String strPageNum,
+    public String indexNewUser(@RequestParam(name = "page", required = false, defaultValue = "1") String strPageNum,
                             @ModelAttribute("user") @Valid User user, BindingResult bindingResult,
                             @RequestParam(value = "index", required = false) Integer[] roleIds,
                             Principal pr, Authentication authentication,
@@ -67,6 +67,38 @@ public class AdminController {
         modalWindowId = 2;
         viewInput(strPageNum, pr, authentication, model);
         return viewOutput(user, bindingResult, roleIds);
+    }
+
+    @PatchMapping("filter")
+    public String filterApply(@ModelAttribute("user") User user,
+                              @RequestParam(value = "index", required = false) Integer[] index) {
+        modalWindowId = 3;
+        setUserRoles(user,index);
+        service.setFilter(user, true);
+        return "redirect:/admin";
+    }
+
+    @PatchMapping("search")
+    public String searchApply(@ModelAttribute("user") User user,
+                              @RequestParam(value = "index", required = false) Integer[] index) {
+        modalWindowId = 4;
+        setUserRoles(user,index);
+        service.setFilter(user, false);
+        return "redirect:/admin";
+    }
+
+    @GetMapping("removeFilter")
+    public String removeFilter() {
+        service.removeFilter();
+        modalWindowId = 0;
+        return "redirect:/admin";
+    }
+
+    @GetMapping("/delete={id}")
+    public String deleteUserById(@PathVariable("id") Long id) {
+        service.delete(id);
+        modalWindowId = 0;
+        return "redirect:/admin";
     }
 
     private void viewInput(@RequestParam(name = "page", required = false, defaultValue = "1") String strPageNum, Principal pr, Authentication authentication, Model model) {
@@ -81,9 +113,7 @@ public class AdminController {
 
     private String viewOutput(User user, BindingResult bindingResult, Integer[] roleIds) {
         setUserRoles(user, roleIds);
-
         checkUserFields(user, bindingResult);
-
         if (bindingResult.hasErrors()) {
             System.out.println("bindingResult.hasErrors: " + user);
             return "index";
@@ -130,110 +160,5 @@ public class AdminController {
             }
         }
         return principal;
-    }
-
-//    @GetMapping("/new")
-//    public String addNewUserPage(Model model) {
-//        ArrayList<UserRole> roles = roleService.getRoles();
-//        model.addAttribute("roles", roles);
-//        User user = new User();
-//        model.addAttribute("user", user);
-//        modalWindowId = 0;
-//        return "create";
-//    }
-
-//    @PostMapping("/new")
-//    public String createUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
-//                             @RequestParam(value = "index", required = false) Integer[] index,
-//                             Model model) {
-//        ArrayList<UserRole> roles = roleService.getRoles();
-//        model.addAttribute("roles", roles);
-//
-//        if (bindingResult.hasErrors()) {
-//            System.out.println(user);
-//            return "create";
-//        }
-//
-//        if (service.getByUsername(user.getUsername()) != null) {
-//            bindingResult.addError(new FieldError("username", "username", "Username already taken"));
-//            user.setUsername("");
-//            return "create";
-//        }
-//
-//        if (service.getByEmail(user.getEmail()) != null) {
-//            bindingResult.addError(new FieldError("email", "email", "User with this email already exists"));
-//            user.setEmail("");
-//            return "create";
-//        }
-//
-//        if (index != null) {
-//            for (Integer i : index) {
-//                user.addRole(roleService.getRole(i));
-//            }
-//        }
-//
-//        service.update(user);
-//        modalWindowId = 0;
-//        return "redirect:/admin";
-//    }
-
-    @GetMapping("filter")
-    public String filterPage(@ModelAttribute("user") User user, Model model) {
-        ArrayList<UserRole> roles = roleService.getRoles();
-        model.addAttribute("roles", roles);
-        modalWindowId = 0;
-        return "filter";
-    }
-
-    @GetMapping("search")
-    public String searchPage(@ModelAttribute("user") User user, Model model) {
-        ArrayList<UserRole> roles = roleService.getRoles();
-        model.addAttribute("roles", roles);
-        modalWindowId = 0;
-        return "search";
-    }
-
-    @PatchMapping("filter")
-    public String filterApply(@ModelAttribute("user") User user,
-                              @RequestParam(value = "index", required = false) Integer[] index) {
-        System.out.println("Setting filter");
-        modalWindowId = 3;
-        if (index != null) {
-            for (Integer i : index) {
-                user.addRole(roleService.getRole(i));
-            }
-            System.out.println("Filtered roles set:"+user.getUserRoles());
-        }
-        service.setFilter(user, true);
-        return "redirect:/admin";
-    }
-
-    @PatchMapping("search")
-    public String searchApply(@ModelAttribute("user") User user,
-                              @RequestParam(value = "index", required = false) Integer[] index) {
-        System.out.println("Setting search filter");
-        modalWindowId = 4;
-        if (index != null) {
-            for (Integer i : index) {
-                user.addRole(roleService.getRole(i));
-            }
-        }
-        service.setFilter(user, false);
-        return "redirect:/admin";
-    }
-
-    @GetMapping("removeFilter")
-    public String removeFilter() {
-        service.removeFilter();
-        System.out.println("Removed filter");
-        modalWindowId = 0;
-        return "redirect:/admin";
-    }
-
-    @GetMapping("/delete={id}")
-    public String deleteUserById(@PathVariable("id") Long id) {
-        service.delete(id);
-        modalWindowId = 0;
-        return "redirect:/admin";
     }
 }
