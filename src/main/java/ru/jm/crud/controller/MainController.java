@@ -34,8 +34,9 @@ public class MainController {
     }
 
     @GetMapping("login")
-    public String loginPage(@ModelAttribute("user") User user)
+    public String loginPage(@ModelAttribute("user") User user, Model model)
     {
+        model.addAttribute("modalWindowId", modalWindowId);
         return "login";
     }
 
@@ -53,6 +54,30 @@ public class MainController {
         return "user";
     }
 
+    @PostMapping("/register")
+    public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
+        modalWindowId = 1;
+
+        model.addAttribute("modalWindowId", modalWindowId);
+
+        if (service.getByUsername(user.getUsername()) != null) {
+            bindingResult.addError(new FieldError("username", "username", "Username already taken"));
+        }
+
+        if (service.getByEmail(user.getEmail()) != null) {
+            bindingResult.addError(new FieldError("email", "email", "User with this email already exists"));
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "login";
+        }
+
+        user.addRole(roleService.getRole("ROLE_GUEST"));
+        service.update(user);
+        modalWindowId = 0;
+        return "redirect:/login";
+    }
+
     private User getPrincipal(Principal pr, Authentication authentication) {
         User principal = service.getByUsername(pr.getName());
         if (principal == null) {
@@ -67,39 +92,5 @@ public class MainController {
             }
         }
         return principal;
-    }
-
-    @GetMapping("/register")
-    public String register(Model model) {
-        System.out.println("get register");
-        User user = new User();
-        model.addAttribute("user", user);
-        return "register";
-    }
-
-
-    @PostMapping("/register")
-    public String create(@ModelAttribute("user") @Valid User user, BindingResult bindingResult, Model model) {
-        modalWindowId = 1;
-        model.addAttribute("modalWindowId", modalWindowId);
-        System.out.println("post register");
-        if (service.getByUsername(user.getUsername()) != null) {
-            bindingResult.addError(new FieldError("username", "username", "Username already taken"));
-        }
-
-        if (service.getByEmail(user.getEmail()) != null) {
-            bindingResult.addError(new FieldError("email", "email", "User with this email already exists"));
-        }
-
-        if (bindingResult.hasErrors()) {
-            System.out.println("register has errors");
-            return "login";
-        }
-
-        System.out.println("register okey");
-        user.addRole(roleService.getRole("ROLE_GUEST"));
-        service.update(user);
-        modalWindowId = 0;
-        return "redirect:/login";
     }
 }

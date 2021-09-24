@@ -18,8 +18,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.security.Principal;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 @Controller
@@ -118,7 +116,6 @@ public class AdminController {
             System.out.println("bindingResult.hasErrors: " + user);
             return "index";
         }
-
         service.update(user);
         modalWindowId = 0;
         return "redirect:/admin";
@@ -129,7 +126,6 @@ public class AdminController {
         if ((editedUser != null) && (!editedUser.getId().equals(user.getId()))) {
             bindingResult.addError(new FieldError("username", "username", "Username already taken"));
         }
-
         editedUser = service.getByEmail(user.getEmail());
         if ((editedUser != null) && (!editedUser.getId().equals(user.getId()))) {
             bindingResult.addError(new FieldError("email", "email", "User with this email already exists"));
