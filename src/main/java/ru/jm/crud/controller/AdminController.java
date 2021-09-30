@@ -67,6 +67,8 @@ public class AdminController {
         return viewOutput(user, bindingResult, roleIds);
     }
 
+
+
     @PatchMapping("filter")
     public String filterApply(@ModelAttribute("user") User user,
                               @RequestParam(value = "index", required = false) Integer[] index) {

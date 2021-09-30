@@ -17,6 +17,7 @@ public class Startup {
     UserService service;
     RoleService roleService;
 
+
     @Autowired
     public void setService(UserService service, RoleService roleService) {
         this.service = service;
@@ -69,6 +70,8 @@ public class Startup {
     public void init() {
         System.out.println("Startup initializing");
 
+
+
         try {
 
             UserRole role1 = new UserRole("ROLE_ADMIN");
@@ -115,7 +118,6 @@ public class Startup {
         } catch (Exception e) {
             System.out.println("Dupes in autogen");
         }
-
 
     }
 }

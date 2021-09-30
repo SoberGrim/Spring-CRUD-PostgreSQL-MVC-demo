@@ -20,7 +20,7 @@
 <div class="row p-2 mx-0 align-items-center bg-dark">
     <div class="col-md-11">
         <a class="text-light text-decoration-none" href="/user">
-            <b>[[${principal.getEmail()}]]</b> with roles: [[${principal.getUserRole()}]]
+            <b>[[${principal.getEmail()}]]</b> with roles: [[${principal.getUserRoleStr()}]]
         </a>
     </div>
     <div class="col-md-1">
@@ -62,7 +62,7 @@
                         <td th:text="${user.getAge()}">age</td>
                         <td th:text="${user.getEmail()}">email</td>
                         <td th:text="${user.getUsername()}">username</td>
-                        <td th:text="${user.getUserRole()}">role</td>
+                        <td th:text="${user.getUserRoleStr()}">role</td>
                     </tr>
                     </tbody>
                 </table>

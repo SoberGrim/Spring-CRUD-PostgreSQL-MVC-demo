@@ -1,13 +1,17 @@
 package ru.jm.crud.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Nationalized;
+import org.json.JSONObject;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -15,12 +19,22 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.UnaryOperator;
 
-
 @NoArgsConstructor
 @Entity
 @Table(name = "users", schema = "test")
 public class User implements UserDetails {
     private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(4);
+
+    public User(User user) {
+        this.id =  user.id;
+        this.username = user.username;
+        this.password = user.password;
+        this.firstname = user.firstname;
+        this.lastname = user.lastname;
+        this.age = user.age;
+        this.email = user.email;
+        this.userRoles = user.userRoles;
+    }
 
     private String checkAndCorrectEncoding(String str) {
         UnaryOperator<String> conv = (name) -> {
@@ -80,6 +94,7 @@ public class User implements UserDetails {
     @Size(min = 5, max = 120, message = "Email should be between 5 and 120 characters")
     private String email;
 
+    @JsonManagedReference
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH})
     @Fetch(FetchMode.JOIN)
     @JoinTable(
@@ -88,6 +103,8 @@ public class User implements UserDetails {
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
     private List<UserRole> userRoles = new ArrayList<>();
+
+    private String userRoleStr;
 
     public User(String username, String password, String firstname, String lastname, String age, String email, List<UserRole> userRoles) {
         setUsername(username);
@@ -175,8 +192,16 @@ public class User implements UserDetails {
         return userRoles;
     }
 
-    public String getUserRole() {
-        List<UserRole> roles = getUserRoles();
+    public String getUserRoleStr() {
+        return userRoleStr;
+    }
+
+    private void setUserRoleStr(String userRoleStr) {
+        this.userRoleStr = userRoleStr;
+    }
+
+    private String roleToStr() {
+        List<UserRole> roles = userRoles;
         StringBuilder strRoles = new StringBuilder();
         if (roles.size() > 0) {
             for (UserRole role:roles) {
@@ -193,28 +218,38 @@ public class User implements UserDetails {
 
     public void setUserRoles(List<UserRole> userRoles) {
         this.userRoles = userRoles;
+        this.setUserRoleStr(this.roleToStr());
     }
 
+    public void clearUserRoles() {
+        this.userRoles = new ArrayList<>();
+    }
+
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return userRoles;
@@ -253,5 +288,4 @@ public class User implements UserDetails {
                 ", userRoles=" + userRoles +
                 '}';
     }
-
 }

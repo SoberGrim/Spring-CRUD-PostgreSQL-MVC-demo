@@ -1,5 +1,7 @@
 package ru.jm.crud.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,6 +19,7 @@ import java.util.Set;
 @Table(name = "role", schema = "test")
 public class UserRole implements GrantedAuthority {
 
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -26,6 +29,7 @@ public class UserRole implements GrantedAuthority {
     @Column(name = "name", nullable = false)
     private String role;
 
+    @JsonBackReference
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REFRESH}, mappedBy = "userRoles")
     private Set<User> users;
 
@@ -33,6 +37,7 @@ public class UserRole implements GrantedAuthority {
         this.role = role;
     }
 
+    @JsonIgnore
     @Override
     public String getAuthority() {
         return role;
