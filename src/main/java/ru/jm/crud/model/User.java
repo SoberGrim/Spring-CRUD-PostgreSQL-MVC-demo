@@ -89,7 +89,7 @@ public class User implements UserDetails {
 
     @NotNull
     @Column(name = "email", nullable = false, unique = true, length = 120)
-    @NotBlank(message = "Lastname should not be empty")
+    @NotBlank(message = "Email should not be empty")
     @Pattern(regexp = "^[^@]+@[^@]+\\.[^@]+$", message = "Email format invalid, example: \"adress@email.com\"")
     @Size(min = 5, max = 120, message = "Email should be between 5 and 120 characters")
     private String email;
@@ -103,8 +103,6 @@ public class User implements UserDetails {
             inverseJoinColumns = {@JoinColumn(name = "role_id")}
     )
     private List<UserRole> userRoles = new ArrayList<>();
-
-    private String userRoleStr;
 
     public User(String username, String password, String firstname, String lastname, String age, String email, List<UserRole> userRoles) {
         setUsername(username);
@@ -193,15 +191,15 @@ public class User implements UserDetails {
     }
 
     public String getUserRoleStr() {
-        return userRoleStr;
+        return roleToStr(userRoles);//userRoleStr;
     }
 
-    private void setUserRoleStr(String userRoleStr) {
-        this.userRoleStr = userRoleStr;
-    }
+//    private void setUserRoleStr(String userRoleStr) {
+//        this.userRoleStr = userRoleStr;
+//        System.out.println("setUserRoleStr "+userRoleStr);
+//    }
 
-    private String roleToStr() {
-        List<UserRole> roles = userRoles;
+    private String roleToStr(List<UserRole> roles) {
         StringBuilder strRoles = new StringBuilder();
         if (roles.size() > 0) {
             for (UserRole role:roles) {
@@ -212,17 +210,28 @@ public class User implements UserDetails {
             strRoles.append("NONE");
         }
 
-        System.out.println("Returned role: "+strRoles);
-        return strRoles.toString();
+        StringBuilder result = new StringBuilder();
+        if (strRoles.indexOf("ADMIN")>=0) {
+            result.append("ADMIN ");
+        }
+        if (strRoles.indexOf("USER")>=0) {
+            result.append("USER ");
+        }
+        if (strRoles.indexOf("GUEST")>=0) {
+            result.append("GUEST ");
+        }
+        if (strRoles.indexOf("NONE")>=0) {
+            result.append("NONE ");
+        }
+        return result.toString();
     }
 
     public void setUserRoles(List<UserRole> userRoles) {
         this.userRoles = userRoles;
-        this.setUserRoleStr(this.roleToStr());
-    }
-
-    public void clearUserRoles() {
-        this.userRoles = new ArrayList<>();
+        System.out.println("setUserRoles "+userRoles);
+//        if (userRoles!=null) {
+//            this.setUserRoleStr(this.roleToStr(userRoles));
+//        }
     }
 
     @JsonIgnore
@@ -264,6 +273,35 @@ public class User implements UserDetails {
         setUsername(user.username);
         setPassword(user.password);
         setUserRoles(user.userRoles);
+    }
+
+    public UserDTO merge(UserDTO user, List<UserRole> roles) {
+        String id = user.getId();
+        if ((id!=null)&&(id.matches("\\d+"))) setId(Long.valueOf(id));
+
+        String firstname = user.getFirstname();
+        if (firstname!=null) setFirstname(firstname);
+
+        String lastname = user.getLastname();
+        if (lastname!=null) setLastname(lastname);
+
+        System.out.println("writing age");
+        String age = user.getAge();
+        if (age!=null) setAge(age);
+        System.out.println("wrote age!");
+
+        String email = user.getEmail();
+        if (email!=null) setEmail(email);
+
+        String username = user.getUsername();
+        if (username!=null) setUsername(username);
+
+        String password = user.getPassword();
+        if (password!=null) setPassword(password);
+
+        if (roles!=null) setUserRoles(roles);
+
+        return null;
     }
 
     public boolean hasRole(UserRole role) {

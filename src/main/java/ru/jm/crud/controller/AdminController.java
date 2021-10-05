@@ -94,12 +94,12 @@ public class AdminController {
         return "redirect:/admin";
     }
 
-    @GetMapping("/delete={id}")
-    public String deleteUserById(@PathVariable("id") Long id) {
-        service.delete(id);
-        modalWindowId = 0;
-        return "redirect:/admin";
-    }
+//    @GetMapping("/delete={id}")
+//    public String deleteUserById(@PathVariable("id") Long id) {
+//        service.delete(id);
+//        modalWindowId = 0;
+//        return "redirect:/admin";
+//    }
 
     private void viewInput(@RequestParam(name = "page", required = false, defaultValue = "1") String strPageNum, Principal pr, Authentication authentication, Model model) {
         model.addAttribute("modalWindowId", modalWindowId);
@@ -118,6 +118,7 @@ public class AdminController {
             System.out.println("bindingResult.hasErrors: " + user);
             return "index";
         }
+        System.out.println("updating user:"+user);
         service.update(user);
         modalWindowId = 0;
         return "redirect:/admin";

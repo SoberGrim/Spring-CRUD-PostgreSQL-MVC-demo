@@ -64,9 +64,20 @@
             document.getElementById(btnName).classList.add('btn-outline-secondary','border-white','border-top');
         }
         function enableButton(btnName){
-            document.getElementById(btnName).removeAttribute('disabled','disabled');
+            document.getElementById(btnName).removeAttribute('disabled');
             document.getElementById(btnName).classList.add('btn-info');
             document.getElementById(btnName).classList.remove('btn-outline-secondary','border-white','border-top');
+        }
+
+        function createButton(currUser, buttonType){
+            let style;
+            if (buttonType==="Delete") {
+                style = "btn-danger";
+            } else {
+                style = "btn-info";
+            }
+
+            return "<td><a><button type=\"button\" class=\"btn btn-sm "+style+"\" data-toggle=\"modal\" data-id="+currUser.id+" data-name="+encodeURIComponent(currUser.firstname)+" data-lastname="+encodeURIComponent(currUser.lastname)+" data-age="+currUser.age+" data-email="+encodeURIComponent(currUser.email)+" data-username="+encodeURIComponent(currUser.username)+" data-password="+encodeURIComponent(currUser.password)+" data-roles="+encodeURIComponent(currUser.userRoleStr)+" data-origin=\""+buttonType+"Button\" data-target=\"#modalWindow\">"+buttonType+"</button></a></td>";
         }
 
         function showPage(pageNum) {
@@ -76,15 +87,19 @@
                 let currUserId = i + skipUsers;
                 if (currUserId < users.length) {
                     let currUser = users[currUserId];
-                    document.getElementById("userTable").innerHTML += "<tr><td>"+currUser.id+"</td><td>"+currUser.firstname+"</td><td>"+currUser.lastname+"</td><td>"+currUser.age+"</td><td>"+currUser.email+"</td><td>"+currUser.userRoleStr+"</td><td><a><button type=\"button\" class=\"btn btn-sm btn-info\" data-toggle=\"modal\" data-id="+currUser.id+" data-name="+currUser.firstname+" data-lname="+currUser.lastname+" data-age="+currUser.age+" data-email="+currUser.email+" data-username="+currUser.username+" data-password="+currUser.password+" data-roles="+currUser.userRoleStr+" data-origin=\"infoButton\" data-target=\"#modalWindow\">Info</button></a></td></tr>"
-
-                } else {
+                    document.getElementById("userTable").innerHTML += "<tr><td>"+currUser.id+"</td><td>"+currUser.firstname+"</td><td>"+currUser.lastname+"</td><td>"+currUser.age+"</td><td>"+currUser.email+"</td><td>"+currUser.userRoleStr+"</td>"+createButton(currUser, "Info")+createButton(currUser, "Edit")+createButton(currUser, "Delete")+"</tr>";
                 }
             }
             if (users.length===0) {
                 document.getElementById("afterTableLabel").innerHTML += "<br>No users found<br>";
             }
             document.getElementById("page").innerHTML = 'page '+pageNum+' of '+userPages+', users: '+users.length;
+            if (pageNum<=1) {
+                disableButton("prevPage");
+            }
+            if (pageNum>=userPages) {
+                disableButton("nextPage");
+            }
         }
 
 
@@ -92,9 +107,6 @@
         function showNextPage() {
             if (currPage < userPages) {
                 showPage(++currPage);
-            }
-            if (currPage===userPages) {
-                disableButton("nextPage");
             }
             if (currPage===2) {
                 enableButton("prevPage");
@@ -109,9 +121,99 @@
             if (currPage===userPages-1) {
                 enableButton("nextPage");
             }
+        }
 
-            if (currPage===1) {
-                disableButton("prevPage");
+        async function del(id) {
+            let response = await fetch('/admin/delete='+id);
+            if (response.ok) {
+                await run();
+            }
+        }
+
+        async function edit(id, name, lastname, age, email, username, password) {
+
+            let user = {
+                id: document.querySelector('#idEdit').value,//decodeURIComponent(id),
+                firstname: document.querySelector('#firstnameEdit').value,//decodeURIComponent(name),
+                lastname: document.querySelector('#lastnameEdit').value,//decodeURIComponent(lastname),
+                age: document.querySelector('#ageEdit').value,//decodeURIComponent(age),
+                email: document.querySelector('#emailEdit').value,//decodeURIComponent(email),
+                username: document.querySelector('#usernameEdit').value,//decodeURIComponent(username),
+                password: document.querySelector('#passwordEdit').value,//decodeURIComponent(password),
+                roleStr: ''
+            };
+            if (document.getElementById("checkboxEdit-1").checked) user.roleStr+="ADMIN";
+            if (document.getElementById("checkboxEdit-2").checked) user.roleStr+="USER";
+            if (document.getElementById("checkboxEdit-3").checked) user.roleStr+="GUEST";
+
+            let response = await fetch('/admin/edit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(user)
+            });
+
+            if (response.ok) {
+                await run();
+            }
+        }
+
+
+        async function newUser() {
+
+            let user = {
+                id: document.querySelector('#idNew').value,
+                firstname: document.querySelector('#firstnameNew').value,
+                lastname: document.querySelector('#lastnameNew').value,
+                age: document.querySelector('#ageNew').value,
+                email: document.querySelector('#emailNew').value,
+                username: document.querySelector('#usernameNew').value,
+                password: document.querySelector('#passwordNew').value,
+                roleStr: ''
+            };
+            if (document.getElementById("checkboxNew-1").checked) user.roleStr+="ADMIN";
+            if (document.getElementById("checkboxNew-2").checked) user.roleStr+="USER";
+            if (document.getElementById("checkboxNew-3").checked) user.roleStr+="GUEST";
+
+            let response = await fetch('/admin/new', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(user)
+            });
+
+            let userError = await response.json();
+            if (userError.id!=null) {
+                alert(userError.id);
+            }
+            if (userError.username!=null) {
+                alert(userError.username);
+            }
+            if (userError.password!=null) {
+                alert(userError.password);
+            }
+            if (userError.email!=null) {
+                alert(userError.email);
+            }
+            if (userError.firstname!=null) {
+                alert(userError.firstname);
+            }
+            if (userError.lastname!=null) {
+                alert(userError.lastname);
+            }
+            if (userError.age!=null) {
+                alert(userError.age);
+            }
+
+
+            {
+                document.getElementById("new").classList.remove('active', 'show');
+                document.getElementById("newTab").classList.remove('active');
+                document.getElementById("table").classList.add('active', 'show');
+                document.getElementById("tableTab").classList.add('active');
+                await run();
             }
         }
 
@@ -133,8 +235,7 @@
             showPage(currPage);
         }
         run();
-       // showPage(1);
-    //    alert( users[1].firstname);
+
     </script>
 
     <!-- Верхняя серая строчка -->
@@ -209,7 +310,7 @@
                                     <a>
                                         <button type="button" class="btn btn-sm btn-info" data-toggle="modal"
                                                 th:data-id=@{{i}(i=${uId})} th:data-name=@{{i}(i=${uName})}
-                                                th:data-lname=@{{i}(i=${uLname})}
+                                                th:data-lastname=@{{i}(i=${ulastname})}
                                                 th:data-age=${uAge} th:data-email=@{{i}(i=${uEmail})}
                                                 th:data-username=@{{i}(i=${uUsername})}
                                                 th:data-password=@{{i}(i=${uPassword})}
@@ -221,7 +322,7 @@
                                     <a>
                                         <button type="button" class="btn btn-sm btn-info" data-toggle="modal"
                                                 th:data-id=@{{i}(i=${uId})} th:data-name=@{{i}(i=${uName})}
-                                                th:data-lname=@{{i}(i=${uLname})}
+                                                th:data-lastname=@{{i}(i=${ulastname})}
                                                 th:data-age=${uAge} th:data-email=@{{i}(i=${uEmail})}
                                                 th:data-username=@{{i}(i=${uUsername})}
                                                 th:data-password=@{{i}(i=${uPassword})}
@@ -233,7 +334,7 @@
                                 <td><a>
                                     <button type="button" class="btn btn-sm btn-danger" data-toggle="modal"
                                             th:data-id=@{{i}(i=${uId})} th:data-name=@{{i}(i=${uName})}
-                                            th:data-lname=@{{i}(i=${uLname})}
+                                            th:data-lastname=@{{i}(i=${ulastname})}
                                             th:data-age=${uAge} th:data-email=@{{i}(i=${uEmail})}
                                             th:data-username=@{{i}(i=${uUsername})}
                                             th:data-password=@{{i}(i=${uPassword})}
@@ -361,7 +462,7 @@
                                     <span th:text="${r.role}"></span>
                                 </label>
                             </div>
-                            <input class="mt-3 mb-4 btn btn-success" type="submit" value="Add new user"/>
+                            <input class="mt-3 mb-4 btn btn-success" type="button" onclick="newUser();" value="Add new user"/>
                         </form>
                     </div>
                     <script type="text/javascript">
@@ -447,9 +548,10 @@
                         <label class="font-weight-bolder mt-3 mb-1">Roles</label>
                         <div th:each="r : ${roles}">
                             <label class="mb-1" style="cursor: pointer;">
-                                <input th:id="${'checkboxEdit-'+r.id}"
-                                       style="width: calc(1vw); height: calc(1vw); vertical-align: middle; cursor: pointer"
-                                       type="checkbox" name="index" th:checked="${user.hasRole(r)}" th:value="${r.id}"/>
+<!--                                <input th:id="${'checkboxEdit-'+r.id}"-->
+<!--                                       style="width: calc(1vw); height: calc(1vw); vertical-align: middle; cursor: pointer"-->
+<!--                                       type="checkbox" name="index" th:checked="${user.hasRole(r)}" th:value="${r.id}"/>-->
+                                <input th:id="${'checkboxEdit-'+r.id}" style="width: calc(1vw); height: calc(1vw); vertical-align: middle; cursor: pointer" type="checkbox" name="index" th:value="${r.id}"/>
                                 <span th:text="${r.role}"></span>
                             </label>
                         </div>
@@ -480,21 +582,30 @@
 
                 $("#modalWindow").on('show.bs.modal', function (e) {
                     const modal = $(e.relatedTarget);
+                    let origin = modal.data('origin');
+
+                    let id = modal.data('id');
+                    let name = modal.data('name');
+                    let lastname = modal.data('lastname');
+                    let age = modal.data('age');
+                    let email = modal.data('email');
+                    let username = modal.data('username');
+                    let password = modal.data('password');
+
                     function setFieldValue(fName, dataName) {
                         $('#'+fName)
-                            .addClass('bg-white') //document.getElementById(fName).style.backgroundColor = '#FFFFFF';
+                            .addClass('bg-white')
                             .val(decodeURIComponent(modal.data(dataName)));
                         $('#'+fName+'Error').text(' ');
 
-                        if ((modal.data('origin')==='editButton')||(modal.data('origin')==='filterButton')||(modal.data('origin')==='searchButton')) {
+                        if ((origin==='EditButton')||(origin==='filterButton')||(origin==='searchButton')) {
                             $('#' + fName).removeClass('text-muted').removeAttr('disabled', 'disabled').removeAttr('readonly', 'readonly');
                         }
                     }
                     function clearFieldValue(fName) {
                         document.getElementById(fName).style.backgroundColor = '#FFFFFF';
-                        $('#'+fName).val('');
+                        $('#'+fName).val('').removeClass('text-muted').removeAttr('disabled', 'disabled').removeAttr('readonly','readonly');
                         $('#'+fName+'Error').text(' ');
-                        $('#'+fName).removeClass('text-muted').removeAttr('disabled', 'disabled').removeAttr('readonly','readonly');
                     }
 
                     function readonlyField(fieldId) {
@@ -512,43 +623,47 @@
                         document.getElementById(fieldId).style.backgroundColor = '#EEEEEE';
                     }
 
-                    if ((modal.data('origin')==='editButton')||(modal.data('origin')==='filterButton')||(modal.data('origin')==='searchButton')) {
+                    if ((origin==='filterButton')||(origin==='searchButton')) {
+                        document.getElementById("formSubmit").setAttribute('type', 'submit');
+                    } else {
+                        document.getElementById("formSubmit").setAttribute('type', 'button');
+                    }
+
+                    if ((origin==='EditButton')||(origin==='filterButton')||(origin==='searchButton'))
+                    {
                         $('#checkboxEdit-1').removeAttr('disabled', 'disabled');
                         $('#checkboxEdit-2').removeAttr('disabled', 'disabled');
                         $('#checkboxEdit-3').removeAttr('disabled', 'disabled');
-                        document.getElementById("formSubmit").setAttribute('type', 'submit');
                     } else {
                         $('#checkboxEdit-1').attr('disabled', 'disabled');
                         $('#checkboxEdit-2').attr('disabled', 'disabled');
                         $('#checkboxEdit-3').attr('disabled', 'disabled');
-                        document.getElementById("formSubmit").setAttribute('type', 'button');
                     }
 
-                    if (modal.data('origin')==='infoButton') {
+
+                    document.getElementById("formSubmit").hidden=false;
+                    $('#formSubmit').removeClass('btn-secondary btn-danger btn-info btn-primary');
+                    if (origin==='InfoButton') {
                         document.getElementById("formSubmit").hidden=true;
-                        $('#formSubmit').val('Edit').removeClass('btn-secondary btn-danger btn-primary').addClass('btn-info');
-                    } else if (modal.data('origin')==='editButton') {
-                        document.getElementById("formSubmit").hidden=false;
-                        $('#formSubmit').val('Edit').removeClass('btn-secondary btn-danger btn-info').addClass('btn-primary');
-                    } else if (modal.data('origin')==='deleteButton') {
-                        document.getElementById("formSubmit").hidden=false;
-                        $('#formSubmit').val('Delete').removeClass('btn-secondary btn-primary btn-info').addClass('btn-danger');
-                        document.getElementById("formSubmit").onclick = function(){location.href = '/admin/delete='+modal.data('id')}
-                    } else if (modal.data('origin')==='filterButton') {
-                        document.getElementById("formSubmit").hidden=false;
-                        $('#formSubmit').val('Filter').removeClass('btn-secondary btn-danger btn-info').addClass('btn-primary');
+                    } else if (origin==='EditButton') {
+                        $('#formSubmit').val('Edit').addClass('btn-primary');
+                        document.getElementById("formSubmit").onclick = function(){edit(id,name,lastname,age,email,username,password);$('#modalWindow').modal('hide')};
+                    } else if (origin==='DeleteButton') {
+                        $('#formSubmit').val('Delete').addClass('btn-danger');
+                        document.getElementById("formSubmit").onclick = function(){del(id);$('#modalWindow').modal('hide')}; //function(){location.href = '/admin/delete='+modal.data('id')}
+                    } else if (origin==='filterButton') {
+                        $('#formSubmit').val('Filter').addClass('btn-primary');
                         document.getElementById('userEditForm').action = '/admin/filter';
-                    } else if (modal.data('origin')==='searchButton') {
-                        document.getElementById("formSubmit").hidden=false;
-                        $('#formSubmit').val('Search').removeClass('btn-secondary btn-danger btn-info').addClass('btn-primary');
+                    } else if (origin==='searchButton') {
+                        $('#formSubmit').val('Search').addClass('btn-primary');
                         document.getElementById('userEditForm').action = '/admin/search';
                     }
 
 
-                    if ((modal.data('origin')!=='filterButton')&&(modal.data('origin')!=='searchButton')){
+                    if ((origin!=='filterButton')&&(origin!=='searchButton')){
                         setFieldValue('idEdit', 'id');
                         setFieldValue('firstnameEdit', 'name');
-                        setFieldValue('lastnameEdit', 'lname');
+                        setFieldValue('lastnameEdit', 'lastname');
                         setFieldValue('ageEdit', 'age');
                         setFieldValue('emailEdit', 'email');
                         setFieldValue('usernameEdit', 'username');
@@ -573,10 +688,10 @@
                         document.getElementById("checkboxEdit-3").checked = false;
                     }
 
-                    if (modal.data('origin')==='editButton') {
+                    if (origin==='EditButton') {
                         readonlyField('idEdit');
                     }
-                    if (modal.data('origin')==='deleteButton') {
+                    if (origin==='DeleteButton') {
                         disableField('idEdit');
                         disableField('firstnameEdit');
                         disableField('lastnameEdit');
@@ -585,7 +700,7 @@
                         disableField('usernameEdit');
                         disableField('passwordEdit');
                     }
-                    if (modal.data('origin')==='infoButton') {
+                    if (origin==='InfoButton') {
                         muteField('idEdit');
                         muteField('firstnameEdit');
                         muteField('lastnameEdit');

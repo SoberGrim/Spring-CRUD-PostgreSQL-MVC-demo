@@ -1,6 +1,7 @@
 package ru.jm.crud.dao;
 
 import ru.jm.crud.model.User;
+import ru.jm.crud.model.UserDTO;
 import ru.jm.crud.model.UserRole;
 
 import java.util.Collection;
@@ -14,6 +15,7 @@ public interface UserDao {
     String add(String username, String password, String firstName, String lastName, String age, String email, UserRole... roles);
     User getById(Long id);
     User getByUsername(String username);
+    User getByLogin(String username);
     List<User> getByName(String firstname);
     List<User> getByName(String firstname, String lastname);
     List<User> getByLastName(String lastname);

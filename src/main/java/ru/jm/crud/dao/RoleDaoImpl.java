@@ -32,6 +32,20 @@ public class RoleDaoImpl implements RoleDao {
         return result.getResultList().isEmpty() ? null : result.getSingleResult();
     }
 
+    @Override
+    public ArrayList<UserRole> getRoles(String roles) {
+        ArrayList<UserRole> list = new ArrayList<>();
+        if (roles.contains("ADMIN")) {
+            list.add(getRole("ROLE_ADMIN"));
+        }
+        if (roles.contains("USER")) {
+            list.add(getRole("ROLE_USER"));
+        }
+        if (roles.contains("GUEST")) {
+            list.add(getRole("ROLE_GUEST"));
+        }
+        return list;
+    }
 
     @Override
     public ArrayList<UserRole> getRoles() {

@@ -36,6 +36,11 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public ArrayList<UserRole> getRoles(String roles) {
+        return dao.getRoles(roles);
+    }
+
+    @Override
     public ArrayList<UserRole> getRoles() {
         return dao.getRoles();
     }

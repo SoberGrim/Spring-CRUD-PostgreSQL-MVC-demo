@@ -1,6 +1,7 @@
 package ru.jm.crud.dao;
 
 import ru.jm.crud.model.User;
+import ru.jm.crud.model.UserDTO;
 import ru.jm.crud.model.UserRole;
 
 import org.springframework.stereotype.Repository;
@@ -64,7 +65,6 @@ public class UserDaoImpl implements UserDao {
     }
 
 
-
     @Override
     public String add(User user) {
         entityManager.persist(user);
@@ -79,7 +79,9 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void update(User user) {
+        System.out.println("UserDaoImpl user: "+user);
         User mergedUser = entityManager.merge(user);
+        System.out.println("UserDaoImpl mergedUser: "+user);
         user.cloneUser(mergedUser);
     }
 
@@ -98,6 +100,11 @@ public class UserDaoImpl implements UserDao {
                         "SELECT u FROM User u WHERE u.username LIKE :username", User.class)
                 .setParameter("username", username);
         return result.getResultList().isEmpty() ? null : result.getSingleResult();
+    }
+
+    @Override
+    public User getByLogin(String login) {
+        return (login.matches("^[^@]+@[^@]+\\.[^@]+$")) ? getByEmail(login) : getByUsername(login);
     }
 
 
@@ -154,7 +161,7 @@ public class UserDaoImpl implements UserDao {
             return this.userCache;
         }
         System.out.println("getting FULL user list from DB");
-        this.userCache = entityManager.createQuery("FROM User", User.class).getResultList();
+        this.userCache = entityManager.createQuery("FROM User ORDER BY id   ", User.class).getResultList();
         return new LinkedList<>(this.userCache);
     }
 
@@ -213,7 +220,7 @@ public class UserDaoImpl implements UserDao {
             if ((this.filterRoles != null) && (this.filterRoles.size() != 0)) {
                 boolean userHasSearchedRoles = false;
                 List<UserRole> userRoles = user.getUserRoles();
-                if (userRoles.size()==this.filterRoles.size()) {
+                if (userRoles.size() == this.filterRoles.size()) {
                     for (UserRole userRole : userRoles) {
                         if (this.filterRoles.contains(userRole)) {
                             userHasSearchedRoles = true;

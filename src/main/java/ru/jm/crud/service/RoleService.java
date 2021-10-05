@@ -10,6 +10,7 @@ public interface RoleService {
     String add(UserRole userRole);
     UserRole getRole(Integer id);
     UserRole getRole(String role);
+    ArrayList<UserRole> getRoles(String roles);
     ArrayList<UserRole> getRoles();
 
 }

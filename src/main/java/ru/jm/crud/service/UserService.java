@@ -14,6 +14,7 @@ public interface UserService {
     String add(String username, String password, String firstName, String lastName, String age, String email, UserRole... roles);
     User getById(Long id);
     User getByUsername(String username);
+    User getByLogin(String username);
     List<User> getByName(String firstname);
     List<User> getByName(String firstname, String lastname);
     List<User> getByLastName(String lastname);
