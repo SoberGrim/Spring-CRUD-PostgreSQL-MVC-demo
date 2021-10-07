@@ -18,5 +18,6 @@
 		загрузить в БД в пределах тысячи пользователей не вызывая ощутимых тормозов при старте
 
 <!-- полезное th:class="${#httpServletRequest.getMethod()}==POST? '' : 'show active'"-->
+//document.querySelector('#id'+formName).value,
 
  <div th:fragment="name"> some code </div> А потом вставляешь <div th:insert="~{nameHtml :: name}"></div>

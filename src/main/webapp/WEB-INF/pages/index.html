@@ -7,51 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
 </head>
-<body style="font-size: 0.95em;" th:with="userPages = ((${users.size()} - (${users.size()} % 19)))/19 + 1">
+<body style="font-size: 0.95em;">
     <script src="/js/jquery-3.3.1.slim.min.js"></script>
     <script src="/js/popper.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
-    <script th:inline="javascript">
-        //<script th:inline="javascript">
-        // addEventListener("keydown", function (event) {
-        //     switch (event.keyCode) {
-        //         case 37:
-        //         case 38:
-        //             document.getElementById("prevPage").click();
-        //             break;
-        //         case 39:
-        //         case 40:
-        //             document.getElementById("nextPage").click();
-        //             break;
-        //         case 78:
-        //         case 67:
-        //             location.href = '/admin/new';
-        //             break;
-        //         case 70:
-        //             location.href = '/admin/filter';
-        //             break;
-        //         case 83:
-        //             location.href = '/admin/search';
-        //             break;
-        //         case 82:
-        //             location.href = '/admin/removeFilter';
-        //             break;
-        //         case 72:
-        //             location.href = '/welcome';
-        //             break;
-        //         case 77:
-        //         case 85:
-        //             location.href = '/user';
-        //             break;
-        //         case 76:
-        //             location.href = '/logout';
-        //             break;
-        //     }
-        // });
-        var currUser = 9;
-        $('#modalEdit').removeData('bs.modal');
-    </script>
-
     <script>
         let usersPerPage = 10;
         let users;
@@ -69,31 +28,31 @@
             document.getElementById(btnName).classList.remove('btn-outline-secondary','border-white','border-top');
         }
 
-        function createButton(currUser, buttonType){
+        function createButton(currUserId, buttonType){
             let style;
             if (buttonType==="Delete") {
                 style = "btn-danger";
             } else {
                 style = "btn-info";
             }
-
-            return "<td><a><button type=\"button\" class=\"btn btn-sm "+style+"\" data-toggle=\"modal\" data-id="+currUser.id+" data-name="+encodeURIComponent(currUser.firstname)+" data-lastname="+encodeURIComponent(currUser.lastname)+" data-age="+currUser.age+" data-email="+encodeURIComponent(currUser.email)+" data-username="+encodeURIComponent(currUser.username)+" data-password="+encodeURIComponent(currUser.password)+" data-roles="+encodeURIComponent(currUser.userRoleStr)+" data-origin=\""+buttonType+"Button\" data-target=\"#modalWindow\">"+buttonType+"</button></a></td>";
+            return "<td><a><button type=\"button\" class=\"btn btn-sm "+style+"\" data-toggle=\"modal\" data-uid="+currUserId+" data-origin=\""+buttonType+"Button\" data-target=\"#modalWindow\">"+buttonType+"</button></a></td>";
         }
 
         function showPage(pageNum) {
             let skipUsers = pageNum * usersPerPage - usersPerPage;
-            document.getElementById("userTable").innerHTML = '';
+            $("#userTable").html('');
             for (let i = 0; i < usersPerPage; i++) {
                 let currUserId = i + skipUsers;
                 if (currUserId < users.length) {
                     let currUser = users[currUserId];
-                    document.getElementById("userTable").innerHTML += "<tr><td>"+currUser.id+"</td><td>"+currUser.firstname+"</td><td>"+currUser.lastname+"</td><td>"+currUser.age+"</td><td>"+currUser.email+"</td><td>"+currUser.userRoleStr+"</td>"+createButton(currUser, "Info")+createButton(currUser, "Edit")+createButton(currUser, "Delete")+"</tr>";
+                    document.getElementById("userTable").innerHTML += "<tr><td>"+currUser.id+"</td><td>"+currUser.firstname+"</td><td>"+currUser.lastname+"</td><td>"+currUser.age+"</td><td>"+currUser.email+"</td><td>"+currUser.userRoleStr+"</td>"+createButton(currUserId, "Info")+createButton(currUserId, "Edit")+createButton(currUserId, "Delete")+"</tr>";
                 }
             }
+
             if (users.length===0) {
-                document.getElementById("afterTableLabel").innerHTML += "<br>No users found<br>";
+                $("#afterTableLabel").html('<br>No users found<br>');
             }
-            document.getElementById("page").innerHTML = 'page '+pageNum+' of '+userPages+', users: '+users.length;
+            $("#page").html('page '+pageNum+' of '+userPages+', users: '+users.length);
             if (pageNum<=1) {
                 disableButton("prevPage");
             }
@@ -101,8 +60,6 @@
                 disableButton("nextPage");
             }
         }
-
-
 
         function showNextPage() {
             if (currPage < userPages) {
@@ -123,28 +80,102 @@
             }
         }
 
-        async function del(id) {
-            let response = await fetch('/admin/delete='+id);
-            if (response.ok) {
-                await run();
-            }
+        function clearUserFields(formName) {
+            $("#id"+formName).val('');
+            $("#firstname"+formName).val('')
+            $("#lastname"+formName).val('')
+            $("#age"+formName).val('')
+            $("#email"+formName).val('')
+            $("#username"+formName).val('')
+            $("#password"+formName).val('')
+
+            document.getElementById("checkbox"+formName+"-1").checked = false;
+            document.getElementById("checkbox"+formName+"-2").checked = false;
+            document.getElementById("checkbox"+formName+"-3").checked = false;
         }
 
-        async function edit(id, name, lastname, age, email, username, password) {
-
+        function parseUser(formName) {
             let user = {
-                id: document.querySelector('#idEdit').value,//decodeURIComponent(id),
-                firstname: document.querySelector('#firstnameEdit').value,//decodeURIComponent(name),
-                lastname: document.querySelector('#lastnameEdit').value,//decodeURIComponent(lastname),
-                age: document.querySelector('#ageEdit').value,//decodeURIComponent(age),
-                email: document.querySelector('#emailEdit').value,//decodeURIComponent(email),
-                username: document.querySelector('#usernameEdit').value,//decodeURIComponent(username),
-                password: document.querySelector('#passwordEdit').value,//decodeURIComponent(password),
+                id: $("#id"+formName).val(),
+                firstname: $("#firstname"+formName).val(),
+                lastname: $("#lastname"+formName).val(),
+                age: $("#age"+formName).val(),
+                email: $("#email"+formName).val(),
+                username: $("#username"+formName).val(),
+                password: $("#password"+formName).val(),
                 roleStr: ''
             };
-            if (document.getElementById("checkboxEdit-1").checked) user.roleStr+="ADMIN";
-            if (document.getElementById("checkboxEdit-2").checked) user.roleStr+="USER";
-            if (document.getElementById("checkboxEdit-3").checked) user.roleStr+="GUEST";
+            if (document.getElementById("checkbox"+formName+"-1").checked) user.roleStr+="ADMIN";
+            if (document.getElementById("checkbox"+formName+"-2").checked) user.roleStr+="USER";
+            if (document.getElementById("checkbox"+formName+"-3").checked) user.roleStr+="GUEST";
+            return user;
+        }
+
+        function setUser(user, formName) {
+            $("#id"+formName).val(user.id);
+            $("#firstname"+formName).val(user.firstname);
+            $("#lastname"+formName).val(user.lastname);
+            $("#age"+formName).val(user.age);
+            $("#email"+formName).val(user.email);
+            $("#username"+formName).val(user.username);
+            $("#password"+formName).val(user.password);
+            if (user.userRoleStr.includes("ADMIN")) document.getElementById("checkbox"+formName+"-1").checked=true;
+            if (user.userRoleStr.includes("USER")) document.getElementById("checkbox"+formName+"-2").checked=true;
+            if (user.userRoleStr.includes("GUEST")) document.getElementById("checkbox"+formName+"-3").checked=true;
+        }
+
+        function setErrorFields(userErrorText, formName) {
+            $("#id"+formName+"Error").html(userErrorText.id);
+
+            $("#username"+formName+"Error").html(userErrorText.username);
+            if (userErrorText.username!=='') {
+                $("#username"+formName).removeClass('bg-white').css("background-color", "#ffebb9");
+            } else $("#username"+formName).addClass('bg-white');
+
+            $("#password"+formName+"Error").html(userErrorText.password);
+            if (userErrorText.password!=='') {
+                $("#password"+formName).removeClass('bg-white').css("background-color", "#ffebb9");
+            } else $("#password"+formName).addClass('bg-white');
+
+            $("#email"+formName+"Error").html(userErrorText.email);
+            document.getElementById("email"+formName+"Error").innerText=userErrorText.email;
+            if (userErrorText.email!=='') {
+                $("#email"+formName).removeClass('bg-white').css("background-color", "#ffebb9");
+            } else $("#email"+formName).addClass('bg-white');
+
+            $("#firstname"+formName+"Error").html(userErrorText.firstname);
+            if (userErrorText.firstname!=='') {
+                $("#firstname"+formName).removeClass('bg-white').css("background-color", "#ffebb9");
+            } else $("#firstname"+formName).addClass('bg-white');
+
+            $("#lastname"+formName+"Error").html(userErrorText.lastname);
+            if (userErrorText.lastname!=='') {
+                $("#lastname"+formName).removeClass('bg-white').css("background-color", "#ffebb9");
+            } else $("#lastname"+formName).addClass('bg-white');
+
+            $("#age"+formName+"Error").html(userErrorText.age);
+            document.getElementById("age"+formName+"Error").innerText=userErrorText.age;
+            if (userErrorText.age!=='') {
+                $("#age"+formName).removeClass('bg-white').css("background-color", "#ffebb9");
+            } else $("#age"+formName).addClass('bg-white');
+        }
+
+        function clearErrorFields(formName) {
+            function clearErrorField(field,formName) {
+                $("#"+field+formName+"Error").html('');
+                $("#"+field+formName).addClass('bg-white');
+            }
+            clearErrorField("id",formName);
+            clearErrorField("username",formName);
+            clearErrorField("password",formName);
+            clearErrorField("email",formName);
+            clearErrorField("firstname",formName);
+            clearErrorField("lastname",formName);
+            clearErrorField("age",formName);
+        }
+
+        async function edit() {
+            let user = parseUser("Edit");
 
             let response = await fetch('/admin/edit', {
                 method: 'POST',
@@ -154,26 +185,17 @@
                 body: JSON.stringify(user)
             });
 
-            if (response.ok) {
-                await run();
+            let userErrorText = await response.json();
+            setErrorFields(userErrorText, "Edit");
+
+            if (!userErrorText.errorsPresent) {
+                $('#modalWindow').modal('hide');
+                await update();
             }
         }
 
-
         async function newUser() {
-            let user = {
-                id: document.querySelector('#idNew').value,
-                firstname: document.querySelector('#firstnameNew').value,
-                lastname: document.querySelector('#lastnameNew').value,
-                age: document.querySelector('#ageNew').value,
-                email: document.querySelector('#emailNew').value,
-                username: document.querySelector('#usernameNew').value,
-                password: document.querySelector('#passwordNew').value,
-                roleStr: ''
-            };
-            if (document.getElementById("checkboxNew-1").checked) user.roleStr+="ADMIN";
-            if (document.getElementById("checkboxNew-2").checked) user.roleStr+="USER";
-            if (document.getElementById("checkboxNew-3").checked) user.roleStr+="GUEST";
+            let user = parseUser("New");
 
             let response = await fetch('/admin/new', {
                 method: 'POST',
@@ -184,29 +206,34 @@
             });
 
             let userErrorText = await response.json();
-            document.getElementById("usernameNewError").innerText=userErrorText.username;
-            document.getElementById("passwordNewError").innerText=userErrorText.password;
-            document.getElementById("emailNewError").innerText=userErrorText.email;
-            document.getElementById("firstnameNewError").innerText=userErrorText.firstname;
-            document.getElementById("lastnameNewError").innerText=userErrorText.lastname;
-            document.getElementById("ageNewError").innerText=userErrorText.age;
+            setErrorFields(userErrorText, "New");
 
-            if (userErrorText.id===null) {
+            if (!userErrorText.errorsPresent) {
                 document.getElementById("new").classList.remove('active', 'show');
                 document.getElementById("newTab").classList.remove('active');
                 document.getElementById("table").classList.add('active', 'show');
                 document.getElementById("tableTab").classList.add('active');
-                await run();
+                clearUserFields("New");
+                await update();
             }
         }
 
-        async function run() {
+        async function del(id) {
+            let response = await fetch('/admin/delete='+id);
+            if (response.ok) {
+                $('#modalWindow').modal('hide')
+                await update();
+            }
+        }
+
+        async function update() {
             let response = await fetch('/admin/users');
             users = await response.json();
             userPages = Math.ceil(users.length / usersPerPage);
             showPage(currPage);
         }
-        run();
+
+        update();
 
     </script>
 
@@ -239,7 +266,7 @@
             <!-- Tab titles -->
             <ul class="nav nav-tabs">
                 <li class="nav-item border-bottom">
-                    <a id="tableTab" class="nav-link" data-toggle="tab" role="tab" href="#table">Users Table</a>
+                    <a id="tableTab" class="nav-link active" data-toggle="tab" role="tab" href="#table">Users Table</a>
                 </li>
                 <li class="nav-item border-bottom">
                     <a id="newTab" class="nav-link" data-toggle="tab" role="tab" href="#new">New User</a>
@@ -250,7 +277,7 @@
             <div class="tab-content">
 
                 <!-- Users tab content -->
-                <div class="tab-pane fade" id="table">
+                <div id="table" class="tab-pane fade active show">
                     <div class="p-3 border border-top-0">
                         <h5 id="tabTitle" class="my-0">All Users</h5>
                     </div>
@@ -271,98 +298,29 @@
                             </tr>
                             </thead>
                             <tbody id="userTable">
-                            <tr th:each="i : ${#numbers.sequence( 0, 17, 1)}">
-                                <td th:id="${'u-id-'+i}">id</td>
-                                <td th:id="${'u-firstname-'+i}">name</td>
-                                <td th:id="${'u-lastname-'+i}">lastname</td>
-                                <td th:id="${'u-age-'+i}">age</td>
-                                <td th:id="${'u-email-'+i}">email</td>
-                                <td th:id="${'u-role-'+i}">role</td>
-                                <td>
-                                    <a>
-                                        <button type="button" class="btn btn-sm btn-info" data-toggle="modal"
-                                                th:data-id=@{{i}(i=${uId})} th:data-name=@{{i}(i=${uName})}
-                                                th:data-lastname=@{{i}(i=${ulastname})}
-                                                th:data-age=${uAge} th:data-email=@{{i}(i=${uEmail})}
-                                                th:data-username=@{{i}(i=${uUsername})}
-                                                th:data-password=@{{i}(i=${uPassword})}
-                                                th:data-roles=@{{i}(i=${uRoles})}
-                                                th:data-origin="infoButton" data-target="#modalWindow">Info</button>
-                                    </a>
-                                </td>
-                                <td>
-                                    <a>
-                                        <button type="button" class="btn btn-sm btn-info" data-toggle="modal"
-                                                th:data-id=@{{i}(i=${uId})} th:data-name=@{{i}(i=${uName})}
-                                                th:data-lastname=@{{i}(i=${ulastname})}
-                                                th:data-age=${uAge} th:data-email=@{{i}(i=${uEmail})}
-                                                th:data-username=@{{i}(i=${uUsername})}
-                                                th:data-password=@{{i}(i=${uPassword})}
-                                                th:data-roles=@{{i}(i=${uRoles})}
-                                                th:data-origin="editButton" data-target="#modalWindow">Edit
-                                        </button>
-                                    </a>
-                                </td>
-                                <td><a>
-                                    <button type="button" class="btn btn-sm btn-danger" data-toggle="modal"
-                                            th:data-id=@{{i}(i=${uId})} th:data-name=@{{i}(i=${uName})}
-                                            th:data-lastname=@{{i}(i=${ulastname})}
-                                            th:data-age=${uAge} th:data-email=@{{i}(i=${uEmail})}
-                                            th:data-username=@{{i}(i=${uUsername})}
-                                            th:data-password=@{{i}(i=${uPassword})}
-                                            th:data-roles=@{{i}(i=${uRoles})}
-                                            th:data-origin="deleteButton" data-target="#modalWindow">Delete
-                                    </button>
-                                </a></td>
-                            </tr>
-                            <tr th:if="${(users.size()<=0)&&isFilterActive}">
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
-                            <table>
-                                <tr>
-                                    <td>
-                                        <div id="page" style="font-size: smaller">
-                                        </div>
-                                    </td>
+                                <tr th:each="i : ${#numbers.sequence( 0, 10, 1)}">
+                                    <td>id</td>
+                                    <td>name</td>
+                                    <td>lastname</td>
+                                    <td>age</td>
+                                    <td>email</td>
+                                    <td>role</td>
+                                    <td><button type="button" class="btn btn-sm btn-info">Info</button></td>
+                                    <td><button type="button" class="btn btn-sm btn-info">Edit</button></td>
+                                    <td><button type="button" class="btn btn-sm btn-danger">Delete</button></td>
                                 </tr>
-                            </table>
+                                <table><tr><td><div id="page" style="font-size: smaller"></div></td></tr></table>
                             </tbody>
                         </table>
                     </div>
                     <label id="afterTableLabel"></label>
                     <div style="margin-top: 0.6em;">
-                        <button type="button" id="prevPage" class="btn-info btn-sm" style="box-shadow: none;">Prev page</button>
-<!--                        <button th:if="#currPage <= 1" type="button" disabled class="btn-outline-secondary btn-sm border-white border-top">Prev page</button>-->
-                        <button type="button" id="nextPage" class="btn-info btn-sm" style="box-shadow: none;">Next page</button>
-<!--                        <button th:if="#currPage >= ${userPages}" type="button" disabled class="btn-outline-secondary btn-sm border-light">Next page</button>-->
-
+                        <button type="button" id="prevPage" class="btn-info btn-sm" style="box-shadow: none;" onclick="showPrevPage();">Prev page</button>
+                        <button type="button" id="nextPage" class="btn-info btn-sm" style="box-shadow: none;" onclick="showNextPage();">Next page</button>
                         <button type="button" data-toggle="modal" th:data-origin="filterButton" data-target="#modalWindow" class="btn-info btn-sm" style="box-shadow: none;">Filter</button>
                         <button type="button" data-toggle="modal" th:data-origin="searchButton" data-target="#modalWindow" class="btn-info btn-sm" style="box-shadow: none;">Search</button>
-                        <button th:if="${!isFilterActive}" id="refresh" type="button" class="btn-info btn-sm" style="box-shadow: none;">Refresh</button>
+                        <button th:if="${!isFilterActive}" id="refresh" type="button" onclick="location.href = '/admin';" class="btn-info btn-sm" style="box-shadow: none;">Refresh</button>
                         <button th:if="${isFilterActive}" type="button" onclick="location.href = '/admin/removeFilter';" class="btn-info btn-sm" style="box-shadow: none;">Remove Filter</button>
-                        <script type="text/javascript">
-                            document.getElementById("prevPage").onclick = function () {
-                                showPrevPage();
-                            };
-                        </script>
-                        <script type="text/javascript">
-                            document.getElementById("nextPage").onclick = function () {
-                                showNextPage();
-                            };
-                        </script>
-                        <script type="text/javascript">
-                            document.getElementById("refresh").onclick = function () {
-                                location.href = '/admin'
-                            };
-                        </script>
                     </div>
                 </div>
 
@@ -372,46 +330,32 @@
                         <h5 class="my-0">Add New User</h5>
                     </div>
                     <div class="listbtn p-3 bg-white border border-top-0">
-
-                        <form class="text-center" th:method="post" th:action="@{/admin/}" th:object="${user}">
-
-                            <input id="idNew" style="display: none" type="text" name="id">
+                        <form class="text-center">
+                            <input id="idNew" style="display: none" type="text">
                             <div id="idNewError" style="display: none"></div>
 
                             <label for="firstnameNew" class="font-weight-bolder mb-1">First name</label><br>
-                            <input  id="firstnameNew" class="border rounded"
-                                   th:style="${#fields.hasErrors('firstname')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                                   th:field="*{firstname}" type="text">
+                            <input id="firstnameNew" class="border rounded" style="width: 19rem" type="text">
                             <div id="firstnameNewError" class="small text-danger"></div>
 
                             <label for="lastnameNew" class="font-weight-bolder mt-3 mb-1">Last name</label><br>
-                            <input id="lastnameNew" class="border rounded"
-                                   th:style="${#fields.hasErrors('lastname')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                                   th:field="*{lastname}" type="text">
+                            <input id="lastnameNew" class="border rounded" style="width: 19rem" type="text">
                             <div id="lastnameNewError" class="small text-danger"></div>
 
                             <label for="ageNew" class="font-weight-bolder mt-3 mb-1">Age</label><br>
-                            <input  id="ageNew" class="border rounded"
-                                   th:style="${#fields.hasErrors('age')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                                   th:field="*{age}" type="text">
+                            <input id="ageNew" class="border rounded" style="width: 19rem" type="text">
                             <div id="ageNewError" class="small text-danger"></div>
 
                             <label for="emailNew" class="font-weight-bolder mt-3 mb-1">Email</label><br>
-                            <input  id="emailNew" class="border rounded"
-                                   th:style="${#fields.hasErrors('email')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                                   th:field="*{email}" type="text">
+                            <input id="emailNew" class="border rounded" style="width: 19rem" type="text">
                             <div id="emailNewError" class="small text-danger"></div>
 
                             <label for="usernameNew" class="font-weight-bolder mt-3 mb-1">Username</label><br>
-                            <input id="usernameNew" class="border rounded"
-                                   th:style="${#fields.hasErrors('username')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                                   th:field="*{username}" type="text">
+                            <input id="usernameNew" class="border rounded" style="width: 19rem" type="text">
                             <div id="usernameNewError" class="small text-danger"></div>
 
                             <label for="passwordNew" class="font-weight-bolder mt-3 mb-1">Password</label><br>
-                            <input  id="passwordNew" class="border rounded"
-                                   th:style="${#fields.hasErrors('password')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                                   th:field="*{password}" type="text">
+                            <input id="passwordNew" class="border rounded" style="width: 19rem" type="text">
                             <div id="passwordNewError" class="small text-danger"></div>
 
                             <label class="font-weight-bolder mt-3 mb-1">Roles</label>
@@ -419,29 +363,17 @@
                                 <label class="mb-1" style="cursor: pointer;">
                                     <input th:id="${'checkboxNew-'+r.id}"
                                            style="width: calc(1vw); height: calc(1vw); vertical-align: middle; cursor: pointer"
-                                           type="checkbox" name="index" th:checked="${user.hasRole(r)}" th:value="${r.id}"/>
+                                           type="checkbox" name="index" th:value="${r.id}"/>
                                     <span th:text="${r.role}"></span>
                                 </label>
                             </div>
                             <input class="mt-3 mb-4 btn btn-success" type="button" onclick="newUser();" value="Add new user"/>
                         </form>
                     </div>
-                    <script type="text/javascript">
-                        if ([[${modalWindowId}]] === 2) {
-                            document.getElementById("new").classList.add('active', 'show');
-                            document.getElementById("newTab").classList.add('active');
-                        } else {
-                            document.getElementById("table").classList.add('active', 'show');
-                            document.getElementById("tableTab").classList.add('active');
-                        }
-                    </script>
                 </div>
-
             </div>
-
             <!--Footer -->
-            <div class="mb-5" style="margin-top: 0.6em">
-            </div>
+            <div class="mb-5" style="margin-top: 0.6em"></div>
 
         </div>
 
@@ -449,112 +381,56 @@
         <div id="modalWindow" class="modal" style="font-size: 0.9em;" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
-                    <form name="userEditForm" id="userEditForm" class="text-center" th:method="patch" th:action="@{/admin/}" th:object="${user}">
-
+                    <form name="userEditForm" id="userEditForm" class="text-center">
                         <label for="idEdit" class="font-weight-bolder mt-4 mb-1">Id</label><br>
-                        <input id="idEdit" class="border rounded"
-                               th:style="'width: 19rem;'"
-                               th:value=${user.getId()} type="text" name="id">
+                        <input id="idEdit" class="border rounded" style="width: 19rem" type="text">
                         <div id="idEditError" class="small text-danger"></div>
 
                         <label for="firstnameEdit" class="font-weight-bolder mt-3 mb-1">First name</label><br>
-                        <input id="firstnameEdit" class="border rounded"
-                               th:style="${#fields.hasErrors('firstname')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                               th:field="*{firstname}"  type="text" >
+                        <input id="firstnameEdit" class="border rounded" style="width: 19rem" type="text">
                         <div id="firstnameEditError" class="small text-danger"></div>
 
                         <label for="lastnameEdit" class="font-weight-bolder mt-3 mb-1">Last name</label><br>
-                        <input id="lastnameEdit" class="border rounded"
-                               th:style="${#fields.hasErrors('lastname')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                               th:field="*{lastname}" type="text">
+                        <input id="lastnameEdit" class="border rounded" style="width: 19rem" type="text">
                         <div id="lastnameEditError" class="small text-danger"></div>
 
                         <label for="ageEdit" class="font-weight-bolder mt-3 mb-1">Age</label><br>
-                        <input id="ageEdit" class="border rounded"
-                               th:style="${#fields.hasErrors('age')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                               th:field="*{age}" type="text">
+                        <input id="ageEdit" class="border rounded" style="width: 19rem" type="text">
                         <div id="ageEditError" class="small text-danger"></div>
 
                         <label for="emailEdit" class="font-weight-bolder mt-3 mb-1">Email</label><br>
-                        <input id="emailEdit" class="border rounded"
-                               th:style="${#fields.hasErrors('email')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                               th:field="*{email}" type="text">
+                        <input id="emailEdit" class="border rounded" style="width: 19rem" type="text">
                         <div id="emailEditError" class="small text-danger"></div>
 
                         <label for="usernameEdit" class="font-weight-bolder mt-3 mb-1">Username</label><br>
-                        <input id="usernameEdit" class="border rounded"
-                               th:style="${#fields.hasErrors('username')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                               th:field="*{username}" type="text">
+                        <input id="usernameEdit" class="border rounded" style="width: 19rem" type="text">
                         <div id="usernameEditError" class="small text-danger"></div>
 
                         <label for="passwordEdit" class="font-weight-bolder mt-3 mb-1">Password</label><br>
-                        <input id="passwordEdit" class="border rounded"
-                               th:style="${#fields.hasErrors('password')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-                               th:field="*{password}" type="text">
+                        <input id="passwordEdit" class="border rounded" style="width: 19rem" type="text">
                         <div id="passwordEditError" class="small text-danger"></div>
-                        <div th:unless="${#fields.hasErrors('password')}"></div>
 
                         <label class="font-weight-bolder mt-3 mb-1">Roles</label>
                         <div th:each="r : ${roles}">
                             <label class="mb-1" style="cursor: pointer;">
-<!--                                <input th:id="${'checkboxEdit-'+r.id}"-->
-<!--                                       style="width: calc(1vw); height: calc(1vw); vertical-align: middle; cursor: pointer"-->
-<!--                                       type="checkbox" name="index" th:checked="${user.hasRole(r)}" th:value="${r.id}"/>-->
                                 <input th:id="${'checkboxEdit-'+r.id}" style="width: calc(1vw); height: calc(1vw); vertical-align: middle; cursor: pointer" type="checkbox" name="index" th:value="${r.id}"/>
                                 <span th:text="${r.role}"></span>
                             </label>
                         </div>
-                        <input id='formCancel' class="mt-3 mb-5 btn btn-secondary" type="button" onclick="$('#modalWindow').modal('hide');"
-                               value="Close"/>
-                        <input id='formSubmit' class="mt-3 mb-5 btn btn-info" type="submit" onclick="$('#modalWindow').modal('hide');"
-                               value="Edit"/>
-
-                        <script type="text/javascript">
-                            if ([[${modalWindowId}]] === 2) {
-                                document.getElementById("modalWindow").style.display = "display-block";
-                            }
-                        </script>
+                        <input id='formCancel' class="mt-3 mb-5 btn btn-secondary" type="button" onclick="$('#modalWindow').modal('hide');" value="Close"/>
+                        <input id='formSubmit' class="mt-3 mb-5 btn" value="Edit"/>
                     </form>
                 </div>
             </div>
             <script type="text/javascript" th:inline="javascript">
 
-                if ([[${modalWindowId}]] === 1) {
-                    $('#modalWindow').modal('show');
-                }
-                if ([[${modalWindowId}]] === 3) {
-                    document.getElementById('tabTitle').innerText = 'Filtered users';
-                }
-                if ([[${modalWindowId}]] === 4) {
-                    document.getElementById('tabTitle').innerText = 'Search result';
-                }
-
                 $("#modalWindow").on('show.bs.modal', function (e) {
                     const modal = $(e.relatedTarget);
                     let origin = modal.data('origin');
-
                     let id = modal.data('id');
-                    let name = modal.data('name');
-                    let lastname = modal.data('lastname');
-                    let age = modal.data('age');
-                    let email = modal.data('email');
-                    let username = modal.data('username');
-                    let password = modal.data('password');
 
-                    function setFieldValue(fName, dataName) {
-                        $('#'+fName)
-                            .addClass('bg-white')
-                            .val(decodeURIComponent(modal.data(dataName)));
-                        $('#'+fName+'Error').text(' ');
-
-                        if ((origin==='EditButton')||(origin==='filterButton')||(origin==='searchButton')) {
-                            $('#' + fName).removeClass('text-muted').removeAttr('disabled', 'disabled').removeAttr('readonly', 'readonly');
-                        }
-                    }
-                    function clearFieldValue(fName) {
-                        document.getElementById(fName).style.backgroundColor = '#FFFFFF';
-                        $('#'+fName).val('').removeClass('text-muted').removeAttr('disabled', 'disabled').removeAttr('readonly','readonly');
-                        $('#'+fName+'Error').text(' ');
+                    function resetField(fieldId) {
+                        $('#' + fieldId).addClass('bg-white').removeClass('text-muted').removeAttr('disabled', 'disabled').removeAttr('readonly', 'readonly');
                     }
 
                     function readonlyField(fieldId) {
@@ -578,6 +454,7 @@
                         document.getElementById("formSubmit").setAttribute('type', 'button');
                     }
 
+
                     if ((origin==='EditButton')||(origin==='filterButton')||(origin==='searchButton'))
                     {
                         $('#checkboxEdit-1').removeAttr('disabled', 'disabled');
@@ -589,17 +466,18 @@
                         $('#checkboxEdit-3').attr('disabled', 'disabled');
                     }
 
-
-                    document.getElementById("formSubmit").hidden=false;
+                    clearErrorFields("Edit");
                     $('#formSubmit').removeClass('btn-secondary btn-danger btn-info btn-primary');
+                    document.getElementById("formSubmit").hidden=false;
+
                     if (origin==='InfoButton') {
                         document.getElementById("formSubmit").hidden=true;
                     } else if (origin==='EditButton') {
                         $('#formSubmit').val('Edit').addClass('btn-primary');
-                        document.getElementById("formSubmit").onclick = function(){edit(id,name,lastname,age,email,username,password);$('#modalWindow').modal('hide')};
+                        document.getElementById("formSubmit").onclick = function(){edit()};
                     } else if (origin==='DeleteButton') {
                         $('#formSubmit').val('Delete').addClass('btn-danger');
-                        document.getElementById("formSubmit").onclick = function(){del(id);$('#modalWindow').modal('hide')}; //function(){location.href = '/admin/delete='+modal.data('id')}
+                        document.getElementById("formSubmit").onclick = function(){del(id)};
                     } else if (origin==='filterButton') {
                         $('#formSubmit').val('Filter').addClass('btn-primary');
                         document.getElementById('userEditForm').action = '/admin/filter';
@@ -609,33 +487,15 @@
                     }
 
 
-                    if ((origin!=='filterButton')&&(origin!=='searchButton')){
-                        setFieldValue('idEdit', 'id');
-                        setFieldValue('firstnameEdit', 'name');
-                        setFieldValue('lastnameEdit', 'lastname');
-                        setFieldValue('ageEdit', 'age');
-                        setFieldValue('emailEdit', 'email');
-                        setFieldValue('usernameEdit', 'username');
-                        setFieldValue('passwordEdit', 'password');
+                    clearUserFields("Edit");
 
-                        let roles = modal.data('roles');
-
-                        document.getElementById("checkboxEdit-1").checked = (roles.indexOf('ADMIN') !== -1);
-                        document.getElementById("checkboxEdit-2").checked = (roles.indexOf('USER') !== -1);
-                        document.getElementById("checkboxEdit-3").checked = (roles.indexOf('GUEST') !== -1);
-                    } else {
-                        clearFieldValue('idEdit');
-                        clearFieldValue('firstnameEdit');
-                        clearFieldValue('lastnameEdit');
-                        clearFieldValue('ageEdit');
-                        clearFieldValue('emailEdit');
-                        clearFieldValue('usernameEdit');
-                        clearFieldValue('passwordEdit');
-
-                        document.getElementById("checkboxEdit-1").checked = false;
-                        document.getElementById("checkboxEdit-2").checked = false;
-                        document.getElementById("checkboxEdit-3").checked = false;
-                    }
+                    resetField('idEdit');
+                    resetField('firstnameEdit');
+                    resetField('lastnameEdit');
+                    resetField('ageEdit');
+                    resetField('emailEdit');
+                    resetField('usernameEdit');
+                    resetField('passwordEdit');
 
                     if (origin==='EditButton') {
                         readonlyField('idEdit');
@@ -658,26 +518,14 @@
                         muteField('usernameEdit');
                         muteField('passwordEdit');
                     }
+
+                    let uid = modal.data('uid');
+                    setUser(users[uid],"Edit");
                 });
 
                 $('#newTab').on('show.bs.tab', function () {
-                    function clearFieldValue(fName) {
-                        document.getElementById(fName).style.backgroundColor = '#FFFFFF';
-                        $('#'+fName).val('');
-                        $('#'+fName+'Error').text(' ');
-                    }
-
-                    clearFieldValue('idNew');
-                    clearFieldValue('firstnameNew');
-                    clearFieldValue('lastnameNew');
-                    clearFieldValue('ageNew');
-                    clearFieldValue('emailNew');
-                    clearFieldValue('usernameNew');
-                    clearFieldValue('passwordNew');
-
-                    document.getElementById("checkboxNew-1").checked = false;
-                    document.getElementById("checkboxNew-2").checked = false;
-                    document.getElementById("checkboxNew-3").checked = false;
+                    clearUserFields("New");
+                    clearErrorFields("New");
                 });
             </script>
         </div>

@@ -65,25 +65,66 @@ public class AdminRestController {
 //    }
 
     @PostMapping("/edit")
-    public String indexEditUser(@RequestBody UserDTO tmpUser) {
-        System.out.println(tmpUser);
+    public UserDTO indexEditUser(@RequestBody @Valid UserDTO tmpUser, BindingResult bindingResult) {
+
         String idStr = tmpUser.getId();
         Long id = idStr.matches("\\d+")?Long.parseLong(idStr):0;
         User user = service.getById(id);
 
-        System.out.println("x1 "+user);
+        checkLoginEmailBusy(tmpUser, bindingResult);
+        UserDTO userErrorDTO = checkBindingErrors(bindingResult);
 
-        user.merge(tmpUser, roleService.getRoles(tmpUser.getRoleStr()));
-        System.out.println("x2 "+user);
-        service.update(user);
+        if (bindingResult.hasErrors()) {
+            userErrorDTO.setErrorsPresent(true);
+            System.out.println(userErrorDTO);
+        } else {
+            user.merge(tmpUser, roleService.getRoles(tmpUser.getRoleStr()));
+            service.update(user);
+        }
 
-        return "success";
+        return userErrorDTO;
     }
 
     @PostMapping("/new")
     public UserDTO indexNewUser(@RequestBody @Valid UserDTO tempUser, BindingResult bindingResult) {
 
+        checkLoginEmailBusy(tempUser, bindingResult);
+        UserDTO userErrorDTO = checkBindingErrors(bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            userErrorDTO.setErrorsPresent(true);
+        } else {
+            User user = new User();
+            user.merge(tempUser, roleService.getRoles(tempUser.getRoleStr()));
+            service.update(user);
+        }
+
+        return userErrorDTO;
+    }
+
+    @GetMapping("/delete={id}")
+    String deleteUserById(@PathVariable("id") Long id) {
+        service.delete(id);
+        return "success";
+    }
+
+    private void checkLoginEmailBusy(UserDTO userdto, BindingResult bindingResult) {
+        User editedUser = service.getByUsername(userdto.getUsername());
+
+        if ((editedUser != null) && (!editedUser.getId().toString().equals(userdto.getId()))) {
+            bindingResult.addError(new FieldError("username", "username", "Username already taken"));
+        }
+        editedUser = service.getByEmail(userdto.getEmail());
+        if ((editedUser != null) && (!editedUser.getId().toString().equals(userdto.getId()))) {
+            bindingResult.addError(new FieldError("email", "email", "User with this email already exists"));
+        }
+    }
+
+    private UserDTO checkBindingErrors(BindingResult bindingResult) {
         UserDTO userError = new UserDTO();
+        userError.setId(
+                (bindingResult.getFieldErrorCount("id")>0)?
+                        bindingResult.getFieldError("id").getDefaultMessage():"");
         userError.setUsername(
                 (bindingResult.getFieldErrorCount("username")>0)?
                         bindingResult.getFieldError("username").getDefaultMessage():"");
@@ -102,69 +143,10 @@ public class AdminRestController {
         userError.setLastname(
                 (bindingResult.getFieldErrorCount("lastname")>0)?
                         bindingResult.getFieldError("lastname").getDefaultMessage():"");
-        System.out.println(userError);
-
-        if (bindingResult.hasErrors()) {
-            userError.setId("-1");
-        } else {
-            System.out.println(tempUser);
-            User user = new User();
-            user.merge(tempUser, roleService.getRoles(tempUser.getRoleStr()));
-            service.update(user);
-        }
 
         return userError;
     }
 
-    @GetMapping("/delete={id}")
-    String deleteUserById(@PathVariable("id") Long id) {
-        service.delete(id);
-        return "success";
-    }
-
-    private void viewInput(@RequestParam(name = "page", required = false, defaultValue = "1") String strPageNum, Principal pr, Authentication authentication, Model model) {
-        int page = getPageNum(strPageNum);
-        model.addAttribute("pageNum", page);
-        model.addAttribute("users", service.getFilterUsers(page != 1));
-        model.addAttribute("roles", roleService.getRoles());
-        model.addAttribute("principal", getPrincipal(pr, authentication));
-        model.addAttribute("isFilterActive", service.isFilterSet());
-    }
-
-    private String viewOutput(User user, BindingResult bindingResult, Integer[] roleIds) {
-        setUserRoles(user, roleIds);
-        checkUserFields(user, bindingResult);
-        if (bindingResult.hasErrors()) {
-            System.out.println("bindingResult.hasErrors: " + user);
-            return "index";
-        }
-        System.out.println("updating user:"+user);
-        service.update(user);
-        return "redirect:/admin";
-    }
-
-    private void checkUserFields(User user, BindingResult bindingResult) {
-        User editedUser = service.getByUsername(user.getUsername());
-        if ((editedUser != null) && (!editedUser.getId().equals(user.getId()))) {
-            bindingResult.addError(new FieldError("username", "username", "Username already taken"));
-        }
-        editedUser = service.getByEmail(user.getEmail());
-        if ((editedUser != null) && (!editedUser.getId().equals(user.getId()))) {
-            bindingResult.addError(new FieldError("email", "email", "User with this email already exists"));
-        }
-    }
-
-    private int getPageNum(String strParam) {
-        return strParam.matches("\\d+") ? Integer.parseInt(strParam) : 1;
-    }
-
-    private void setUserRoles(User user, Integer[] roleIds) {
-        if (roleIds != null) {
-            for (Integer i : roleIds) {
-                user.addRole(roleService.getRole(i));
-            }
-        }
-    }
 
     private User getPrincipal(Principal pr, Authentication authentication) {
         User principal = service.getByUsername(pr.getName());
@@ -179,7 +161,4 @@ public class AdminRestController {
         }
         return principal;
     }
-
-    //    JSONObject  jo = usr.toJSON();//.toString();
-    // return usr.toJSON().toString();
 }

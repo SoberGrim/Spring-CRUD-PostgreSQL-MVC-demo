@@ -28,7 +28,7 @@ public class UserDTO {
 
     @NotNull
     @NotBlank(message = "Age should not be empty")
-    @Pattern(regexp = "^[1]?[0-9]?[0-9]$", message = "Age format invalid")
+    @Pattern(regexp = "^[1]?[0-9]?[0-9]$", message = "Age should 1 to 199 years")
     @Size(max = 3)
     private String age;
 
@@ -49,4 +49,6 @@ public class UserDTO {
     private String password;
 
     private String roleStr;
+
+    private boolean errorsPresent;
 }
