@@ -2,10 +2,8 @@ package ru.jm.crud.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Nationalized;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -16,10 +14,6 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class UserDTO {
 
-    @NotNull
-    @NotBlank(message = "Id should not be empty")
-    @Size(max = 16, message = "Id should be less than 16 characters")
-    @Pattern(regexp = "\\d+", message = "Id should be numeric")
     private String id;
 
     @NotNull

@@ -161,7 +161,6 @@
 
 
         async function newUser() {
-
             let user = {
                 id: document.querySelector('#idNew').value,
                 firstname: document.querySelector('#firstnameNew').value,
@@ -184,31 +183,15 @@
                 body: JSON.stringify(user)
             });
 
-            let userError = await response.json();
-            if (userError.id!=null) {
-                alert(userError.id);
-            }
-            if (userError.username!=null) {
-                alert(userError.username);
-            }
-            if (userError.password!=null) {
-                alert(userError.password);
-            }
-            if (userError.email!=null) {
-                alert(userError.email);
-            }
-            if (userError.firstname!=null) {
-                alert(userError.firstname);
-            }
-            if (userError.lastname!=null) {
-                alert(userError.lastname);
-            }
-            if (userError.age!=null) {
-                alert(userError.age);
-            }
+            let userErrorText = await response.json();
+            document.getElementById("usernameNewError").innerText=userErrorText.username;
+            document.getElementById("passwordNewError").innerText=userErrorText.password;
+            document.getElementById("emailNewError").innerText=userErrorText.email;
+            document.getElementById("firstnameNewError").innerText=userErrorText.firstname;
+            document.getElementById("lastnameNewError").innerText=userErrorText.lastname;
+            document.getElementById("ageNewError").innerText=userErrorText.age;
 
-
-            {
+            if (userErrorText.id===null) {
                 document.getElementById("new").classList.remove('active', 'show');
                 document.getElementById("newTab").classList.remove('active');
                 document.getElementById("table").classList.add('active', 'show');
@@ -218,18 +201,7 @@
         }
 
         async function run() {
-            let user = {
-                name: 'John',
-                surname: 'Smith'
-            };
-
-            let response = await fetch('/admin/users', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8'
-                },
-                body: JSON.stringify(user)
-            });
+            let response = await fetch('/admin/users');
             users = await response.json();
             userPages = Math.ceil(users.length / usersPerPage);
             showPage(currPage);
@@ -410,48 +382,37 @@
                             <input  id="firstnameNew" class="border rounded"
                                    th:style="${#fields.hasErrors('firstname')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
                                    th:field="*{firstname}" type="text">
-                            <div id="firstnameNewError" th:if="${#fields.hasErrors('firstname')}" class="small text-danger"
-                                 th:utext="${#fields.errors('firstname').get(0)}"></div>
-                            <div th:unless="${#fields.hasErrors('firstname')}"></div>
+                            <div id="firstnameNewError" class="small text-danger"></div>
 
                             <label for="lastnameNew" class="font-weight-bolder mt-3 mb-1">Last name</label><br>
                             <input id="lastnameNew" class="border rounded"
                                    th:style="${#fields.hasErrors('lastname')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
                                    th:field="*{lastname}" type="text">
-                            <div id="lastnameNewError" th:if="${#fields.hasErrors('lastname')}" class="small text-danger"
-                                 th:utext="${#fields.errors('lastname').get(0)}"></div>
-                            <div th:unless="${#fields.hasErrors('lastname')}"></div>
+                            <div id="lastnameNewError" class="small text-danger"></div>
 
                             <label for="ageNew" class="font-weight-bolder mt-3 mb-1">Age</label><br>
                             <input  id="ageNew" class="border rounded"
                                    th:style="${#fields.hasErrors('age')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
                                    th:field="*{age}" type="text">
-                            <div id="ageNewError" th:if="${#fields.hasErrors('age')}" class="small text-danger">Age should be between 0 and 199 years</div>
-                            <div th:unless="${#fields.hasErrors('age')}"></div>
+                            <div id="ageNewError" class="small text-danger"></div>
 
                             <label for="emailNew" class="font-weight-bolder mt-3 mb-1">Email</label><br>
                             <input  id="emailNew" class="border rounded"
                                    th:style="${#fields.hasErrors('email')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
                                    th:field="*{email}" type="text">
-                            <div id="emailNewError" th:if="${#fields.hasErrors('email')}" class="small text-danger"
-                                 th:utext="${#fields.errors('email').get(0)}"></div>
-                            <div th:unless="${#fields.hasErrors('email')}"></div>
+                            <div id="emailNewError" class="small text-danger"></div>
 
                             <label for="usernameNew" class="font-weight-bolder mt-3 mb-1">Username</label><br>
                             <input id="usernameNew" class="border rounded"
                                    th:style="${#fields.hasErrors('username')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
                                    th:field="*{username}" type="text">
-                            <div id="usernameNewError" th:if="${#fields.hasErrors('username')}" class="small text-danger"
-                                 th:utext="${#fields.errors('username').get(0)}"></div>
-                            <div th:unless="${#fields.hasErrors('username')}"></div>
+                            <div id="usernameNewError" class="small text-danger"></div>
 
                             <label for="passwordNew" class="font-weight-bolder mt-3 mb-1">Password</label><br>
                             <input  id="passwordNew" class="border rounded"
                                    th:style="${#fields.hasErrors('password')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
                                    th:field="*{password}" type="text">
-                            <div id="passwordNewError" th:if="${#fields.hasErrors('password')}" class="small text-danger"
-                                 th:utext="${#fields.errors('password').get(0)}"></div>
-                            <div th:unless="${#fields.hasErrors('password')}"></div>
+                            <div id="passwordNewError" class="small text-danger"></div>
 
                             <label class="font-weight-bolder mt-3 mb-1">Roles</label>
                             <div th:each="r : ${roles}">
@@ -494,55 +455,43 @@
                         <input id="idEdit" class="border rounded"
                                th:style="'width: 19rem;'"
                                th:value=${user.getId()} type="text" name="id">
-                        <div id="idEditError"></div>
+                        <div id="idEditError" class="small text-danger"></div>
 
                         <label for="firstnameEdit" class="font-weight-bolder mt-3 mb-1">First name</label><br>
                         <input id="firstnameEdit" class="border rounded"
                                th:style="${#fields.hasErrors('firstname')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
                                th:field="*{firstname}"  type="text" >
-                        <div id="firstnameEditError" th:if="${#fields.hasErrors('firstname')}" class="small text-danger"
-                             th:utext="${#fields.errors('firstname').get(0)}"></div>
-                        <div th:unless="${#fields.hasErrors('firstname')}"></div>
+                        <div id="firstnameEditError" class="small text-danger"></div>
 
                         <label for="lastnameEdit" class="font-weight-bolder mt-3 mb-1">Last name</label><br>
                         <input id="lastnameEdit" class="border rounded"
                                th:style="${#fields.hasErrors('lastname')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
                                th:field="*{lastname}" type="text">
-                        <div id="lastnameEditError" th:if="${#fields.hasErrors('lastname')}" class="small text-danger"
-                             th:utext="${#fields.errors('lastname').get(0)}"></div>
-                        <div th:unless="${#fields.hasErrors('lastname')}"></div>
+                        <div id="lastnameEditError" class="small text-danger"></div>
 
                         <label for="ageEdit" class="font-weight-bolder mt-3 mb-1">Age</label><br>
                         <input id="ageEdit" class="border rounded"
                                th:style="${#fields.hasErrors('age')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
                                th:field="*{age}" type="text">
-                        <div id="ageEditError" th:if="${#fields.hasErrors('age')}" class="small text-danger">Age should be between 0 and 199
-                            years
-                        </div>
-                        <div th:unless="${#fields.hasErrors('age')}"></div>
+                        <div id="ageEditError" class="small text-danger"></div>
 
                         <label for="emailEdit" class="font-weight-bolder mt-3 mb-1">Email</label><br>
                         <input id="emailEdit" class="border rounded"
                                th:style="${#fields.hasErrors('email')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
                                th:field="*{email}" type="text">
-                        <div id="emailEditError" th:if="${#fields.hasErrors('email')}" class="small text-danger"
-                             th:utext="${#fields.errors('email').get(0)}"></div>
-                        <div th:unless="${#fields.hasErrors('email')}"></div>
+                        <div id="emailEditError" class="small text-danger"></div>
 
                         <label for="usernameEdit" class="font-weight-bolder mt-3 mb-1">Username</label><br>
                         <input id="usernameEdit" class="border rounded"
                                th:style="${#fields.hasErrors('username')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
                                th:field="*{username}" type="text">
-                        <div id="usernameEditError" th:if="${#fields.hasErrors('username')}" class="small text-danger"
-                             th:utext="${#fields.errors('username').get(0)}"></div>
-                        <div th:unless="${#fields.hasErrors('username')}"></div>
+                        <div id="usernameEditError" class="small text-danger"></div>
 
                         <label for="passwordEdit" class="font-weight-bolder mt-3 mb-1">Password</label><br>
                         <input id="passwordEdit" class="border rounded"
                                th:style="${#fields.hasErrors('password')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
                                th:field="*{password}" type="text">
-                        <div id="passwordEditError" th:if="${#fields.hasErrors('password')}" class="small text-danger"
-                             th:utext="${#fields.errors('password').get(0)}"></div>
+                        <div id="passwordEditError" class="small text-danger"></div>
                         <div th:unless="${#fields.hasErrors('password')}"></div>
 
                         <label class="font-weight-bolder mt-3 mb-1">Roles</label>

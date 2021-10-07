@@ -49,14 +49,14 @@ public class AdminRestController {
         return list;
     }
 
-    @PostMapping("/users")
-    List<User> allP() {
-        List<User> list = service.getAllUsers(false);
-
-        //  String result = new ObjectMapper().writeValueAsString(usr);
-        //   System.out.println("@GetMapping: "+result);
-        return list;
-    }
+//    @GetMapping("/users")
+//    List<User> allP() {
+//        List<User> list = service.getAllUsers(false);
+//
+//        //  String result = new ObjectMapper().writeValueAsString(usr);
+//        //   System.out.println("@GetMapping: "+result);
+//        return list;
+//    }
 
 //    @PostMapping("/delete={id}")
 //    public String deleteUserById(@PathVariable("id") Long id) {
@@ -82,52 +82,38 @@ public class AdminRestController {
 
     @PostMapping("/new")
     public UserDTO indexNewUser(@RequestBody @Valid UserDTO tempUser, BindingResult bindingResult) {
+
+        UserDTO userError = new UserDTO();
+        userError.setUsername(
+                (bindingResult.getFieldErrorCount("username")>0)?
+                        bindingResult.getFieldError("username").getDefaultMessage():"");
+        userError.setPassword(
+                (bindingResult.getFieldErrorCount("password")>0)?
+                        bindingResult.getFieldError("password").getDefaultMessage():"");
+        userError.setEmail(
+                (bindingResult.getFieldErrorCount("email")>0)?
+                        bindingResult.getFieldError("email").getDefaultMessage():"");
+        userError.setAge(
+                (bindingResult.getFieldErrorCount("age")>0)?
+                        bindingResult.getFieldError("age").getDefaultMessage():"");
+        userError.setFirstname(
+                (bindingResult.getFieldErrorCount("firstname")>0)?
+                        bindingResult.getFieldError("firstname").getDefaultMessage():"");
+        userError.setLastname(
+                (bindingResult.getFieldErrorCount("lastname")>0)?
+                        bindingResult.getFieldError("lastname").getDefaultMessage():"");
+        System.out.println(userError);
+
         if (bindingResult.hasErrors()) {
-            UserDTO userError = new UserDTO();
-            if (bindingResult.getFieldErrorCount("id")>0) {
-                userError.setId(bindingResult.getFieldError("id").getDefaultMessage());
-            }
-            if (bindingResult.getFieldErrorCount("username")>0) {
-                userError.setUsername(bindingResult.getFieldError("username").getDefaultMessage());
-            }
-            if (bindingResult.getFieldErrorCount("password")>0) {
-                userError.setPassword(bindingResult.getFieldError("password").getDefaultMessage());
-            }
-            if (bindingResult.getFieldErrorCount("email")>0) {
-                userError.setEmail(bindingResult.getFieldError("email").getDefaultMessage());
-            }
-            if (bindingResult.getFieldErrorCount("age")>0) {
-                userError.setAge(bindingResult.getFieldError("age").getDefaultMessage());
-            }
-            if (bindingResult.getFieldErrorCount("firstname")>0) {
-                userError.setFirstname(bindingResult.getFieldError("firstname").getDefaultMessage());
-            }
-            if (bindingResult.getFieldErrorCount("lastname")>0) {
-                userError.setLastname(bindingResult.getFieldError("lastname").getDefaultMessage());
-            }
-            System.out.println(userError);
-            return userError;
+            userError.setId("-1");
+        } else {
+            System.out.println(tempUser);
+            User user = new User();
+            user.merge(tempUser, roleService.getRoles(tempUser.getRoleStr()));
+            service.update(user);
         }
 
-        System.out.println(tempUser);
-        User user = new User();
-        user.merge(tempUser, roleService.getRoles(tempUser.getRoleStr()));
-
-        service.update(user);
-        return new UserDTO();
-//        if (userError==null)
-//        {
-//            service.update(user);
-//            return new UserDTO();
-//        } else {
-//            return userError;
-//        }
-       // System.out.println("x2 "+user);
-      //  service.update(user);
-
-
-
-       // return "success";
+        return userError;
     }
 
     @GetMapping("/delete={id}")
