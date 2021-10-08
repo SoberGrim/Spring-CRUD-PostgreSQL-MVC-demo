@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <title>User Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+</head>
+
+<body style="font-size: 0.95em;">
+<script src="/js/jquery-3.3.1.slim.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+
+<!-- Верхняя серая строчка -->
+<div class="row p-2 mx-0 align-items-center bg-dark">
+    <div class="col-md-11">
+        <a class="text-light text-decoration-none" href="/user">
+            <b>[[${principal.getEmail()}]]</b> with roles: [[${principal.getUserRoleStr()}]]
+        </a>
+    </div>
+    <div class="col-md-1">
+        <a class="text-white-50 text-decoration-none" href="/logout">Logout</a>
+    </div>
+</div> <!-- /Верхняя серая строчка -->
+
+<!-- боковая панель -->
+<nav class="col-2 nav float-left d-inline-block p-0 pt-3 flex-column nav-pills">
+    <a sec:authorize="hasAnyRole('ROLE_ADMIN')" class="nav-link" href="/admin">Admin</a>
+    <a class="nav-link active" href="javascript:void(0);">User</a>
+    <a class="nav-link" href="/guest">Guest Page</a>
+</nav>
+<!-- основной блок -->
+<div class="col-10 d-inline-block bg-light" th:with="currUser=0">
+    <h3 class="p-2 mt-2">User information-page</h3>
+
+    <!-- Tabs -->
+    <div class="tabs" id="mainTabs">
+
+
+        <!-- Tabs content -->
+        <div>
+
+            <!-- Users tab content -->
+            <div id="table">
+                <div class="p-3 border">
+                    <h5 class="my-0">About user</h5>
+                </div>
+
+                <div class="p-3 bg-white border border-top-0">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Age</th>
+                            <th>Email</th>
+                            <th>Username</th>
+                            <th>Role</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:object="${users}">
+                            <td th:text="'&nbsp;'+${user.getId()}">id</td>
+                            <td th:text="${user.getFirstname()}">name</td>
+                            <td th:text="${user.getLastname()}">lastname</td>
+                            <td th:text="${user.getAge()}">age</td>
+                            <td th:text="${user.getEmail()}">email</td>
+                            <td th:text="${user.getUsername()}">username</td>
+                          <td th:text="${user.getUserRoleStr()}">role</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+</body>
+</html>
+

@@ -20,7 +20,9 @@
         <java.version>11</java.version>
     </properties>
 
+    <repositories>
 
+    </repositories>
 
     <dependencies>
         <dependency>
@@ -78,7 +80,12 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+
+
     </dependencies>
+
+
 
     <build>
         <plugins>
@@ -97,5 +104,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

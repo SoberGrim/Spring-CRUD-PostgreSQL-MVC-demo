@@ -51,7 +51,7 @@ public class MainController {
     public String user(Principal pr, Authentication authentication, Model model) {
         model.addAttribute("principal", getPrincipal(pr,authentication));
         model.addAttribute("user", getPrincipal(pr,authentication));
-        return "user";
+        return "user_old";
     }
 
     @PostMapping("/register")

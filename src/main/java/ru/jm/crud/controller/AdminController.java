@@ -33,6 +33,19 @@ public class AdminController {
         this.roleService = roleService;
     }
 
+    @GetMapping("/user")
+    String getUser(Principal pr, Authentication authentication, Model model) {
+        model.addAttribute("user", getPrincipal(pr, authentication));
+        return "user";
+    }
+
+    @GetMapping("/admin")
+    String getAdmin(Model model) {
+        model.addAttribute("roles", roleService.getRoles());
+        model.addAttribute("isFilterActive", service.isFilterSet());
+        return "admin";
+    }
+
     @GetMapping("")
     public String indexGet(@RequestParam(name = "page", required = false, defaultValue = "1") String strPageNum,
                            Principal pr, Authentication authentication,
