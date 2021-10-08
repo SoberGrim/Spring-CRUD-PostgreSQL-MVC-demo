@@ -35,7 +35,7 @@
             } else {
                 style = "btn-info";
             }
-            return "<td><a><button type=\"button\" class=\"btn btn-sm "+style+"\" data-toggle=\"modal\" data-uid="+currUserId+" data-origin=\""+buttonType+"Button\" data-target=\"#modalWindow\">"+buttonType+"</button></a></td>";
+            return "<td><a><button type=\"button\" class=\"btn btn-sm "+style+"\" data-toggle=\"modal\" data-uid="+currUserId+" data-id="+users[currUserId].id+" data-origin=\""+buttonType+"Button\" data-target=\"#modalWindow\">"+buttonType+"</button></a></td>";
         }
 
         function showPage(pageNum) {
@@ -94,6 +94,8 @@
             document.getElementById("checkbox"+formName+"-1").checked = false;
             document.getElementById("checkbox"+formName+"-2").checked = false;
             document.getElementById("checkbox"+formName+"-3").checked = false;
+
+            clearErrorFields(formName);
         }
 
         function parseUser(formName) {
@@ -180,14 +182,20 @@
             if (page==="user") {
                 $("#admin-link").removeClass('active').attr('href','javascript:sidemenu(\'admin\');');
                 $("#user-link").addClass('active').attr('href','javascript:void(0);');
-                $("#guest-link").removeClass('active');
+                $("#guest-link").removeClass('active').attr('href','javascript:sidemenu(\'guest\');');
                 userPage();
             } else
             if (page==="admin") {
                 $("#admin-link").addClass('active').attr('href','javascript:void(0);');
                 $("#user-link").removeClass('active').attr('href','javascript:sidemenu(\'user\');');
-                $("#guest-link").removeClass('active');
+                $("#guest-link").removeClass('active').attr('href','javascript:sidemenu(\'guest\');');
                 adminPage();
+            } else
+            if (page==="guest") {
+                $("#admin-link").removeClass('active').attr('href','javascript:sidemenu(\'admin\');');
+                $("#user-link").removeClass('active').attr('href','javascript:sidemenu(\'user\');');
+                $("#guest-link").addClass('active').attr('href','javascript:void(0);');
+                guestPage();
             }
         }
 
@@ -243,17 +251,43 @@
             }
         }
 
+        async function filter() {
+            $('#modalWindow').modal('hide')
+        }
+
+        async function search() {
+            $('#modalWindow').modal('hide')
+        }
+
         async function userPage() {
             let response = await fetch('/admin/user');
             let html = await response.text();
-            $("#mainblock").html(html);
+            if (html.includes("<title>Please sign in</title>")) {
+                window.location.replace('/login');
+            } else {
+                $("#mainblock").html(html);
+            }
         }
 
         async function adminPage() {
             let response = await fetch('/admin/admin');
             let html = await response.text();
-            $("#mainblock").html(html);
-            update();
+            if (html.includes("<title>Please sign in</title>")) {
+                window.location.replace('/login');
+            } else {
+                $("#mainblock").html(html);
+                update();
+            }
+        }
+
+        async function guestPage() {
+            let response = await fetch('/admin/guest');
+            let html = await response.text();
+            if (html.includes("<title>Please sign in</title>")) {
+                window.location.replace('/login');
+            } else {
+                $("#mainblock").html(html);
+            }
         }
 
 
@@ -284,7 +318,7 @@
         <nav id="sidemenu" class="col-2 nav float-left d-inline-block p-0 pt-3 flex-column nav-pills">
             <a id="admin-link" class="nav-link active" href="javascript:void(0);">Admin</a>
             <a id="user-link" class="nav-link" href="javascript:sidemenu('user');">User</a>
-            <a id="guest-link" class="nav-link" href="/guest">Guest Page</a>
+            <a id="guest-link" class="nav-link" href="javascript:sidemenu('guest');">Guest Page</a>
         </nav>
 
         <!-- основной блок -->
@@ -300,7 +334,7 @@
                         <a id="tableTab" class="nav-link active" data-toggle="tab" role="tab" href="#table">Users Table</a>
                     </li>
                     <li class="nav-item border-bottom">
-                        <a id="newTab" class="nav-link" data-toggle="tab" role="tab" href="#new">New User</a>
+                        <a id="newTab" class="nav-link" data-toggle="tab" role="tab" href="#new" onclick="clearUserFields('New')">New User</a>
                     </li>
                 </ul>
 
@@ -427,117 +461,108 @@
                         </label>
                     </div>
                     <input id='formCancel' class="mt-3 mb-5 btn btn-secondary" type="button" onclick="$('#modalWindow').modal('hide');" value="Close"/>
-                    <input id='formSubmit' class="mt-3 mb-5 btn" value="Edit"/>
+                    <input id='formSubmit' class="mt-3 mb-5 btn" type="button" value="Edit"/>
                 </form>
             </div>
         </div>
-        <script type="text/javascript" th:inline="javascript">
+    </div>
 
-            $("#modalWindow").on('show.bs.modal', function (e) {
-                const modal = $(e.relatedTarget);
-                let origin = modal.data('origin');
-                let id = modal.data('id');
+    <script type="text/javascript" th:inline="javascript">
 
-                function resetField(fieldId) {
-                    $('#' + fieldId).addClass('bg-white').removeClass('text-muted').removeAttr('disabled', 'disabled').removeAttr('readonly', 'readonly');
-                }
+        $("#modalWindow").on('show.bs.modal', function (e) {
+            const modal = $(e.relatedTarget);
+            let origin = modal.data('origin');
+            let id = modal.data('id');
 
-                function readonlyField(fieldId) {
-                    $('#'+fieldId).addClass('text-muted').attr('readonly', 'readonly').removeClass('bg-white');
-                    document.getElementById(fieldId).style.backgroundColor = '#EEEEEE';
-                }
+            function resetField(fieldId) {
+                $('#' + fieldId).addClass('bg-white').removeClass('text-muted').removeAttr('disabled', 'disabled').removeAttr('readonly', 'readonly');
+            }
 
-                function muteField(fieldId) {
-                    $('#'+fieldId).addClass('text-muted').attr('disabled', 'disabled');
-                }
+            function readonlyField(fieldId) {
+                $('#'+fieldId).addClass('text-muted').attr('readonly', 'readonly').removeClass('bg-white');
+                document.getElementById(fieldId).style.backgroundColor = '#EEEEEE';
+            }
 
-                function disableField(fieldId) {
-                    muteField(fieldId);
-                    $('#'+fieldId).removeClass('bg-white');
-                    document.getElementById(fieldId).style.backgroundColor = '#EEEEEE';
-                }
+            function muteField(fieldId) {
+                $('#'+fieldId).addClass('text-muted').attr('disabled', 'disabled');
+            }
 
-                if ((origin==='filterButton')||(origin==='searchButton')) {
-                    document.getElementById("formSubmit").setAttribute('type', 'submit');
-                } else {
-                    document.getElementById("formSubmit").setAttribute('type', 'button');
-                }
+            function disableField(fieldId) {
+                muteField(fieldId);
+                $('#'+fieldId).removeClass('bg-white');
+                document.getElementById(fieldId).style.backgroundColor = '#EEEEEE';
+            }
 
 
-                if ((origin==='EditButton')||(origin==='filterButton')||(origin==='searchButton'))
-                {
-                    $('#checkboxEdit-1').removeAttr('disabled', 'disabled');
-                    $('#checkboxEdit-2').removeAttr('disabled', 'disabled');
-                    $('#checkboxEdit-3').removeAttr('disabled', 'disabled');
-                } else {
-                    $('#checkboxEdit-1').attr('disabled', 'disabled');
-                    $('#checkboxEdit-2').attr('disabled', 'disabled');
-                    $('#checkboxEdit-3').attr('disabled', 'disabled');
-                }
+            if ((origin==='EditButton')||(origin==='filterButton')||(origin==='searchButton'))
+            {
+                $('#checkboxEdit-1').removeAttr('disabled', 'disabled');
+                $('#checkboxEdit-2').removeAttr('disabled', 'disabled');
+                $('#checkboxEdit-3').removeAttr('disabled', 'disabled');
+            } else {
+                $('#checkboxEdit-1').attr('disabled', 'disabled');
+                $('#checkboxEdit-2').attr('disabled', 'disabled');
+                $('#checkboxEdit-3').attr('disabled', 'disabled');
+            }
 
-                clearErrorFields("Edit");
-                $('#formSubmit').removeClass('btn-secondary btn-danger btn-info btn-primary');
-                document.getElementById("formSubmit").hidden=false;
+            clearUserFields("Edit");
+            $('#formSubmit').removeClass('btn-secondary btn-danger btn-info btn-primary');
+            document.getElementById("formSubmit").hidden=false;
 
-                if (origin==='InfoButton') {
-                    document.getElementById("formSubmit").hidden=true;
-                } else if (origin==='EditButton') {
-                    $('#formSubmit').val('Edit').addClass('btn-primary');
-                    document.getElementById("formSubmit").onclick = function(){edit()};
-                } else if (origin==='DeleteButton') {
-                    $('#formSubmit').val('Delete').addClass('btn-danger');
-                    document.getElementById("formSubmit").onclick = function(){del(id)};
-                } else if (origin==='filterButton') {
-                    $('#formSubmit').val('Filter').addClass('btn-primary');
-                    document.getElementById('userEditForm').action = '/admin/filter';
-                } else if (origin==='searchButton') {
-                    $('#formSubmit').val('Search').addClass('btn-primary');
-                    document.getElementById('userEditForm').action = '/admin/search';
-                }
+            if (origin==='InfoButton') {
+                document.getElementById("formSubmit").hidden=true;
+            } else if (origin==='EditButton') {
+                $('#formSubmit').val('Edit').addClass('btn-primary');
+                document.getElementById("formSubmit").onclick = function(){edit()};
+            } else if (origin==='DeleteButton') {
+                $('#formSubmit').val('Delete').addClass('btn-danger');
+                document.getElementById("formSubmit").onclick = function(){del(id)};
+            } else if (origin==='filterButton') {
+                $('#formSubmit').val('Filter').addClass('btn-primary');
+                document.getElementById("formSubmit").onclick = function(){filter()};
+            } else if (origin==='searchButton') {
+                $('#formSubmit').val('Search').addClass('btn-primary');
+                document.getElementById("formSubmit").onclick = function(){search()};
+            }
 
+            resetField('idEdit');
+            resetField('firstnameEdit');
+            resetField('lastnameEdit');
+            resetField('ageEdit');
+            resetField('emailEdit');
+            resetField('usernameEdit');
+            resetField('passwordEdit');
 
-                clearUserFields("Edit");
-
-                resetField('idEdit');
-                resetField('firstnameEdit');
-                resetField('lastnameEdit');
-                resetField('ageEdit');
-                resetField('emailEdit');
-                resetField('usernameEdit');
-                resetField('passwordEdit');
-
-                if (origin==='EditButton') {
-                    readonlyField('idEdit');
-                }
-                if (origin==='DeleteButton') {
-                    disableField('idEdit');
-                    disableField('firstnameEdit');
-                    disableField('lastnameEdit');
-                    disableField('ageEdit');
-                    disableField('emailEdit');
-                    disableField('usernameEdit');
-                    disableField('passwordEdit');
-                }
-                if (origin==='InfoButton') {
-                    muteField('idEdit');
-                    muteField('firstnameEdit');
-                    muteField('lastnameEdit');
-                    muteField('ageEdit');
-                    muteField('emailEdit');
-                    muteField('usernameEdit');
-                    muteField('passwordEdit');
-                }
-
+            if (origin==='EditButton') {
+                readonlyField('idEdit');
                 let uid = modal.data('uid');
                 setUser(users[uid],"Edit");
-            });
+            }
+            if (origin==='DeleteButton') {
+                disableField('idEdit');
+                disableField('firstnameEdit');
+                disableField('lastnameEdit');
+                disableField('ageEdit');
+                disableField('emailEdit');
+                disableField('usernameEdit');
+                disableField('passwordEdit');
+            }
+            if (origin==='InfoButton') {
+                muteField('idEdit');
+                muteField('firstnameEdit');
+                muteField('lastnameEdit');
+                muteField('ageEdit');
+                muteField('emailEdit');
+                muteField('usernameEdit');
+                muteField('passwordEdit');
+            }
 
-            $('#newTab').on('show.bs.tab', function () {
-                clearUserFields("New");
-                clearErrorFields("New");
-            });
-        </script>
-    </div>
+        });
+
+        $('#newTab').on('show.bs.tab', function () {
+            //тут событие может не сработать
+        });
+    </script>
 
 </body>
 </html>

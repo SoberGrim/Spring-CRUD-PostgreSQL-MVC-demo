@@ -103,11 +103,11 @@ public class AdminRestController {
     }
 
     @GetMapping("/delete={id}")
-    String deleteUserById(@PathVariable("id") Long id) {
+    String deleteUserById(@PathVariable("id") String idStr) {
+        Long id = idStr.matches("\\d+")?Long.parseLong(idStr):0;
         service.delete(id);
         return "success";
     }
-
 
 
     private void checkLoginEmailBusy(UserDTO userdto, BindingResult bindingResult) {

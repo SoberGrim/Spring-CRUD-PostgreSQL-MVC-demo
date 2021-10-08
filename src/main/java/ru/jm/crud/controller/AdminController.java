@@ -46,6 +46,12 @@ public class AdminController {
         return "admin";
     }
 
+    @GetMapping("/guest")
+    String getGuest(Principal pr, Authentication authentication, Model model) {
+        model.addAttribute("user", getPrincipal(pr, authentication));
+        return "guest";
+    }
+
     @GetMapping("")
     public String indexGet(@RequestParam(name = "page", required = false, defaultValue = "1") String strPageNum,
                            Principal pr, Authentication authentication,
