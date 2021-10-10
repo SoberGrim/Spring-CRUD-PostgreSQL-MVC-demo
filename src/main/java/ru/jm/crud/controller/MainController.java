@@ -40,6 +40,19 @@ public class MainController {
         return "login";
     }
 
+    @GetMapping("slogin")
+    public String loginPage()
+    {
+        return "slogin";
+    }
+
+//    @GetMapping("")
+//    public String welcome0(Principal pr, Authentication authentication, Model model) {
+//        model.addAttribute("principal", getPrincipal(pr,authentication));
+//        model.addAttribute("user", getPrincipal(pr,authentication));
+//        return "guest_old";
+//    }
+
     @GetMapping("guest")
     public String welcome(Principal pr, Authentication authentication, Model model) {
         model.addAttribute("principal", getPrincipal(pr,authentication));

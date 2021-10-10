@@ -64,6 +64,7 @@ public class AdminRestController {
 //        return "done";
 //    }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("/edit")
     public UserDTO indexEditUser(@RequestBody @Valid UserDTO tmpUser, BindingResult bindingResult) {
 
@@ -85,6 +86,7 @@ public class AdminRestController {
         return userErrorDTO;
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping("/new")
     public UserDTO indexNewUser(@RequestBody @Valid UserDTO tempUser, BindingResult bindingResult) {
 
@@ -102,6 +104,7 @@ public class AdminRestController {
         return userErrorDTO;
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping("/delete={id}")
     String deleteUserById(@PathVariable("id") String idStr) {
         Long id = idStr.matches("\\d+")?Long.parseLong(idStr):0;

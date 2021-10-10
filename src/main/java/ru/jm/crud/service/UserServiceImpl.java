@@ -1,5 +1,7 @@
 package ru.jm.crud.service;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import ru.jm.crud.model.User;
 import ru.jm.crud.model.UserRole;
 import ru.jm.crud.dao.UserDao;
@@ -12,7 +14,7 @@ import java.util.Collection;
 import java.util.List;
 
 
-@Service
+@Service("UserService")
 @Transactional
 public class UserServiceImpl implements UserService {
 
@@ -110,5 +112,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delete(Long id) {
         dao.delete(id);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return dao.getByUsername(username);
     }
 }

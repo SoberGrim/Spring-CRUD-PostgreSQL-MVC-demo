@@ -1,13 +1,14 @@
 package ru.jm.crud.service;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.stereotype.Service;
 import ru.jm.crud.model.User;
 import ru.jm.crud.model.UserRole;
 
 import java.util.Collection;
 import java.util.List;
 
-
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     String add(User user);
     <T extends User> Collection<T> bulkSave(Collection<T> entities);

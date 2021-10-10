@@ -6,6 +6,7 @@
     <title>Users</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="icon" type="image/png" href="/favicon.png"/>
 </head>
 <body style="font-size: 0.95em;">
     <script src="/js/jquery-3.3.1.slim.min.js"></script>
@@ -533,11 +534,11 @@
             resetField('usernameEdit');
             resetField('passwordEdit');
 
-            if (origin==='EditButton') {
-                readonlyField('idEdit');
+            if ((origin!=='filterButton')&&(origin!=='searchButton')) {
                 let uid = modal.data('uid');
-                setUser(users[uid],"Edit");
+                setUser(users[uid], "Edit");
             }
+
             if (origin==='DeleteButton') {
                 disableField('idEdit');
                 disableField('firstnameEdit');
