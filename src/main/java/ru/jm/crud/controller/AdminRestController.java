@@ -30,14 +30,14 @@ public class AdminRestController {
 
 
     @GetMapping("/users")
-    List<User> allP() {
+    List<User> userList() {
         return service.getAllUsers(false);
     }
 
 
     @Secured("ROLE_ADMIN")
     @PostMapping("/new")
-    public UserDTO indexNewUser(@RequestBody @Valid UserDTO tempUser, BindingResult bindingResult) {
+    public UserDTO createNewUser(@RequestBody @Valid UserDTO tempUser, BindingResult bindingResult) {
 
         checkLoginEmailBusy(tempUser, bindingResult);
         UserDTO userErrorDTO = checkBindingErrors(bindingResult);
@@ -56,7 +56,7 @@ public class AdminRestController {
 
     @Secured("ROLE_ADMIN")
     @PostMapping("/edit")
-    public UserDTO indexEditUser(@RequestBody @Valid UserDTO tmpUser, BindingResult bindingResult) {
+    public UserDTO editUser(@RequestBody @Valid UserDTO tmpUser, BindingResult bindingResult) {
 
         String idStr = tmpUser.getId();
         Long id = idStr.matches("\\d+")?Long.parseLong(idStr):0;

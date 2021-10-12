@@ -1,6 +1,5 @@
 package ru.jm.crud.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,7 +30,7 @@ public class APIController {
 
     @Secured({"ROLE_ADMIN"})
     @GetMapping("/admin")
-    String getAdmin(Model model) {
+    String getAdminHTML(Model model) {
         model.addAttribute("roles", roleService.getRoles());
         model.addAttribute("isFilterActive", service.isFilterSet());
         return "adminHTML";
@@ -39,14 +38,14 @@ public class APIController {
 
     @Secured({"ROLE_ADMIN","ROLE_USER"})
     @GetMapping("/user")
-    String getUser(Principal pr, Authentication authentication, Model model) {
+    String getUserHTML(Principal pr, Authentication authentication, Model model) {
         model.addAttribute("user", getPrincipal(pr, authentication));
         return "userHTML";
     }
 
     @Secured({"ROLE_ADMIN","ROLE_USER","ROLE_GUEST"})
     @GetMapping("/guest")
-    String getGuest(Principal pr, Authentication authentication, Model model) {
+    String getGuestHTML(Principal pr, Authentication authentication, Model model) {
         model.addAttribute("user", getPrincipal(pr, authentication));
         return "guestHTML";
     }

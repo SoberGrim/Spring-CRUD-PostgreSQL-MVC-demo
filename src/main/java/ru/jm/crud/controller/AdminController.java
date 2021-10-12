@@ -31,7 +31,7 @@ public class AdminController {
 
 
     @GetMapping("")
-    public String indexGet(@RequestParam(name = "page", required = false, defaultValue = "1") String strPageNum,
+    public String index(@RequestParam(name = "page", required = false, defaultValue = "1") String strPageNum,
                            Principal pr, Authentication authentication,
                            Model model) {
 
