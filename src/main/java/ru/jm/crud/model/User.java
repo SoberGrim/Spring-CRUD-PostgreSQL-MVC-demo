@@ -190,14 +190,9 @@ public class User implements UserDetails {
         return userRoles;
     }
 
-    public String getUserRoleStr() {
-        return roleToStr(userRoles);//userRoleStr;
+    public void setUserRoles(List<UserRole> userRoles) {
+        this.userRoles = userRoles;
     }
-
-//    private void setUserRoleStr(String userRoleStr) {
-//        this.userRoleStr = userRoleStr;
-//        System.out.println("setUserRoleStr "+userRoleStr);
-//    }
 
     private String roleToStr(List<UserRole> roles) {
         StringBuilder strRoles = new StringBuilder();
@@ -224,14 +219,6 @@ public class User implements UserDetails {
             result.append("NONE ");
         }
         return result.toString();
-    }
-
-    public void setUserRoles(List<UserRole> userRoles) {
-        this.userRoles = userRoles;
-        System.out.println("setUserRoles "+userRoles);
-//        if (userRoles!=null) {
-//            this.setUserRoleStr(this.roleToStr(userRoles));
-//        }
     }
 
     @JsonIgnore
