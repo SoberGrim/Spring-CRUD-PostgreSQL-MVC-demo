@@ -49,7 +49,7 @@ public class MainController {
     @GetMapping("/basicauth")
     public String basicAuthPage()
     {
-        return "basicauth";
+        return "index";
     }
 
     @GetMapping("guest")
