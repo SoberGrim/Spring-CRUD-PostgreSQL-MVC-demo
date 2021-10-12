@@ -46,12 +46,6 @@ public class MainController {
         return "noauth";
     }
 
-    @GetMapping("/basicauth")
-    public String basicAuthPage()
-    {
-        return "index";
-    }
-
     @GetMapping("guest")
     public String welcome(Principal pr, Authentication authentication, Model model) {
         model.addAttribute("principal", getPrincipal(pr,authentication));

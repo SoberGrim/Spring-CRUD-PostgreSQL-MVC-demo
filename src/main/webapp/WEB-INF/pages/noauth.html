@@ -11,16 +11,16 @@
         document.execCommand("ClearAuthenticationCache");
 
         //chrome
-        fetch("/basicauth", {
+        fetch("/admin", {
             credentials: 'include',
             headers: {
                 'Authorization': 'Basic ' + btoa('none:none'),
                 'X-Requested-With': 'XMLHttpRequest'
             }
         }).then(() => {
-            //nonChrome
+            //mozilla and safari(?)
             const xhr = new XMLHttpRequest();
-            xhr.open("GET", "/basicauth", true, 'none', 'none');
+            xhr.open("GET", "/", true, 'none', 'none');
             xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
             xhr.onerror = function(err) {
                 console.error(err);

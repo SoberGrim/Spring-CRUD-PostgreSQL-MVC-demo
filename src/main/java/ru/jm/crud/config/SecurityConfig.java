@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,11 +46,10 @@ public class SecurityConfig {
             http
                     .authorizeRequests()
                     .antMatchers("/css/*","/js/*","/favicon.png").permitAll()
-                    .antMatchers("/register","/login","/logout401","/logout402","/slogin").permitAll()
+                    .antMatchers("/register","/login").permitAll()
                     .antMatchers("/admin/","/admin").access("hasRole('ROLE_ADMIN')")
                     .antMatchers("/user/","/user").access("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
                     .antMatchers("/guest/","/guest").access("hasAnyRole('ROLE_GUEST','ROLE_USER','ROLE_ADMIN')");
-                    //.anyRequest().authenticated();
 
 
             http
@@ -62,6 +62,7 @@ public class SecurityConfig {
                     .logout().logoutUrl("/logout").logoutSuccessUrl("/noauth")
                     .and()
                     .csrf().disable();
+
         }
     }
 
@@ -79,7 +80,6 @@ public class SecurityConfig {
                 .passwordEncoder(passwordEncoder());
         }
 
-
         protected void configure(HttpSecurity http) throws Exception {
             //http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
@@ -87,10 +87,10 @@ public class SecurityConfig {
                     .antMatchers("/css/*","/js/*").permitAll()
                     .antMatchers("/favicon.png").permitAll();
 
+
             http
-                    .antMatcher("/basicauth/**")
+                    .antMatcher("/admin/**")
                     .authorizeRequests()
-                    .antMatchers("/basicauth/","/basicauth").access("hasAnyRole('ROLE_GUEST','ROLE_USER','ROLE_ADMIN')")
                     .antMatchers("/admin/","/admin").access("hasRole('ROLE_ADMIN')")
                     .antMatchers("/user/","/user").access("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
                     .antMatchers("/guest/","/guest").access("hasAnyRole('ROLE_GUEST','ROLE_USER','ROLE_ADMIN')")
@@ -98,7 +98,6 @@ public class SecurityConfig {
                     .httpBasic()
                     .and()
                     .sessionManagement().disable();
-
         }
     }
 }

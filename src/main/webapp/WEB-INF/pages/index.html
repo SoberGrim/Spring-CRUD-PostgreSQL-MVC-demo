@@ -6,17 +6,9 @@
     <title>Basic Auth</title>
 </head>
 <body>
-<script sec:authorize="hasAnyRole('ROLE_ADMIN')">
-    document.location.replace("/admin");
-</script>
-<script sec:authorize="hasAnyRole('ROLE_USER')">
-    document.location.replace("/user");
-</script>
-<script sec:authorize="hasAnyRole('ROLE_GUEST')">
-    document.location.replace("/guest");
-</script>
-<script>
-    document.location.replace("/login");
-</script>
+<script sec:authorize="hasAnyRole('ROLE_ADMIN')">document.location.replace("/admin");</script>
+<script sec:authorize="hasAnyRole('ROLE_USER')">document.location.replace("/user");</script>
+<script sec:authorize="hasAnyRole('ROLE_GUEST')">document.location.replace("/guest");</script>
+<script>document.location.replace("/login");</script>
 </body>
 </html>

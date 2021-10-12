@@ -39,6 +39,7 @@ public class AdminController {
         return "userHTML";
     }
 
+
     @GetMapping("/admin")
     String getAdmin(Model model) {
         model.addAttribute("roles", roleService.getRoles());

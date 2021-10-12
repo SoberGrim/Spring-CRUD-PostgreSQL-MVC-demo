@@ -44,10 +44,10 @@ public class AdminRestController {
     List<User> all() throws JsonProcessingException {
         List<User> list = service.getAllUsers(false);
 
-      //  String result = new ObjectMapper().writeValueAsString(usr);
-     //   System.out.println("@GetMapping: "+result);
         return list;
     }
+
+
 
 //    @GetMapping("/users")
 //    List<User> allP() {
