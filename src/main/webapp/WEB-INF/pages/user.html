@@ -1,7 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -14,11 +13,45 @@
 <script src="/js/jquery-3.3.1.slim.min.js"></script>
 <script src="/js/popper.min.js"></script>
 <script src="/js/bootstrap.min.js"></script>
+<script>
+    function sidemenu(page) {
+        if (page==="user") {
+            $("#user-link").addClass('active').attr('href','javascript:void(0);');
+            $("#guest-link").removeClass('active').attr('href','javascript:sidemenu(\'guest\');');
+            userPage();
+        } else
+        if (page==="guest") {
+            $("#user-link").removeClass('active').attr('href','javascript:sidemenu(\'user\');');
+            $("#guest-link").addClass('active').attr('href','javascript:void(0);');
+            guestPage();
+        }
+    }
+
+    async function userPage() {
+        let response = await fetch('/api/user');
+        let html = await response.text();
+        if (html.includes("<title>Please sign in</title>")) {
+            window.location.replace('/login');
+        } else {
+            $("#mainblock").html(html);
+        }
+    }
+
+    async function guestPage() {
+        let response = await fetch('/api/guest');
+        let html = await response.text();
+        if (html.includes("<title>Please sign in</title>")) {
+            window.location.replace('/login');
+        } else {
+            $("#mainblock").html(html);
+        }
+    }
+</script>
 
 <!-- Верхняя серая строчка -->
 <div class="row p-2 mx-0 align-items-center bg-dark">
     <div class="col-md-11">
-        <a class="text-light text-decoration-none" href="/user">
+        <a class="text-light text-decoration-none" href="javascript:void(0);">
             <b>[[${principal.getEmail()}]]</b> with roles: [[${principal.getUserRoleStr()}]]
         </a>
     </div>
@@ -29,12 +62,12 @@
 
 <!-- боковая панель -->
 <nav class="col-2 nav float-left d-inline-block p-0 pt-3 flex-column nav-pills">
-    <a sec:authorize="hasAnyRole('ROLE_ADMIN')" class="nav-link" href="/admin">Admin</a>
-    <a class="nav-link active" href="javascript:void(0);">User</a>
-    <a class="nav-link" href="/guest">Guest Page</a>
+    <a id="user-link" class="nav-link active" href="javascript:void(0);">User</a>
+    <a id="guest-link" class="nav-link" href="javascript:sidemenu('guest');">Guest Page</a>
 </nav>
+
 <!-- основной блок -->
-<div class="col-10 d-inline-block bg-light" th:with="currUser=0">
+<div id="mainblock" class="col-10 d-inline-block bg-light" th:with="currUser=0">
     <h3 class="p-2 mt-2">User information-page</h3>
 
     <!-- Tabs -->
@@ -64,7 +97,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:object="${users}">
+                        <tr th:object="${user}">
                             <td th:text="'&nbsp;'+${user.getId()}">id</td>
                             <td th:text="${user.getFirstname()}">name</td>
                             <td th:text="${user.getLastname()}">lastname</td>

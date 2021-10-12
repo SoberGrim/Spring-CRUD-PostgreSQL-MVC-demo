@@ -261,7 +261,7 @@
         }
 
         async function userPage() {
-            let response = await fetch('/admin/user');
+            let response = await fetch('/api/user');
             let html = await response.text();
             if (html.includes("<title>Please sign in</title>")) {
                 window.location.replace('/login');
@@ -271,7 +271,7 @@
         }
 
         async function adminPage() {
-            let response = await fetch('/admin/admin');
+            let response = await fetch('/api/admin');
             let html = await response.text();
             if (html.includes("<title>Please sign in</title>")) {
                 window.location.replace('/login');
@@ -282,7 +282,7 @@
         }
 
         async function guestPage() {
-            let response = await fetch('/admin/guest');
+            let response = await fetch('/api/guest');
             let html = await response.text();
             if (html.includes("<title>Please sign in</title>")) {
                 window.location.replace('/login');
@@ -305,7 +305,7 @@
     <!-- Верхняя серая строчка -->
     <div class="row p-2 mx-0 align-items-center bg-dark">
         <div class="col-md-11">
-            <a class="text-light text-decoration-none" href="/user">
+            <a class="text-light text-decoration-none" href="javascript:sidemenu('user');">
                 <b>[[${principal.getEmail()}]]</b> with roles: [[${principal.getUserRoleStr()}]]
             </a>
         </div>
@@ -374,6 +374,7 @@
                         </div>
                         <div class="listbtn p-3 bg-white border border-top-0">
                             <form class="text-center">
+                                <label for="idNew"></label>
                                 <input id="idNew" style="display: none" type="text">
                                 <div id="idNewError" style="display: none"></div>
 
@@ -397,7 +398,6 @@
                                 <input id="usernameNew" class="border rounded" style="width: 19rem" type="text">
                                 <div id="usernameNewError" class="small text-danger"></div>
 
-                                <label for="passwordNew" class="font-weight-bolder mt-3 mb-1">Password</label><br>
                                 <label for="passwordNew" class="font-weight-bolder mt-3 mb-1">Password</label><br>
                                 <input id="passwordNew" class="border rounded" style="width: 19rem" type="text">
                                 <div id="passwordNewError" class="small text-danger"></div>
@@ -478,11 +478,6 @@
 
             function resetField(fieldId) {
                 $('#' + fieldId).addClass('bg-white').removeClass('text-muted').removeAttr('disabled', 'disabled').removeAttr('readonly', 'readonly');
-            }
-
-            function readonlyField(fieldId) {
-                $('#'+fieldId).addClass('text-muted').attr('readonly', 'readonly').removeClass('bg-white');
-                document.getElementById(fieldId).style.backgroundColor = '#EEEEEE';
             }
 
             function muteField(fieldId) {
