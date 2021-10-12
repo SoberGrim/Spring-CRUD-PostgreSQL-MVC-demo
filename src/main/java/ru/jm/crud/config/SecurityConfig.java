@@ -82,11 +82,12 @@ public class SecurityConfig {
 
         protected void configure(HttpSecurity http) throws Exception {
             //http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            //для SessionCreationPolicy.STATELESS надо убрать .sessionManagement().disable();
+            //страницы /user и /guest станут недоступны
 
             http.authorizeRequests()
                     .antMatchers("/css/*","/js/*").permitAll()
                     .antMatchers("/favicon.png").permitAll();
-
 
             http
                     .antMatcher("/admin/**")
