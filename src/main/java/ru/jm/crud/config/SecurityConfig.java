@@ -65,7 +65,6 @@ public class SecurityConfig {
         }
     }
 
-
     @Configuration
     @Order(1)
     public static class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
