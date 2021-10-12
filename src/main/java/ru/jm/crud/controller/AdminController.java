@@ -36,20 +36,20 @@ public class AdminController {
     @GetMapping("/user")
     String getUser(Principal pr, Authentication authentication, Model model) {
         model.addAttribute("user", getPrincipal(pr, authentication));
-        return "user";
+        return "userHTML";
     }
 
     @GetMapping("/admin")
     String getAdmin(Model model) {
         model.addAttribute("roles", roleService.getRoles());
         model.addAttribute("isFilterActive", service.isFilterSet());
-        return "admin";
+        return "adminHTML";
     }
 
     @GetMapping("/guest")
     String getGuest(Principal pr, Authentication authentication, Model model) {
         model.addAttribute("user", getPrincipal(pr, authentication));
-        return "guest";
+        return "guestHTML";
     }
 
     @GetMapping("")
@@ -59,7 +59,7 @@ public class AdminController {
 
         viewInput(strPageNum, pr, authentication, model);
         model.addAttribute("user", new User());
-        return "index";
+        return "admin";
     }
 
     @PatchMapping("")
@@ -94,7 +94,7 @@ public class AdminController {
         modalWindowId = 3;
         setUserRoles(user,index);
         service.setFilter(user, true);
-        return "redirect:/admin";
+        return "adminHTML";
     }
 
     @PatchMapping("search")
@@ -103,14 +103,14 @@ public class AdminController {
         modalWindowId = 4;
         setUserRoles(user,index);
         service.setFilter(user, false);
-        return "redirect:/admin";
+        return "adminHTML";
     }
 
     @GetMapping("removeFilter")
     public String removeFilter() {
         service.removeFilter();
         modalWindowId = 0;
-        return "redirect:/admin";
+        return "adminHTML";
     }
 
 //    @GetMapping("/delete={id}")

@@ -40,12 +40,35 @@ public class MainController {
         return "login";
     }
 
-    @GetMapping("slogin")
-    public String loginPage()
+    @GetMapping("logout401")
+    public String logout401Page()
     {
-        return "slogin";
+        return "logout401";
     }
 
+    @GetMapping("logout402")
+    public String logout402Page()
+    {
+        return "logout402";
+    }
+
+    @GetMapping("/basicauth")
+    public String basicAuthPage()
+    {
+        return "basicauth";
+    }
+
+//    @GetMapping("error")
+//    public String errorPage()
+//    {
+//        return "index";
+//    }
+//
+//    @GetMapping("errors")
+//    public String errorsPage()
+//    {
+//        return "index";
+//    }
 //    @GetMapping("")
 //    public String welcome0(Principal pr, Authentication authentication, Model model) {
 //        model.addAttribute("principal", getPrincipal(pr,authentication));
@@ -57,14 +80,14 @@ public class MainController {
     public String welcome(Principal pr, Authentication authentication, Model model) {
         model.addAttribute("principal", getPrincipal(pr,authentication));
         model.addAttribute("user", getPrincipal(pr,authentication));
-        return "guest_old";
+        return "guest";
     }
 
     @GetMapping("user")
     public String user(Principal pr, Authentication authentication, Model model) {
         model.addAttribute("principal", getPrincipal(pr,authentication));
         model.addAttribute("user", getPrincipal(pr,authentication));
-        return "user_old";
+        return "user";
     }
 
     @PostMapping("/register")

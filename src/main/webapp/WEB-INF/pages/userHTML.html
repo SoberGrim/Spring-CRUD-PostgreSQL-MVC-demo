@@ -1,0 +1,36 @@
+<h3 class="p-2 mt-2">User information-page</h3>
+<div class="tabs" id="mainTabs">
+    <div>
+        <div id="table">
+            <div class="p-3 border">
+                <h5 class="my-0">About user</h5>
+            </div>
+            <div class="p-3 bg-white border border-top-0">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Age</th>
+                        <th>Email</th>
+                        <th>Username</th>
+                        <th>Role</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:object="${user}">
+                        <td th:text="'&nbsp;'+${user.getId()}">id</td>
+                        <td th:text="${user.getFirstname()}">name</td>
+                        <td th:text="${user.getLastname()}">lastname</td>
+                        <td th:text="${user.getAge()}">age</td>
+                        <td th:text="${user.getEmail()}">email</td>
+                        <td th:text="${user.getUsername()}">username</td>
+                        <td th:text="${user.getUserRoleStr()}">role</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,107 @@
+<h3 class="p-2 mt-2">Admin panel</h3>
+
+<!-- Tabs -->
+<div class="tabs" id="mainTabs">
+
+    <!-- Tab titles -->
+    <ul class="nav nav-tabs">
+        <li class="nav-item border-bottom">
+            <a id="tableTab" class="nav-link active" data-toggle="tab" role="tab" href="#table">Users Table</a>
+        </li>
+        <li class="nav-item border-bottom">
+            <a id="newTab" class="nav-link" data-toggle="tab" role="tab" href="#new" onclick="clearUserFields('New')">New User</a>
+        </li>
+    </ul>
+
+    <!-- Tabs content -->
+    <div class="tab-content">
+
+        <!-- Users tab content -->
+        <div id="table" class="tab-pane fade active show">
+            <div class="p-3 border border-top-0">
+                <h5 id="tabTitle" class="my-0">All Users</h5>
+            </div>
+
+            <div class="p-3 bg-white border border-top-0">
+                <table class="table table-striped">
+                    <thead id="userTableHeading">
+                    </thead>
+                    <tbody id="userTable">
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <label id="afterTableLabel"></label>
+            <div style="margin-top: 0.6em;">
+                <button type="button" id="prevPage" class="btn-info btn-sm" style="box-shadow: none;" onclick="showPrevPage();">Prev page</button>
+                <button type="button" id="nextPage" class="btn-info btn-sm" style="box-shadow: none;" onclick="showNextPage();">Next page</button>
+                <button type="button" data-toggle="modal" th:data-origin="filterButton" data-target="#modalWindow" class="btn-info btn-sm" style="box-shadow: none;">Filter</button>
+                <button type="button" data-toggle="modal" th:data-origin="searchButton" data-target="#modalWindow" class="btn-info btn-sm" style="box-shadow: none;">Search</button>
+                <button th:if="${!isFilterActive}" id="refresh" type="button" onclick="location.href = '/admin';" class="btn-info btn-sm" style="box-shadow: none;">Refresh</button>
+                <button th:if="${isFilterActive}" type="button" onclick="location.href = '/admin/removeFilter';" class="btn-info btn-sm" style="box-shadow: none;">Remove Filter</button>
+            </div>
+        </div>
+
+        <!--New User tab content-->
+        <div class="tab-pane fade" style="font-size: 0.9em;" id="new">
+            <div class="p-3 border border-top-0">
+                <h5 class="my-0">Add New User</h5>
+            </div>
+            <div class="listbtn p-3 bg-white border border-top-0">
+                <form class="text-center">
+                    <input id="idNew" style="display: none" type="text">
+                    <div id="idNewError" style="display: none"></div>
+
+                    <label for="firstnameNew" class="font-weight-bolder mb-1">First name</label><br>
+                    <input id="firstnameNew" class="border rounded" style="width: 19rem" type="text">
+                    <div id="firstnameNewError" class="small text-danger"></div>
+
+                    <label for="lastnameNew" class="font-weight-bolder mt-3 mb-1">Last name</label><br>
+                    <input id="lastnameNew" class="border rounded" style="width: 19rem" type="text">
+                    <div id="lastnameNewError" class="small text-danger"></div>
+
+                    <label for="ageNew" class="font-weight-bolder mt-3 mb-1">Age</label><br>
+                    <input id="ageNew" class="border rounded" style="width: 19rem" type="text">
+                    <div id="ageNewError" class="small text-danger"></div>
+
+                    <label for="emailNew" class="font-weight-bolder mt-3 mb-1">Email</label><br>
+                    <input id="emailNew" class="border rounded" style="width: 19rem" type="text">
+                    <div id="emailNewError" class="small text-danger"></div>
+
+                    <label for="usernameNew" class="font-weight-bolder mt-3 mb-1">Username</label><br>
+                    <input id="usernameNew" class="border rounded" style="width: 19rem" type="text">
+                    <div id="usernameNewError" class="small text-danger"></div>
+
+                    <label for="passwordNew" class="font-weight-bolder mt-3 mb-1">Password</label><br>
+                    <input id="passwordNew" class="border rounded" style="width: 19rem" type="text">
+                    <div id="passwordNewError" class="small text-danger"></div>
+
+                    <label class="font-weight-bolder mt-3 mb-1">Roles</label>
+                    <div th:each="r : ${roles}">
+                        <label class="mb-1" style="cursor: pointer;">
+                            <input th:id="${'checkboxNew-'+r.id}"
+                                   style="width: calc(1vw); height: calc(1vw); vertical-align: middle; cursor: pointer"
+                                   type="checkbox" name="index" th:value="${r.id}"/>
+                            <span th:text="${r.role}"></span>
+                        </label>
+                    </div>
+                    <input class="mt-3 mb-4 btn btn-success" type="button" onclick="newUser();" value="Add new user"/>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--Footer -->
+    <div class="mb-5" style="margin-top: 0.6em"></div>
+</div>

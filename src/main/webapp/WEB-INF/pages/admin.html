@@ -1,107 +1,570 @@
-<h3 class="p-2 mt-2">Admin panel</h3>
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="icon" type="image/png" href="/favicon.png"/>
+</head>
+<body style="font-size: 0.95em;">
+    <script src="/js/jquery-3.3.1.slim.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script>
+        let usersPerPage = 10;
+        let users;
+        let userPages;
+        let currPage = 1;
 
-<!-- Tabs -->
-<div class="tabs" id="mainTabs">
+        function disableButton(btnName){
+            document.getElementById(btnName).setAttribute('disabled','disabled');
+            document.getElementById(btnName).classList.remove('btn-info');
+            document.getElementById(btnName).classList.add('btn-outline-secondary','border-white','border-top');
+        }
+        function enableButton(btnName){
+            document.getElementById(btnName).removeAttribute('disabled');
+            document.getElementById(btnName).classList.add('btn-info');
+            document.getElementById(btnName).classList.remove('btn-outline-secondary','border-white','border-top');
+        }
 
-    <!-- Tab titles -->
-    <ul class="nav nav-tabs">
-        <li class="nav-item border-bottom">
-            <a id="tableTab" class="nav-link active" data-toggle="tab" role="tab" href="#table">Users Table</a>
-        </li>
-        <li class="nav-item border-bottom">
-            <a id="newTab" class="nav-link" data-toggle="tab" role="tab" href="#new" onclick="clearUserFields('New')">New User</a>
-        </li>
-    </ul>
+        function createButton(currUserId, buttonType){
+            let style;
+            if (buttonType==="Delete") {
+                style = "btn-danger";
+            } else {
+                style = "btn-info";
+            }
+            return "<td><a><button type=\"button\" class=\"btn btn-sm "+style+"\" data-toggle=\"modal\" data-uid="+currUserId+" data-id="+users[currUserId].id+" data-origin=\""+buttonType+"Button\" data-target=\"#modalWindow\">"+buttonType+"</button></a></td>";
+        }
 
-    <!-- Tabs content -->
-    <div class="tab-content">
+        function showPage(pageNum) {
+            let skipUsers = pageNum * usersPerPage - usersPerPage;
 
-        <!-- Users tab content -->
-        <div id="table" class="tab-pane fade active show">
-            <div class="p-3 border border-top-0">
-                <h5 id="tabTitle" class="my-0">All Users</h5>
-            </div>
+            $("#userTableHeading").html('<tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Age</th><th>Email</th><th>Role</th><th>Info</th><th>Edit</th><th>Delete</th></tr>');
+            $("#userTable").html('');
+            for (let i = 0; i < usersPerPage; i++) {
+                let currUserId = i + skipUsers;
+                if (currUserId < users.length) {
+                    let currUser = users[currUserId];
+                    document.getElementById("userTable").innerHTML += "<tr><td>"+currUser.id+"</td><td>"+currUser.firstname+"</td><td>"+currUser.lastname+"</td><td>"+currUser.age+"</td><td>"+currUser.email+"</td><td>"+currUser.userRoleStr+"</td>"+createButton(currUserId, "Info")+createButton(currUserId, "Edit")+createButton(currUserId, "Delete")+"</tr>";
+                }
+            }
 
-            <div class="p-3 bg-white border border-top-0">
-                <table class="table table-striped">
-                    <thead id="userTableHeading">
-                    </thead>
-                    <tbody id="userTable">
-                        <tr><td>&nbsp;</td></tr>
-                        <tr><td>&nbsp;</td></tr>
-                        <tr><td>&nbsp;</td></tr>
-                        <tr><td>&nbsp;</td></tr>
-                        <tr><td>&nbsp;</td></tr>
-                        <tr><td>&nbsp;</td></tr>
-                        <tr><td>&nbsp;</td></tr>
-                        <tr><td>&nbsp;</td></tr>
-                        <tr><td>&nbsp;</td></tr>
-                        <tr><td>&nbsp;</td></tr>
-                        <tr><td>&nbsp;</td></tr>
-                        <tr><td>&nbsp;</td></tr>
-                        <tr><td>&nbsp;</td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <label id="afterTableLabel"></label>
-            <div style="margin-top: 0.6em;">
-                <button type="button" id="prevPage" class="btn-info btn-sm" style="box-shadow: none;" onclick="showPrevPage();">Prev page</button>
-                <button type="button" id="nextPage" class="btn-info btn-sm" style="box-shadow: none;" onclick="showNextPage();">Next page</button>
-                <button type="button" data-toggle="modal" th:data-origin="filterButton" data-target="#modalWindow" class="btn-info btn-sm" style="box-shadow: none;">Filter</button>
-                <button type="button" data-toggle="modal" th:data-origin="searchButton" data-target="#modalWindow" class="btn-info btn-sm" style="box-shadow: none;">Search</button>
-                <button th:if="${!isFilterActive}" id="refresh" type="button" onclick="location.href = '/admin';" class="btn-info btn-sm" style="box-shadow: none;">Refresh</button>
-                <button th:if="${isFilterActive}" type="button" onclick="location.href = '/admin/removeFilter';" class="btn-info btn-sm" style="box-shadow: none;">Remove Filter</button>
+            if (users.length===0) {
+                $("#afterTableLabel").html('<br>No users found<br>');
+            }
+            $("#page").html('page '+pageNum+' of '+userPages+', users: '+users.length);
+            if (pageNum<=1) {
+                disableButton("prevPage");
+            }
+            if (pageNum>=userPages) {
+                disableButton("nextPage");
+            }
+        }
+
+        function showNextPage() {
+            if (currPage < userPages) {
+                showPage(++currPage);
+            }
+            if (currPage===2) {
+                enableButton("prevPage");
+            }
+        }
+
+        function showPrevPage() {
+            if (currPage > 1) {
+                showPage(--currPage);
+            }
+
+            if (currPage===userPages-1) {
+                enableButton("nextPage");
+            }
+        }
+
+        function clearUserFields(formName) {
+            $("#id"+formName).val('');
+            $("#firstname"+formName).val('')
+            $("#lastname"+formName).val('')
+            $("#age"+formName).val('')
+            $("#email"+formName).val('')
+            $("#username"+formName).val('')
+            $("#password"+formName).val('')
+
+            document.getElementById("checkbox"+formName+"-1").checked = false;
+            document.getElementById("checkbox"+formName+"-2").checked = false;
+            document.getElementById("checkbox"+formName+"-3").checked = false;
+
+            clearErrorFields(formName);
+        }
+
+        function parseUser(formName) {
+            let user = {
+                id: $("#id"+formName).val(),
+                firstname: $("#firstname"+formName).val(),
+                lastname: $("#lastname"+formName).val(),
+                age: $("#age"+formName).val(),
+                email: $("#email"+formName).val(),
+                username: $("#username"+formName).val(),
+                password: $("#password"+formName).val(),
+                roleStr: ''
+            };
+            if (document.getElementById("checkbox"+formName+"-1").checked) user.roleStr+="ADMIN";
+            if (document.getElementById("checkbox"+formName+"-2").checked) user.roleStr+="USER";
+            if (document.getElementById("checkbox"+formName+"-3").checked) user.roleStr+="GUEST";
+            return user;
+        }
+
+        function setUser(user, formName) {
+            $("#id"+formName).val(user.id);
+            $("#firstname"+formName).val(user.firstname);
+            $("#lastname"+formName).val(user.lastname);
+            $("#age"+formName).val(user.age);
+            $("#email"+formName).val(user.email);
+            $("#username"+formName).val(user.username);
+            $("#password"+formName).val(user.password);
+            if (user.userRoleStr.includes("ADMIN")) document.getElementById("checkbox"+formName+"-1").checked=true;
+            if (user.userRoleStr.includes("USER")) document.getElementById("checkbox"+formName+"-2").checked=true;
+            if (user.userRoleStr.includes("GUEST")) document.getElementById("checkbox"+formName+"-3").checked=true;
+        }
+
+        function setErrorFields(userErrorText, formName) {
+            $("#id"+formName+"Error").html(userErrorText.id);
+
+            $("#username"+formName+"Error").html(userErrorText.username);
+            if (userErrorText.username!=='') {
+                $("#username"+formName).removeClass('bg-white').css("background-color", "#ffebb9");
+            } else $("#username"+formName).addClass('bg-white');
+
+            $("#password"+formName+"Error").html(userErrorText.password);
+            if (userErrorText.password!=='') {
+                $("#password"+formName).removeClass('bg-white').css("background-color", "#ffebb9");
+            } else $("#password"+formName).addClass('bg-white');
+
+            $("#email"+formName+"Error").html(userErrorText.email);
+            document.getElementById("email"+formName+"Error").innerText=userErrorText.email;
+            if (userErrorText.email!=='') {
+                $("#email"+formName).removeClass('bg-white').css("background-color", "#ffebb9");
+            } else $("#email"+formName).addClass('bg-white');
+
+            $("#firstname"+formName+"Error").html(userErrorText.firstname);
+            if (userErrorText.firstname!=='') {
+                $("#firstname"+formName).removeClass('bg-white').css("background-color", "#ffebb9");
+            } else $("#firstname"+formName).addClass('bg-white');
+
+            $("#lastname"+formName+"Error").html(userErrorText.lastname);
+            if (userErrorText.lastname!=='') {
+                $("#lastname"+formName).removeClass('bg-white').css("background-color", "#ffebb9");
+            } else $("#lastname"+formName).addClass('bg-white');
+
+            $("#age"+formName+"Error").html(userErrorText.age);
+            document.getElementById("age"+formName+"Error").innerText=userErrorText.age;
+            if (userErrorText.age!=='') {
+                $("#age"+formName).removeClass('bg-white').css("background-color", "#ffebb9");
+            } else $("#age"+formName).addClass('bg-white');
+        }
+
+        function clearErrorFields(formName) {
+            function clearErrorField(field,formName) {
+                $("#"+field+formName+"Error").html('');
+                $("#"+field+formName).addClass('bg-white');
+            }
+            clearErrorField("id",formName);
+            clearErrorField("username",formName);
+            clearErrorField("password",formName);
+            clearErrorField("email",formName);
+            clearErrorField("firstname",formName);
+            clearErrorField("lastname",formName);
+            clearErrorField("age",formName);
+        }
+
+        function sidemenu(page) {
+            if (page==="user") {
+                $("#admin-link").removeClass('active').attr('href','javascript:sidemenu(\'admin\');');
+                $("#user-link").addClass('active').attr('href','javascript:void(0);');
+                $("#guest-link").removeClass('active').attr('href','javascript:sidemenu(\'guest\');');
+                userPage();
+            } else
+            if (page==="admin") {
+                $("#admin-link").addClass('active').attr('href','javascript:void(0);');
+                $("#user-link").removeClass('active').attr('href','javascript:sidemenu(\'user\');');
+                $("#guest-link").removeClass('active').attr('href','javascript:sidemenu(\'guest\');');
+                adminPage();
+            } else
+            if (page==="guest") {
+                $("#admin-link").removeClass('active').attr('href','javascript:sidemenu(\'admin\');');
+                $("#user-link").removeClass('active').attr('href','javascript:sidemenu(\'user\');');
+                $("#guest-link").addClass('active').attr('href','javascript:void(0);');
+                guestPage();
+            }
+        }
+
+        async function edit() {
+            let user = parseUser("Edit");
+
+            let response = await fetch('/admin/edit', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(user)
+            });
+
+            let userErrorText = await response.json();
+            setErrorFields(userErrorText, "Edit");
+
+            if (!userErrorText.errorsPresent) {
+                $('#modalWindow').modal('hide');
+                await update();
+            }
+        }
+
+        async function newUser() {
+            let user = parseUser("New");
+
+            let response = await fetch('/admin/new', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8'
+                },
+                body: JSON.stringify(user)
+            });
+
+            let userErrorText = await response.json();
+            setErrorFields(userErrorText, "New");
+
+            if (!userErrorText.errorsPresent) {
+                document.getElementById("new").classList.remove('active', 'show');
+                document.getElementById("newTab").classList.remove('active');
+                document.getElementById("table").classList.add('active', 'show');
+                document.getElementById("tableTab").classList.add('active');
+                clearUserFields("New");
+                await update();
+            }
+        }
+
+        async function del(id) {
+            let response = await fetch('/admin/delete='+id);
+            if (response.ok) {
+                $('#modalWindow').modal('hide')
+                await update();
+            }
+        }
+
+        async function filter() {
+            $('#modalWindow').modal('hide')
+        }
+
+        async function search() {
+            $('#modalWindow').modal('hide')
+        }
+
+        async function userPage() {
+            let response = await fetch('/admin/user');
+            let html = await response.text();
+            if (html.includes("<title>Please sign in</title>")) {
+                window.location.replace('/login');
+            } else {
+                $("#mainblock").html(html);
+            }
+        }
+
+        async function adminPage() {
+            let response = await fetch('/admin/admin');
+            let html = await response.text();
+            if (html.includes("<title>Please sign in</title>")) {
+                window.location.replace('/login');
+            } else {
+                $("#mainblock").html(html);
+                update();
+            }
+        }
+
+        async function guestPage() {
+            let response = await fetch('/admin/guest');
+            let html = await response.text();
+            if (html.includes("<title>Please sign in</title>")) {
+                window.location.replace('/login');
+            } else {
+                $("#mainblock").html(html);
+            }
+        }
+
+
+        async function update() {
+            let response = await fetch('/admin/users');
+            users = await response.json();
+            userPages = Math.ceil(users.length / usersPerPage);
+            showPage(currPage);
+        }
+
+        update();
+    </script>
+
+    <!-- Верхняя серая строчка -->
+    <div class="row p-2 mx-0 align-items-center bg-dark">
+        <div class="col-md-11">
+            <a class="text-light text-decoration-none" href="/user">
+                <b>[[${principal.getEmail()}]]</b> with roles: [[${principal.getUserRoleStr()}]]
+            </a>
+        </div>
+        <div class="col-md-1">
+            <a class="text-white-50 text-decoration-none" href="/logout">Logout</a>
+        </div>
+    </div> <!-- /Верхняя серая строчка -->
+
+    <div>
+        <!-- боковая панель -->
+        <nav id="sidemenu" class="col-2 nav float-left d-inline-block p-0 pt-3 flex-column nav-pills">
+            <a id="admin-link" class="nav-link active" href="javascript:void(0);">Admin</a>
+            <a id="user-link" class="nav-link" href="javascript:sidemenu('user');">User</a>
+            <a id="guest-link" class="nav-link" href="javascript:sidemenu('guest');">Guest Page</a>
+        </nav>
+
+        <!-- основной блок -->
+        <div id="mainblock" class="col-10 d-inline-block bg-light">
+            <h3 class="p-2 mt-2">Admin panel</h3>
+
+            <!-- Tabs -->
+            <div class="tabs" id="mainTabs">
+
+                <!-- Tab titles -->
+                <ul class="nav nav-tabs">
+                    <li class="nav-item border-bottom">
+                        <a id="tableTab" class="nav-link active" data-toggle="tab" role="tab" href="#table">Users Table</a>
+                    </li>
+                    <li class="nav-item border-bottom">
+                        <a id="newTab" class="nav-link" data-toggle="tab" role="tab" href="#new" onclick="clearUserFields('New')">New User</a>
+                    </li>
+                </ul>
+
+                <!-- Tabs content -->
+                <div class="tab-content">
+
+                    <!-- Users tab content -->
+                    <div id="table" class="tab-pane fade active show">
+                        <div class="p-3 border border-top-0">
+                            <h5 id="tabTitle" class="my-0">All Users</h5>
+                        </div>
+
+                        <div class="p-3 bg-white border border-top-0">
+                            <table class="table table-striped">
+                                <thead id="userTableHeading">
+                                </thead>
+                                <tbody id="userTable">
+                                </tbody>
+                            </table>
+                        </div>
+                        <label id="afterTableLabel"></label>
+                        <div style="margin-top: 0.6em;">
+                            <button type="button" id="prevPage" class="btn-info btn-sm" style="box-shadow: none;" onclick="showPrevPage();">Prev page</button>
+                            <button type="button" id="nextPage" class="btn-info btn-sm" style="box-shadow: none;" onclick="showNextPage();">Next page</button>
+                            <button type="button" data-toggle="modal" th:data-origin="filterButton" data-target="#modalWindow" class="btn-info btn-sm" style="box-shadow: none;">Filter</button>
+                            <button type="button" data-toggle="modal" th:data-origin="searchButton" data-target="#modalWindow" class="btn-info btn-sm" style="box-shadow: none;">Search</button>
+                            <button th:if="${!isFilterActive}" id="refresh" type="button" onclick="location.href = '/admin';" class="btn-info btn-sm" style="box-shadow: none;">Refresh</button>
+                            <button th:if="${isFilterActive}" type="button" onclick="location.href = '/admin/removeFilter';" class="btn-info btn-sm" style="box-shadow: none;">Remove Filter</button>
+                        </div>
+                    </div>
+
+                    <!--New User tab content-->
+                    <div class="tab-pane fade" style="font-size: 0.9em;" id="new">
+                        <div class="p-3 border border-top-0">
+                            <h5 class="my-0">Add New User</h5>
+                        </div>
+                        <div class="listbtn p-3 bg-white border border-top-0">
+                            <form class="text-center">
+                                <input id="idNew" style="display: none" type="text">
+                                <div id="idNewError" style="display: none"></div>
+
+                                <label for="firstnameNew" class="font-weight-bolder mb-1">First name</label><br>
+                                <input id="firstnameNew" class="border rounded" style="width: 19rem" type="text">
+                                <div id="firstnameNewError" class="small text-danger"></div>
+
+                                <label for="lastnameNew" class="font-weight-bolder mt-3 mb-1">Last name</label><br>
+                                <input id="lastnameNew" class="border rounded" style="width: 19rem" type="text">
+                                <div id="lastnameNewError" class="small text-danger"></div>
+
+                                <label for="ageNew" class="font-weight-bolder mt-3 mb-1">Age</label><br>
+                                <input id="ageNew" class="border rounded" style="width: 19rem" type="text">
+                                <div id="ageNewError" class="small text-danger"></div>
+
+                                <label for="emailNew" class="font-weight-bolder mt-3 mb-1">Email</label><br>
+                                <input id="emailNew" class="border rounded" style="width: 19rem" type="text">
+                                <div id="emailNewError" class="small text-danger"></div>
+
+                                <label for="usernameNew" class="font-weight-bolder mt-3 mb-1">Username</label><br>
+                                <input id="usernameNew" class="border rounded" style="width: 19rem" type="text">
+                                <div id="usernameNewError" class="small text-danger"></div>
+
+                                <label for="passwordNew" class="font-weight-bolder mt-3 mb-1">Password</label><br>
+                                <label for="passwordNew" class="font-weight-bolder mt-3 mb-1">Password</label><br>
+                                <input id="passwordNew" class="border rounded" style="width: 19rem" type="text">
+                                <div id="passwordNewError" class="small text-danger"></div>
+
+                                <label class="font-weight-bolder mt-3 mb-1">Roles</label>
+                                <div th:each="r : ${roles}">
+                                    <label class="mb-1" style="cursor: pointer;">
+                                        <input th:id="${'checkboxNew-'+r.id}"
+                                               style="width: calc(1vw); height: calc(1vw); vertical-align: middle; cursor: pointer"
+                                               type="checkbox" name="index" th:value="${r.id}"/>
+                                        <span th:text="${r.role}"></span>
+                                    </label>
+                                </div>
+                                <input class="mt-3 mb-4 btn btn-success" type="button" onclick="newUser();" value="Add new user"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!--Footer -->
+                <div class="mb-5" style="margin-top: 0.6em"></div>
             </div>
         </div>
+    </div>
 
-        <!--New User tab content-->
-        <div class="tab-pane fade" style="font-size: 0.9em;" id="new">
-            <div class="p-3 border border-top-0">
-                <h5 class="my-0">Add New User</h5>
-            </div>
-            <div class="listbtn p-3 bg-white border border-top-0">
-                <form class="text-center">
-                    <input id="idNew" style="display: none" type="text">
-                    <div id="idNewError" style="display: none"></div>
+    <!-- Edit modal window-->
+    <div id="modalWindow" class="modal" style="font-size: 0.9em;" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form name="userEditForm" id="userEditForm" class="text-center">
+                    <label for="idEdit" class="font-weight-bolder mt-4 mb-1">Id</label><br>
+                    <input id="idEdit" class="border rounded" style="width: 19rem" type="text">
+                    <div id="idEditError" class="small text-danger"></div>
 
-                    <label for="firstnameNew" class="font-weight-bolder mb-1">First name</label><br>
-                    <input id="firstnameNew" class="border rounded" style="width: 19rem" type="text">
-                    <div id="firstnameNewError" class="small text-danger"></div>
+                    <label for="firstnameEdit" class="font-weight-bolder mt-3 mb-1">First name</label><br>
+                    <input id="firstnameEdit" class="border rounded" style="width: 19rem" type="text">
+                    <div id="firstnameEditError" class="small text-danger"></div>
 
-                    <label for="lastnameNew" class="font-weight-bolder mt-3 mb-1">Last name</label><br>
-                    <input id="lastnameNew" class="border rounded" style="width: 19rem" type="text">
-                    <div id="lastnameNewError" class="small text-danger"></div>
+                    <label for="lastnameEdit" class="font-weight-bolder mt-3 mb-1">Last name</label><br>
+                    <input id="lastnameEdit" class="border rounded" style="width: 19rem" type="text">
+                    <div id="lastnameEditError" class="small text-danger"></div>
 
-                    <label for="ageNew" class="font-weight-bolder mt-3 mb-1">Age</label><br>
-                    <input id="ageNew" class="border rounded" style="width: 19rem" type="text">
-                    <div id="ageNewError" class="small text-danger"></div>
+                    <label for="ageEdit" class="font-weight-bolder mt-3 mb-1">Age</label><br>
+                    <input id="ageEdit" class="border rounded" style="width: 19rem" type="text">
+                    <div id="ageEditError" class="small text-danger"></div>
 
-                    <label for="emailNew" class="font-weight-bolder mt-3 mb-1">Email</label><br>
-                    <input id="emailNew" class="border rounded" style="width: 19rem" type="text">
-                    <div id="emailNewError" class="small text-danger"></div>
+                    <label for="emailEdit" class="font-weight-bolder mt-3 mb-1">Email</label><br>
+                    <input id="emailEdit" class="border rounded" style="width: 19rem" type="text">
+                    <div id="emailEditError" class="small text-danger"></div>
 
-                    <label for="usernameNew" class="font-weight-bolder mt-3 mb-1">Username</label><br>
-                    <input id="usernameNew" class="border rounded" style="width: 19rem" type="text">
-                    <div id="usernameNewError" class="small text-danger"></div>
+                    <label for="usernameEdit" class="font-weight-bolder mt-3 mb-1">Username</label><br>
+                    <input id="usernameEdit" class="border rounded" style="width: 19rem" type="text">
+                    <div id="usernameEditError" class="small text-danger"></div>
 
-                    <label for="passwordNew" class="font-weight-bolder mt-3 mb-1">Password</label><br>
-                    <input id="passwordNew" class="border rounded" style="width: 19rem" type="text">
-                    <div id="passwordNewError" class="small text-danger"></div>
+                    <label for="passwordEdit" class="font-weight-bolder mt-3 mb-1">Password</label><br>
+                    <input id="passwordEdit" class="border rounded" style="width: 19rem" type="text">
+                    <div id="passwordEditError" class="small text-danger"></div>
 
                     <label class="font-weight-bolder mt-3 mb-1">Roles</label>
                     <div th:each="r : ${roles}">
                         <label class="mb-1" style="cursor: pointer;">
-                            <input th:id="${'checkboxNew-'+r.id}"
-                                   style="width: calc(1vw); height: calc(1vw); vertical-align: middle; cursor: pointer"
-                                   type="checkbox" name="index" th:value="${r.id}"/>
+                            <input th:id="${'checkboxEdit-'+r.id}" style="width: calc(1vw); height: calc(1vw); vertical-align: middle; cursor: pointer" type="checkbox" name="index" th:value="${r.id}"/>
                             <span th:text="${r.role}"></span>
                         </label>
                     </div>
-                    <input class="mt-3 mb-4 btn btn-success" type="button" onclick="newUser();" value="Add new user"/>
+                    <input id='formCancel' class="mt-3 mb-5 btn btn-secondary" type="button" onclick="$('#modalWindow').modal('hide');" value="Close"/>
+                    <input id='formSubmit' class="mt-3 mb-5 btn" type="button" value="Edit"/>
                 </form>
             </div>
         </div>
     </div>
-    <!--Footer -->
-    <div class="mb-5" style="margin-top: 0.6em"></div>
-</div>
+
+    <script type="text/javascript" th:inline="javascript">
+
+        $("#modalWindow").on('show.bs.modal', function (e) {
+            const modal = $(e.relatedTarget);
+            let origin = modal.data('origin');
+            let id = modal.data('id');
+
+            function resetField(fieldId) {
+                $('#' + fieldId).addClass('bg-white').removeClass('text-muted').removeAttr('disabled', 'disabled').removeAttr('readonly', 'readonly');
+            }
+
+            function readonlyField(fieldId) {
+                $('#'+fieldId).addClass('text-muted').attr('readonly', 'readonly').removeClass('bg-white');
+                document.getElementById(fieldId).style.backgroundColor = '#EEEEEE';
+            }
+
+            function muteField(fieldId) {
+                $('#'+fieldId).addClass('text-muted').attr('disabled', 'disabled');
+            }
+
+            function disableField(fieldId) {
+                muteField(fieldId);
+                $('#'+fieldId).removeClass('bg-white');
+                document.getElementById(fieldId).style.backgroundColor = '#EEEEEE';
+            }
+
+
+            if ((origin==='EditButton')||(origin==='filterButton')||(origin==='searchButton'))
+            {
+                $('#checkboxEdit-1').removeAttr('disabled', 'disabled');
+                $('#checkboxEdit-2').removeAttr('disabled', 'disabled');
+                $('#checkboxEdit-3').removeAttr('disabled', 'disabled');
+            } else {
+                $('#checkboxEdit-1').attr('disabled', 'disabled');
+                $('#checkboxEdit-2').attr('disabled', 'disabled');
+                $('#checkboxEdit-3').attr('disabled', 'disabled');
+            }
+
+            clearUserFields("Edit");
+            $('#formSubmit').removeClass('btn-secondary btn-danger btn-info btn-primary');
+            document.getElementById("formSubmit").hidden=false;
+
+            if (origin==='InfoButton') {
+                document.getElementById("formSubmit").hidden=true;
+            } else if (origin==='EditButton') {
+                $('#formSubmit').val('Edit').addClass('btn-primary');
+                document.getElementById("formSubmit").onclick = function(){edit()};
+            } else if (origin==='DeleteButton') {
+                $('#formSubmit').val('Delete').addClass('btn-danger');
+                document.getElementById("formSubmit").onclick = function(){del(id)};
+            } else if (origin==='filterButton') {
+                $('#formSubmit').val('Filter').addClass('btn-primary');
+                document.getElementById("formSubmit").onclick = function(){filter()};
+            } else if (origin==='searchButton') {
+                $('#formSubmit').val('Search').addClass('btn-primary');
+                document.getElementById("formSubmit").onclick = function(){search()};
+            }
+
+            resetField('idEdit');
+            resetField('firstnameEdit');
+            resetField('lastnameEdit');
+            resetField('ageEdit');
+            resetField('emailEdit');
+            resetField('usernameEdit');
+            resetField('passwordEdit');
+
+            if ((origin!=='filterButton')&&(origin!=='searchButton')) {
+                let uid = modal.data('uid');
+                setUser(users[uid], "Edit");
+            }
+
+            if (origin==='DeleteButton') {
+                disableField('idEdit');
+                disableField('firstnameEdit');
+                disableField('lastnameEdit');
+                disableField('ageEdit');
+                disableField('emailEdit');
+                disableField('usernameEdit');
+                disableField('passwordEdit');
+            }
+            if (origin==='InfoButton') {
+                muteField('idEdit');
+                muteField('firstnameEdit');
+                muteField('lastnameEdit');
+                muteField('ageEdit');
+                muteField('emailEdit');
+                muteField('usernameEdit');
+                muteField('passwordEdit');
+            }
+
+        });
+
+        $('#newTab').on('show.bs.tab', function () {
+            //тут событие может не сработать
+        });
+    </script>
+
+</body>
+</html>

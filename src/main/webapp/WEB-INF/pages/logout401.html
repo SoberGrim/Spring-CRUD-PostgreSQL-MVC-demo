@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    {
+        //IE
+        document.execCommand("ClearAuthenticationCache");
+
+        //chrome
+        fetch("/basicauth", {
+            credentials: 'include',
+            headers: {
+                'Authorization': 'Basic ' + btoa('none:none'),
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(() => {
+            //nonChrome
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "/basicauth", true, 'none', 'none');
+            xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            xhr.onerror = function(err) {
+                console.error(err);
+            };
+            xhr.onload = function () {
+                    window.location.assign("/login");
+            };
+            xhr.send()
+        }).catch(err => console.error(err));
+    }
+</script>
+logged out
+</body>
+</html>
