@@ -40,10 +40,10 @@ public class MainController {
         return "login";
     }
 
-    @GetMapping("logout401")
+    @GetMapping("noauth")
     public String logout401Page()
     {
-        return "logout401";
+        return "noauth";
     }
 
     @GetMapping("/basicauth")

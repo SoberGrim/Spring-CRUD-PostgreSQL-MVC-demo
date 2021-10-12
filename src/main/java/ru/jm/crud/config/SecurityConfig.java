@@ -49,8 +49,7 @@ public class SecurityConfig {
                     .antMatchers("/admin/","/admin").access("hasRole('ROLE_ADMIN')")
                     .antMatchers("/user/","/user").access("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
                     .antMatchers("/guest/","/guest").access("hasAnyRole('ROLE_GUEST','ROLE_USER','ROLE_ADMIN')");
-                    //.anyRequest().permitAll();
-                    //.anyRequest().
+                    //.anyRequest().authenticated();
 
 
             http
@@ -60,11 +59,10 @@ public class SecurityConfig {
                     .loginProcessingUrl("/login")
                     .usernameParameter("j_username").passwordParameter("j_password")
                     .and()
-                    .logout().logoutUrl("/logout").logoutSuccessUrl("/logout401")
+                    .logout().logoutUrl("/logout").logoutSuccessUrl("/noauth")
                     .and()
                     .csrf().disable();
         }
-
     }
 
 
