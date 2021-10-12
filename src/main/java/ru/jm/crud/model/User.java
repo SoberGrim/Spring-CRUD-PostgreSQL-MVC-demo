@@ -194,6 +194,12 @@ public class User implements UserDetails {
         this.userRoles = userRoles;
     }
 
+    public String getUserRoleStr() {
+        return roleToStr(userRoles);
+    }
+
+
+
     private String roleToStr(List<UserRole> roles) {
         StringBuilder strRoles = new StringBuilder();
         if (roles.size() > 0) {

@@ -204,7 +204,7 @@
             let user = parseUser("Edit");
 
             let response = await fetch('/admin/edit', {
-                method: 'POST',
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
@@ -245,7 +245,12 @@
         }
 
         async function del(id) {
-            let response = await fetch('/admin/delete='+id);
+
+            let response = await fetch('/admin/delete', {
+                method: 'DELETE',
+                body: JSON.stringify(id)
+            });
+
             if (response.ok) {
                 $('#modalWindow').modal('hide')
                 await update();
@@ -290,7 +295,6 @@
                 $("#mainblock").html(html);
             }
         }
-
 
         async function update() {
             let response = await fetch('/admin/users');

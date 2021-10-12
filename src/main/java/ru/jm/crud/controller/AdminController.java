@@ -1,5 +1,6 @@
 package ru.jm.crud.controller;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 
 
 @Controller
+@Secured("ROLE_ADMIN")
 @RequestMapping("/admin")
 public class AdminController {
     final UserService service;

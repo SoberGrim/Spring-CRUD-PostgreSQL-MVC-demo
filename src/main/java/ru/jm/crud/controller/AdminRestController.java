@@ -17,6 +17,7 @@ import java.util.Objects;
 
 
 @RestController
+@Secured("ROLE_ADMIN")
 @RequestMapping("/admin")
 public class AdminRestController {
     final UserService service;
@@ -35,7 +36,6 @@ public class AdminRestController {
     }
 
 
-    @Secured("ROLE_ADMIN")
     @PostMapping("/new")
     public UserDTO createNewUser(@RequestBody @Valid UserDTO tempUser, BindingResult bindingResult) {
 
@@ -54,8 +54,7 @@ public class AdminRestController {
     }
 
 
-    @Secured("ROLE_ADMIN")
-    @PostMapping("/edit")
+    @PatchMapping("/edit")
     public UserDTO editUser(@RequestBody @Valid UserDTO tmpUser, BindingResult bindingResult) {
 
         String idStr = tmpUser.getId();
@@ -77,9 +76,8 @@ public class AdminRestController {
     }
 
 
-    @Secured("ROLE_ADMIN")
-    @GetMapping("/delete={id}")
-    String deleteUserById(@PathVariable("id") String idStr) {
+    @DeleteMapping("/delete")
+    String deleteUserById(@RequestBody String idStr) {
         Long id = idStr.matches("\\d+")?Long.parseLong(idStr):0;
         service.delete(id);
         return "success";
