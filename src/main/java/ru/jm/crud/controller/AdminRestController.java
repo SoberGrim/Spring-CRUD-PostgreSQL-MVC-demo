@@ -75,6 +75,21 @@ public class AdminRestController {
         return userErrorDTO;
     }
 
+    @PostMapping("/search")
+    public UserDTO searchUser(@RequestBody UserDTO tmpUser) {
+
+        String idStr = tmpUser.getId();
+        Long id = idStr.matches("\\d+")?Long.parseLong(idStr):0;
+
+        User user = new User();
+        user.merge(tmpUser, roleService.getRoles(tmpUser.getRoleStr()));
+        System.out.println("Searching"+user);
+        //service.update(user);
+
+
+        return tmpUser;
+    }
+
 
     @DeleteMapping("/delete")
     String deleteUserById(@RequestBody String idStr) {
