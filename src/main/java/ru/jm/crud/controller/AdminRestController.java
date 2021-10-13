@@ -84,6 +84,7 @@ public class AdminRestController {
         User user = new User();
         user.merge(tmpUser, roleService.getRoles(tmpUser.getRoleStr()));
         System.out.println("Searching"+user);
+        service.setFilter(user, false);
         //service.update(user);
 
 
