@@ -174,14 +174,14 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getFilterUsers(boolean fromCache) {
         return this.isFilterActive ?
-                (this.filterStrict) ? getStrictFilterUsers() : getNonStrictFilterUsers()
+                (this.filterStrict) ? getStrictFilterUsers(fromCache) : getNonStrictFilterUsers(fromCache)
                 : getAllUsers(fromCache);
     }
 
 
-    private List<User> getStrictFilterUsers() {
+    private List<User> getStrictFilterUsers(boolean fromCache) {
         System.out.println("Strict filtering users in user cache");
-        List<User> list = this.userCache;
+        List<User> list = getAllUsers(fromCache);
         List<User> outList = new LinkedList<>();
 
         boolean found = false;
@@ -254,9 +254,9 @@ public class UserDaoImpl implements UserDao {
         return outList;
     }
 
-    private List<User> getNonStrictFilterUsers() {
+    private List<User> getNonStrictFilterUsers(boolean fromCache) {
         System.out.println("Searching users in user cache");
-        List<User> list = this.userCache;
+        List<User> list = getAllUsers(fromCache);
         List<User> outList = new LinkedList<>();
 
         boolean found = false;
