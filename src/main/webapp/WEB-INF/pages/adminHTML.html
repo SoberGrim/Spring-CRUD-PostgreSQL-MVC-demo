@@ -22,7 +22,7 @@
                 <h5 id="tabTitle" class="my-0">All Users</h5>
             </div>
 
-            <div class="p-3 bg-white border border-top-0">
+            <div class="p-3 bg-white border border-top-0 pb-0">
                 <table class="table table-striped">
                     <thead id="userTableHeading">
                     </thead>
@@ -49,8 +49,7 @@
                 <button type="button" id="nextPage" class="btn-info btn-sm" style="box-shadow: none;" onclick="showNextPage();">Next page</button>
                 <button type="button" data-toggle="modal" th:data-origin="filterButton" data-target="#modalWindow" class="btn-info btn-sm" style="box-shadow: none;">Filter</button>
                 <button type="button" data-toggle="modal" th:data-origin="searchButton" data-target="#modalWindow" class="btn-info btn-sm" style="box-shadow: none;">Search</button>
-                <button th:if="${!isFilterActive}" id="refresh" type="button" onclick="location.href = '/admin';" class="btn-info btn-sm" style="box-shadow: none;">Refresh</button>
-                <button th:if="${isFilterActive}" type="button" onclick="location.href = '/admin/removeFilter';" class="btn-info btn-sm" style="box-shadow: none;">Remove Filter</button>
+                <button id="removeFilter" type="button" onclick="removeFilter()" class="btn-info btn-sm d-none" style="box-shadow: none;">Remove Filter</button>
             </div>
         </div>
 
@@ -61,6 +60,7 @@
             </div>
             <div class="listbtn p-3 bg-white border border-top-0">
                 <form class="text-center">
+                    <label for="idNew"></label>
                     <input id="idNew" style="display: none" type="text">
                     <div id="idNewError" style="display: none"></div>
 

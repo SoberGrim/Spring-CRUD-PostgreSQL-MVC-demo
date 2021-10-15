@@ -1,7 +1,6 @@
 package ru.jm.crud.dao;
 
 import ru.jm.crud.model.User;
-import ru.jm.crud.model.UserDTO;
 import ru.jm.crud.model.UserRole;
 
 import java.util.Collection;

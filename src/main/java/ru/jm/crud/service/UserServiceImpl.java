@@ -2,13 +2,13 @@ package ru.jm.crud.service;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import ru.jm.crud.model.User;
-import ru.jm.crud.model.UserRole;
-import ru.jm.crud.dao.UserDao;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import ru.jm.crud.model.User;
+import ru.jm.crud.model.UserRole;
+import ru.jm.crud.dao.UserDao;
 
 import java.util.Collection;
 import java.util.List;

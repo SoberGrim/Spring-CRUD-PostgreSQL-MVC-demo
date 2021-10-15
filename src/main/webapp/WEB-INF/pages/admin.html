@@ -4,42 +4,28 @@
 <head>
     <meta charset="UTF-8">
     <title>Users</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="icon" type="image/png" href="/favicon.png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="/js/admin.js"></script>
+    <script src="/js/common.js"></script>
 </head>
 <body style="font-size: 0.95em;">
-    <script src="/js/jquery-3.3.1.slim.min.js"></script>
-    <script src="/js/popper.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
     <script>
         let usersPerPage = 10;
         let users;
         let userPages;
         let currPage = 1;
 
-        function disableButton(btnName){
-            document.getElementById(btnName).setAttribute('disabled','disabled');
-            document.getElementById(btnName).classList.remove('btn-info');
-            document.getElementById(btnName).classList.add('btn-outline-secondary','border-white','border-top');
-        }
-        function enableButton(btnName){
-            document.getElementById(btnName).removeAttribute('disabled');
-            document.getElementById(btnName).classList.add('btn-info');
-            document.getElementById(btnName).classList.remove('btn-outline-secondary','border-white','border-top');
-        }
-
-        function createButton(currUserId, buttonType){
-            let style;
-            if (buttonType==="Delete") {
-                style = "btn-danger";
-            } else {
-                style = "btn-info";
-            }
-            return "<td><a><button type=\"button\" class=\"btn btn-sm "+style+"\" data-toggle=\"modal\" data-uid="+currUserId+" data-id="+users[currUserId].id+" data-origin=\""+buttonType+"Button\" data-target=\"#modalWindow\">"+buttonType+"</button></a></td>";
-        }
-
         function showPage(pageNum) {
+            function createButton(currUserId, buttonType){
+                let style = (buttonType==="Delete")? "btn-danger": "btn-info";
+                return "<td><a><button type=\"button\" class=\"btn btn-sm "+style+"\" data-toggle=\"modal\" data-uid="+currUserId+" data-id="+users[currUserId].id+" data-origin=\""+buttonType+"Button\" data-target=\"#modalWindow\">"+buttonType+"</button></a></td>";
+            }
+
             let skipUsers = pageNum * usersPerPage - usersPerPage;
 
             $("#userTableHeading").html('<tr><th>ID</th><th>First Name</th><th>Last Name</th><th>Age</th><th>Email</th><th>Role</th><th>Info</th><th>Edit</th><th>Delete</th></tr>');
@@ -52,24 +38,19 @@
                 }
             }
 
-            if (users.length===0) {
-                $("#afterTableLabel").html('<br>No users found<br>');
-            }
+            (users.length===0)?
+                $("#afterTableLabel").html('<br>&nbsp;No users found<br>') :
+                $("#afterTableLabel").html('<label class="pl-2 small">Page '+ pageNum + ' of '+userPages + ', users: ' + users.length +'</label>');
+
             $("#page").html('page '+pageNum+' of '+userPages+', users: '+users.length);
-            if (pageNum<=1) {
-                disableButton("prevPage");
-            }
-            if (pageNum>=userPages) {
-                disableButton("nextPage");
-            }
+
+            (pageNum<=1) ? disableButton("prevPage"): enableButton("prevPage");
+            (pageNum>=userPages) ? disableButton("nextPage"): enableButton("nextPage");
         }
 
         function showNextPage() {
             if (currPage < userPages) {
                 showPage(++currPage);
-            }
-            if (currPage===2) {
-                enableButton("prevPage");
             }
         }
 
@@ -77,133 +58,25 @@
             if (currPage > 1) {
                 showPage(--currPage);
             }
-
-            if (currPage===userPages-1) {
-                enableButton("nextPage");
-            }
-        }
-
-        function clearUserFields(formName) {
-            $("#id"+formName).val('');
-            $("#firstname"+formName).val('')
-            $("#lastname"+formName).val('')
-            $("#age"+formName).val('')
-            $("#email"+formName).val('')
-            $("#username"+formName).val('')
-            $("#password"+formName).val('')
-
-            document.getElementById("checkbox"+formName+"-1").checked = false;
-            document.getElementById("checkbox"+formName+"-2").checked = false;
-            document.getElementById("checkbox"+formName+"-3").checked = false;
-
-            clearErrorFields(formName);
-        }
-
-        function parseUser(formName) {
-            let user = {
-                id: $("#id"+formName).val(),
-                firstname: $("#firstname"+formName).val(),
-                lastname: $("#lastname"+formName).val(),
-                age: $("#age"+formName).val(),
-                email: $("#email"+formName).val(),
-                username: $("#username"+formName).val(),
-                password: $("#password"+formName).val(),
-                roleStr: ''
-            };
-            if (document.getElementById("checkbox"+formName+"-1").checked) user.roleStr+="ADMIN";
-            if (document.getElementById("checkbox"+formName+"-2").checked) user.roleStr+="USER";
-            if (document.getElementById("checkbox"+formName+"-3").checked) user.roleStr+="GUEST";
-            return user;
-        }
-
-        function setUser(user, formName) {
-            $("#id"+formName).val(user.id);
-            $("#firstname"+formName).val(user.firstname);
-            $("#lastname"+formName).val(user.lastname);
-            $("#age"+formName).val(user.age);
-            $("#email"+formName).val(user.email);
-            $("#username"+formName).val(user.username);
-            $("#password"+formName).val(user.password);
-            if (user.userRoleStr.includes("ADMIN")) document.getElementById("checkbox"+formName+"-1").checked=true;
-            if (user.userRoleStr.includes("USER")) document.getElementById("checkbox"+formName+"-2").checked=true;
-            if (user.userRoleStr.includes("GUEST")) document.getElementById("checkbox"+formName+"-3").checked=true;
-        }
-
-        function setErrorFields(userErrorText, formName) {
-            $("#id"+formName+"Error").html(userErrorText.id);
-
-            $("#username"+formName+"Error").html(userErrorText.username);
-            if (userErrorText.username!=='') {
-                $("#username"+formName).removeClass('bg-white').css("background-color", "#ffebb9");
-            } else $("#username"+formName).addClass('bg-white');
-
-            $("#password"+formName+"Error").html(userErrorText.password);
-            if (userErrorText.password!=='') {
-                $("#password"+formName).removeClass('bg-white').css("background-color", "#ffebb9");
-            } else $("#password"+formName).addClass('bg-white');
-
-            $("#email"+formName+"Error").html(userErrorText.email);
-            document.getElementById("email"+formName+"Error").innerText=userErrorText.email;
-            if (userErrorText.email!=='') {
-                $("#email"+formName).removeClass('bg-white').css("background-color", "#ffebb9");
-            } else $("#email"+formName).addClass('bg-white');
-
-            $("#firstname"+formName+"Error").html(userErrorText.firstname);
-            if (userErrorText.firstname!=='') {
-                $("#firstname"+formName).removeClass('bg-white').css("background-color", "#ffebb9");
-            } else $("#firstname"+formName).addClass('bg-white');
-
-            $("#lastname"+formName+"Error").html(userErrorText.lastname);
-            if (userErrorText.lastname!=='') {
-                $("#lastname"+formName).removeClass('bg-white').css("background-color", "#ffebb9");
-            } else $("#lastname"+formName).addClass('bg-white');
-
-            $("#age"+formName+"Error").html(userErrorText.age);
-            document.getElementById("age"+formName+"Error").innerText=userErrorText.age;
-            if (userErrorText.age!=='') {
-                $("#age"+formName).removeClass('bg-white').css("background-color", "#ffebb9");
-            } else $("#age"+formName).addClass('bg-white');
-        }
-
-        function clearErrorFields(formName) {
-            function clearErrorField(field,formName) {
-                $("#"+field+formName+"Error").html('');
-                $("#"+field+formName).addClass('bg-white');
-            }
-            clearErrorField("id",formName);
-            clearErrorField("username",formName);
-            clearErrorField("password",formName);
-            clearErrorField("email",formName);
-            clearErrorField("firstname",formName);
-            clearErrorField("lastname",formName);
-            clearErrorField("age",formName);
         }
 
         function sidemenu(page) {
-            if (page==="user") {
-                $("#admin-link").removeClass('active').attr('href','javascript:sidemenu(\'admin\');');
-                $("#user-link").addClass('active').attr('href','javascript:void(0);');
-                $("#guest-link").removeClass('active').attr('href','javascript:sidemenu(\'guest\');');
-                userPage();
-            } else
-            if (page==="admin") {
-                $("#admin-link").addClass('active').attr('href','javascript:void(0);');
-                $("#user-link").removeClass('active').attr('href','javascript:sidemenu(\'user\');');
-                $("#guest-link").removeClass('active').attr('href','javascript:sidemenu(\'guest\');');
-                adminPage();
-            } else
-            if (page==="guest") {
-                $("#admin-link").removeClass('active').attr('href','javascript:sidemenu(\'admin\');');
-                $("#user-link").removeClass('active').attr('href','javascript:sidemenu(\'user\');');
-                $("#guest-link").addClass('active').attr('href','javascript:void(0);');
-                guestPage();
+            function updateLink(link) {
+                (page===link) ?
+                    $("#"+link+"-link").addClass('active').attr('href','javascript:void(0);') :
+                    $("#"+link+"-link").removeClass('active').attr('href','javascript:sidemenu(\''+link+'\');');
             }
+            updateLink("admin");
+            updateLink("user");
+            updateLink("guest");
+
+            (page==="admin") ? loadPage("admin") : (page==="user") ? loadPage("user") : loadPage("guest");
         }
 
         async function edit() {
             let user = parseUser("Edit");
 
-            let response = await fetch('/admin/edit', {
+            let response = await fetch('/api/edit', {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
@@ -221,14 +94,12 @@
         }
 
         async function newUser() {
-            let user = parseUser("New");
-
-            let response = await fetch('/admin/new', {
+            let response = await fetch('/api/new', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
-                body: JSON.stringify(user)
+                body: JSON.stringify(parseUser("New"))
             });
 
             let userErrorText = await response.json();
@@ -245,76 +116,47 @@
         }
 
         async function del(id) {
-
-            let response = await fetch('/admin/delete', {
+            let response = await fetch('/api/delete', {
                 method: 'DELETE',
                 body: JSON.stringify(id)
             });
-
             if (response.ok) {
                 $('#modalWindow').modal('hide')
                 await update();
             }
         }
 
-        async function filter() {
-            $('#modalWindow').modal('hide')
-        }
-
-        async function search() {
-            let user = parseUser("Edit");
-            alert(user);
-            let response = await fetch('/admin/search', {
+        async function mode(link) {
+            await fetch('/api/'+link, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json;charset=utf-8'
                 },
-                body: JSON.stringify(user)
+                body: JSON.stringify(parseUser("Edit"))
             });
-
-            let userErrorText = await response.json();
-            //setErrorFields(userErrorText, "New");
-            $('#modalWindow').modal('hide')
+            currPage=1;
+            await update();
+            $('#removeFilter').removeClass('d-none');
+            $('#modalWindow').modal('hide');
         }
 
-        async function userPage() {
-            let response = await fetch('/api/user');
-            let html = await response.text();
-            if (html.includes("<title>Please sign in</title>")) {
-                window.location.replace('/login');
-            } else {
-                $("#mainblock").html(html);
-            }
-        }
-
-        async function adminPage() {
-            let response = await fetch('/api/admin');
-            let html = await response.text();
-            if (html.includes("<title>Please sign in</title>")) {
-                window.location.replace('/login');
-            } else {
-                $("#mainblock").html(html);
-                update();
-            }
-        }
-
-        async function guestPage() {
-            let response = await fetch('/api/guest');
-            let html = await response.text();
-            if (html.includes("<title>Please sign in</title>")) {
-                window.location.replace('/login');
-            } else {
-                $("#mainblock").html(html);
+        async function removeFilter() {
+            let response = await fetch('/api/removefilter');
+            if (response.ok) {
+                $('#removeFilter').addClass('d-none');
+                currPage=1;
+                await update();
             }
         }
 
         async function update() {
-            let response = await fetch('/admin/users');
+            let response = await fetch('/api/users');
             users = await response.json();
             userPages = Math.ceil(users.length / usersPerPage);
             showPage(currPage);
         }
 
+        loadPage("admin");
         update();
     </script>
 
@@ -328,7 +170,7 @@
         <div class="col-md-1">
             <a class="text-white-50 text-decoration-none" href="/logout">Logout</a>
         </div>
-    </div> <!-- /Верхняя серая строчка -->
+    </div>
 
     <div>
         <!-- боковая панель -->
@@ -339,102 +181,7 @@
         </nav>
 
         <!-- основной блок -->
-        <div id="mainblock" class="col-10 d-inline-block bg-light">
-            <h3 class="p-2 mt-2">Admin panel</h3>
-
-            <!-- Tabs -->
-            <div class="tabs" id="mainTabs">
-
-                <!-- Tab titles -->
-                <ul class="nav nav-tabs">
-                    <li class="nav-item border-bottom">
-                        <a id="tableTab" class="nav-link active" data-toggle="tab" role="tab" href="#table">Users Table</a>
-                    </li>
-                    <li class="nav-item border-bottom">
-                        <a id="newTab" class="nav-link" data-toggle="tab" role="tab" href="#new" onclick="clearUserFields('New')">New User</a>
-                    </li>
-                </ul>
-
-                <!-- Tabs content -->
-                <div class="tab-content">
-
-                    <!-- Users tab content -->
-                    <div id="table" class="tab-pane fade active show">
-                        <div class="p-3 border border-top-0">
-                            <h5 id="tabTitle" class="my-0">All Users</h5>
-                        </div>
-
-                        <div class="p-3 bg-white border border-top-0">
-                            <table class="table table-striped">
-                                <thead id="userTableHeading">
-                                </thead>
-                                <tbody id="userTable">
-                                </tbody>
-                            </table>
-                        </div>
-                        <label id="afterTableLabel"></label>
-                        <div style="margin-top: 0.6em;">
-                            <button type="button" id="prevPage" class="btn-info btn-sm" style="box-shadow: none;" onclick="showPrevPage();">Prev page</button>
-                            <button type="button" id="nextPage" class="btn-info btn-sm" style="box-shadow: none;" onclick="showNextPage();">Next page</button>
-                            <button type="button" data-toggle="modal" th:data-origin="filterButton" data-target="#modalWindow" class="btn-info btn-sm" style="box-shadow: none;">Filter</button>
-                            <button type="button" data-toggle="modal" th:data-origin="searchButton" data-target="#modalWindow" class="btn-info btn-sm" style="box-shadow: none;">Search</button>
-                            <button th:if="${!isFilterActive}" id="refresh" type="button" onclick="location.href = '/admin';" class="btn-info btn-sm" style="box-shadow: none;">Refresh</button>
-                            <button th:if="${isFilterActive}" type="button" onclick="location.href = '/admin/removeFilter';" class="btn-info btn-sm" style="box-shadow: none;">Remove Filter</button>
-                        </div>
-                    </div>
-
-                    <!--New User tab content-->
-                    <div class="tab-pane fade" style="font-size: 0.9em;" id="new">
-                        <div class="p-3 border border-top-0">
-                            <h5 class="my-0">Add New User</h5>
-                        </div>
-                        <div class="listbtn p-3 bg-white border border-top-0">
-                            <form class="text-center">
-                                <label for="idNew"></label>
-                                <input id="idNew" style="display: none" type="text">
-                                <div id="idNewError" style="display: none"></div>
-
-                                <label for="firstnameNew" class="font-weight-bolder mb-1">First name</label><br>
-                                <input id="firstnameNew" class="border rounded" style="width: 19rem" type="text">
-                                <div id="firstnameNewError" class="small text-danger"></div>
-
-                                <label for="lastnameNew" class="font-weight-bolder mt-3 mb-1">Last name</label><br>
-                                <input id="lastnameNew" class="border rounded" style="width: 19rem" type="text">
-                                <div id="lastnameNewError" class="small text-danger"></div>
-
-                                <label for="ageNew" class="font-weight-bolder mt-3 mb-1">Age</label><br>
-                                <input id="ageNew" class="border rounded" style="width: 19rem" type="text">
-                                <div id="ageNewError" class="small text-danger"></div>
-
-                                <label for="emailNew" class="font-weight-bolder mt-3 mb-1">Email</label><br>
-                                <input id="emailNew" class="border rounded" style="width: 19rem" type="text">
-                                <div id="emailNewError" class="small text-danger"></div>
-
-                                <label for="usernameNew" class="font-weight-bolder mt-3 mb-1">Username</label><br>
-                                <input id="usernameNew" class="border rounded" style="width: 19rem" type="text">
-                                <div id="usernameNewError" class="small text-danger"></div>
-
-                                <label for="passwordNew" class="font-weight-bolder mt-3 mb-1">Password</label><br>
-                                <input id="passwordNew" class="border rounded" style="width: 19rem" type="text">
-                                <div id="passwordNewError" class="small text-danger"></div>
-
-                                <label class="font-weight-bolder mt-3 mb-1">Roles</label>
-                                <div th:each="r : ${roles}">
-                                    <label class="mb-1" style="cursor: pointer;">
-                                        <input th:id="${'checkboxNew-'+r.id}"
-                                               style="width: calc(1vw); height: calc(1vw); vertical-align: middle; cursor: pointer"
-                                               type="checkbox" name="index" th:value="${r.id}"/>
-                                        <span th:text="${r.role}"></span>
-                                    </label>
-                                </div>
-                                <input class="mt-3 mb-4 btn btn-success" type="button" onclick="newUser();" value="Add new user"/>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-                <!--Footer -->
-                <div class="mb-5" style="margin-top: 0.6em"></div>
-            </div>
+        <div id="mainBlock" class="col-10 d-inline-block bg-light">
         </div>
     </div>
 
@@ -532,10 +279,10 @@
                 document.getElementById("formSubmit").onclick = function(){del(id)};
             } else if (origin==='filterButton') {
                 $('#formSubmit').val('Filter').addClass('btn-primary');
-                document.getElementById("formSubmit").onclick = function(){filter()};
+                document.getElementById("formSubmit").onclick = function(){mode('filter')};
             } else if (origin==='searchButton') {
                 $('#formSubmit').val('Search').addClass('btn-primary');
-                document.getElementById("formSubmit").onclick = function(){search()};
+                document.getElementById("formSubmit").onclick = function(){mode('search')};
             }
 
             resetField('idEdit');
@@ -545,6 +292,7 @@
             resetField('emailEdit');
             resetField('usernameEdit');
             resetField('passwordEdit');
+
 
             if ((origin!=='filterButton')&&(origin!=='searchButton')) {
                 let uid = modal.data('uid');
@@ -568,6 +316,12 @@
                 muteField('emailEdit');
                 muteField('usernameEdit');
                 muteField('passwordEdit');
+            }
+            if (origin==='EditButton') {
+                disableField('idEdit');
+            }
+            if ((origin==='filterButton')||(origin==='searchButton')) {
+
             }
 
         });

@@ -6,17 +6,17 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import ru.jm.crud.service.UserService;
 
 import javax.annotation.Resource;
 import java.util.function.BiPredicate;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true, jsr250Enabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 
 public class SecurityConfig {
 
@@ -45,12 +45,16 @@ public class SecurityConfig {
 
             http
                     .authorizeRequests()
-                    .antMatchers("/css/*","/js/*","/favicon.png").permitAll()
-                    .antMatchers("/register","/login").permitAll()
+                    .antMatchers("/register").permitAll()
+                    .antMatchers("/css/*","/js/*").permitAll()
+                    .antMatchers("/*.js","/*.css").permitAll();
+
+            http
+                    .authorizeRequests()
+                    .antMatchers("/login").permitAll()
                     .antMatchers("/admin/","/admin").access("hasRole('ROLE_ADMIN')")
                     .antMatchers("/user/","/user").access("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
                     .antMatchers("/guest/","/guest").access("hasAnyRole('ROLE_GUEST','ROLE_USER','ROLE_ADMIN')");
-
 
             http
                     .formLogin().loginPage("/login").successHandler((request, response, auth) ->
@@ -62,7 +66,6 @@ public class SecurityConfig {
                     .logout().logoutUrl("/logout").logoutSuccessUrl("/noauth")
                     .and()
                     .csrf().disable();
-
         }
     }
 
@@ -75,9 +78,7 @@ public class SecurityConfig {
 
         @Override
         public void configure(AuthenticationManagerBuilder auth) throws Exception {
-
-        auth.userDetailsService(userService::getByLogin)
-                .passwordEncoder(passwordEncoder());
+            auth.userDetailsService(userService::getByLogin).passwordEncoder(passwordEncoder());
         }
 
         protected void configure(HttpSecurity http) throws Exception {
@@ -85,17 +86,8 @@ public class SecurityConfig {
             //для STATELESS надо убрать .sessionManagement().disable();
             //но останется доступным только url /admin/, страницы /user и /guest будут требовать обычной авторизации
 
-            http.authorizeRequests()
-                    .antMatchers("/css/*","/js/*").permitAll()
-                    .antMatchers("/favicon.png").permitAll();
-
             http
                     .antMatcher("/admin")
-                    .authorizeRequests()
-                    .antMatchers("/admin/","/admin").access("hasRole('ROLE_ADMIN')")
-                    .antMatchers("/user/","/user").access("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
-                    .antMatchers("/guest/","/guest").access("hasAnyRole('ROLE_GUEST','ROLE_USER','ROLE_ADMIN')")
-                    .and()
                     .httpBasic()
                     .and()
                     .sessionManagement().disable();

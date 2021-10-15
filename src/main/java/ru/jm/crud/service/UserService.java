@@ -1,7 +1,7 @@
 package ru.jm.crud.service;
 
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Service;
+
 import ru.jm.crud.model.User;
 import ru.jm.crud.model.UserRole;
 

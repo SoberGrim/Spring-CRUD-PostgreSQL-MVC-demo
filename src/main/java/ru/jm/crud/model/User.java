@@ -6,12 +6,10 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Nationalized;
-import org.json.JSONObject;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -148,7 +146,7 @@ public class User implements UserDetails {
                 System.out.println("plain password set: " + password + Arrays.toString(password.getBytes()));
                 this.password = passwordEncoder.encode(password);
             } else {
-                System.out.println("password not set, too long ot too short");
+                System.out.println("password not updated (len < 4)");
                 this.password = password;
             }
         }
@@ -278,10 +276,8 @@ public class User implements UserDetails {
         String lastname = user.getLastname();
         if (lastname!=null) setLastname(lastname);
 
-        System.out.println("writing age");
         String age = user.getAge();
         if (age!=null) setAge(age);
-        System.out.println("wrote age!");
 
         String email = user.getEmail();
         if (email!=null) setEmail(email);

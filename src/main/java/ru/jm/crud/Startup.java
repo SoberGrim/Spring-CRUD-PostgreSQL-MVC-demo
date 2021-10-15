@@ -3,6 +3,7 @@ package ru.jm.crud;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+
 import ru.jm.crud.model.User;
 import ru.jm.crud.model.UserRole;
 import ru.jm.crud.service.RoleService;
@@ -92,7 +93,7 @@ public class Startup {
 
             List<User> list = new LinkedList<>(new ArrayList<>(List.of(user1, user2, user3, user4, user5, user6, user7, user8)));
 
-            for (int i = 0; i < 36; i++) {
+            for (int i = 0; i < 336; i++) {
                 String name = randomName();
                 String lastname = randomLastname();
                 int age = randomAge();

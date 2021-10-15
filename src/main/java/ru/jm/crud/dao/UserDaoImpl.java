@@ -1,14 +1,14 @@
 package ru.jm.crud.dao;
 
-import ru.jm.crud.model.User;
-import ru.jm.crud.model.UserDTO;
-import ru.jm.crud.model.UserRole;
-
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+
+import ru.jm.crud.model.User;
+import ru.jm.crud.model.UserRole;
+
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.UnaryOperator;
@@ -16,6 +16,7 @@ import java.util.function.UnaryOperator;
 
 @Repository
 public class UserDaoImpl implements UserDao {
+    private Long filterId;
     private String filterName;
     private String filterLastname;
     private String filterAge;
@@ -95,23 +96,27 @@ public class UserDaoImpl implements UserDao {
         if ((username.indexOf('Ð') >= 0) || (username.indexOf('Ñ') >= 0)) {
             username = conv.apply(username);
         }
-
         TypedQuery<User> result = entityManager.createQuery(
-                        "SELECT u FROM User u WHERE u.username LIKE :username", User.class)
+                "SELECT u FROM User u WHERE u.username LIKE :username", User.class)
                 .setParameter("username", username);
+
         return result.getResultList().isEmpty() ? null : result.getSingleResult();
     }
 
     @Override
     public User getByLogin(String login) {
-        return (login.matches("^[^@]+@[^@]+\\.[^@]+$")) ? getByEmail(login) : getByUsername(login);
+        User user = (login.matches("^[^@]+@[^@]+\\.[^@]+$")) ? getByEmail(login) : getByUsername(login);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found: " + login);
+        }
+        return user;
     }
 
 
     @Override
     public List<User> getByName(String firstname) {
         return entityManager.createQuery(
-                        "SELECT u FROM User u WHERE u.firstname LIKE :firstname", User.class)
+                "SELECT u FROM User u WHERE u.firstname LIKE :firstname", User.class)
                 .setParameter("firstname", firstname)
                 .setMaxResults(99)
                 .getResultList();
@@ -120,7 +125,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getByName(String firstname, String lastname) {
         return entityManager.createQuery(
-                        "SELECT u FROM User u WHERE u.firstname LIKE :firstname AND u.lastname LIKE :lastname", User.class)
+                "SELECT u FROM User u WHERE u.firstname LIKE :firstname AND u.lastname LIKE :lastname", User.class)
                 .setParameter("firstname", firstname)
                 .setParameter("lastname", lastname)
                 .setMaxResults(99)
@@ -130,7 +135,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getByLastName(String lastname) {
         return entityManager.createQuery(
-                        "SELECT u FROM User u WHERE u.lastname LIKE :lastname", User.class)
+                "SELECT u FROM User u WHERE u.lastname LIKE :lastname", User.class)
                 .setParameter("lastname", lastname)
                 .setMaxResults(99)
                 .getResultList();
@@ -139,7 +144,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getByEmail(String email) {
         TypedQuery<User> result = entityManager.createQuery(
-                        "SELECT u FROM User u WHERE u.email LIKE :email", User.class)
+                "SELECT u FROM User u WHERE u.email LIKE :email", User.class)
                 .setParameter("email", email);
         return result.getResultList().isEmpty() ? null : result.getSingleResult();
     }
@@ -147,7 +152,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getByAge(String age) {
         return entityManager.createQuery(
-                        "SELECT u FROM User u WHERE u.age =:age", User.class)
+                "SELECT u FROM User u WHERE u.age =:age", User.class)
                 .setParameter("age", age)
                 .setMaxResults(99)
                 .getResultList();
@@ -181,6 +186,13 @@ public class UserDaoImpl implements UserDao {
 
         boolean found = false;
         for (User user : list) {
+
+            if ((this.filterId != null) && (!(this.filterId==0))) {
+                if (!(Objects.equals(user.getId(), this.filterId))) {
+                    continue;
+                }
+                found = true;
+            }
 
             if ((this.filterName != null) && (!this.filterName.equals(""))) {
                 if (!this.filterName.equals(user.getFirstname())) {
@@ -250,6 +262,13 @@ public class UserDaoImpl implements UserDao {
         boolean found = false;
         for (User user : list) {
 
+            if ((this.filterId != null) && (!(this.filterId==0))) {
+                if (!user.getId().toString().contains(this.filterId.toString())) {
+                    continue;
+                }
+                found = true;
+            }
+
             if ((this.filterName != null) && (!this.filterName.equals(""))) {
                 if (!user.getFirstname().contains(this.filterName)) {
                     continue;
@@ -310,6 +329,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void setFilter(User user, boolean strict) {
         if (user != null) {
+            this.filterId = (user.getId() == null) ? 0 : user.getId();
             this.filterName = (user.getFirstname() == null) ? "" : user.getFirstname();
             this.filterLastname = (user.getLastname() == null) ? "" : user.getLastname();
             this.filterAge = (user.getAge() == null) ? "" : user.getAge();
@@ -328,6 +348,7 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public void removeFilter() {
+        this.filterId = 0L;
         this.filterName = null;
         this.filterLastname = null;
         this.filterAge = null;

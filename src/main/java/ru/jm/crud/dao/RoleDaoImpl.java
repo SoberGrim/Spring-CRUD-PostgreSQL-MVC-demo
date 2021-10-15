@@ -3,6 +3,7 @@ package ru.jm.crud.dao;
 import ru.jm.crud.model.UserRole;
 
 import org.springframework.stereotype.Repository;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;

@@ -5,116 +5,95 @@
 <head>
     <meta charset="UTF-8">
     <title>User Page</title>
+    <link rel="icon" type="image/png" href="/favicon.png"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script>
+        async function loadPage(link) {
+            let response = await fetch('/api/'+link);
+            let html = await response.text();
+            html.includes("<title>Please sign in</title>") ? window.location.replace('/login') : $("#mainBlock").html(html);
+        }
+
+        function sideMenu(page) {
+            function updateLink(link) {
+                (page===link) ?
+                    $("#"+link+"-link").addClass('active').attr('href','javascript:void(0);') :
+                    $("#"+link+"-link").removeClass('active').attr('href','javascript:sideMenu(\''+link+'\');');
+            }
+            updateLink("user");
+            updateLink("guest");
+            (page==="user") ? loadPage("user") : loadPage("guest");
+        }
+    </script>
 </head>
 
 <body style="font-size: 0.95em;">
-<script src="/js/jquery-3.3.1.slim.min.js"></script>
-<script src="/js/popper.min.js"></script>
-<script src="/js/bootstrap.min.js"></script>
-<script>
-    function sidemenu(page) {
-        if (page==="user") {
-            $("#user-link").addClass('active').attr('href','javascript:void(0);');
-            $("#guest-link").removeClass('active').attr('href','javascript:sidemenu(\'guest\');');
-            userPage();
-        } else
-        if (page==="guest") {
-            $("#user-link").removeClass('active').attr('href','javascript:sidemenu(\'user\');');
-            $("#guest-link").addClass('active').attr('href','javascript:void(0);');
-            guestPage();
-        }
-    }
+    <!-- Верхняя серая строчка -->
+    <div class="row p-2 mx-0 align-items-center bg-dark">
+        <div class="col-md-11">
+            <a class="text-light text-decoration-none" href="javascript:sideMenu('user');">
+                <b>[[${principal.getEmail()}]]</b> with roles: [[${principal.getUserRoleStr()}]]
+            </a>
+        </div>
+        <div class="col-md-1">
+            <a class="text-white-50 text-decoration-none" href="/logout">Logout</a>
+        </div>
+    </div> <!-- /Верхняя серая строчка -->
 
-    async function userPage() {
-        let response = await fetch('/api/user');
-        let html = await response.text();
-        if (html.includes("<title>Please sign in</title>")) {
-            window.location.replace('/login');
-        } else {
-            $("#mainblock").html(html);
-        }
-    }
+    <!-- боковая панель -->
+    <nav class="col-2 nav float-left d-inline-block p-0 pt-3 flex-column nav-pills">
+        <a id="user-link" class="nav-link active" href="javascript:void(0);">User</a>
+        <a id="guest-link" class="nav-link" href="javascript:sideMenu('guest');">Guest Page</a>
+    </nav>
 
-    async function guestPage() {
-        let response = await fetch('/api/guest');
-        let html = await response.text();
-        if (html.includes("<title>Please sign in</title>")) {
-            window.location.replace('/login');
-        } else {
-            $("#mainblock").html(html);
-        }
-    }
-</script>
+    <!-- основной блок -->
+    <div id="mainBlock" class="col-10 d-inline-block bg-light" th:with="currUser=0">
+        <h3 class="p-2 mt-2">User information-page</h3>
 
-<!-- Верхняя серая строчка -->
-<div class="row p-2 mx-0 align-items-center bg-dark">
-    <div class="col-md-11">
-        <a class="text-light text-decoration-none" href="javascript:void(0);">
-            <b>[[${principal.getEmail()}]]</b> with roles: [[${principal.getUserRoleStr()}]]
-        </a>
-    </div>
-    <div class="col-md-1">
-        <a class="text-white-50 text-decoration-none" href="/logout">Logout</a>
-    </div>
-</div> <!-- /Верхняя серая строчка -->
+        <!-- Tabs -->
+        <div class="tabs" id="mainTabs">
+            <!-- Tabs content -->
+            <div>
+                <!-- Users tab content -->
+                <div id="table">
+                    <div class="p-3 border">
+                        <h5 class="my-0">About user</h5>
+                    </div>
 
-<!-- боковая панель -->
-<nav class="col-2 nav float-left d-inline-block p-0 pt-3 flex-column nav-pills">
-    <a id="user-link" class="nav-link active" href="javascript:void(0);">User</a>
-    <a id="guest-link" class="nav-link" href="javascript:sidemenu('guest');">Guest Page</a>
-</nav>
-
-<!-- основной блок -->
-<div id="mainblock" class="col-10 d-inline-block bg-light" th:with="currUser=0">
-    <h3 class="p-2 mt-2">User information-page</h3>
-
-    <!-- Tabs -->
-    <div class="tabs" id="mainTabs">
-
-
-        <!-- Tabs content -->
-        <div>
-
-            <!-- Users tab content -->
-            <div id="table">
-                <div class="p-3 border">
-                    <h5 class="my-0">About user</h5>
-                </div>
-
-                <div class="p-3 bg-white border border-top-0">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Age</th>
-                            <th>Email</th>
-                            <th>Username</th>
-                            <th>Role</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:object="${user}">
-                            <td th:text="'&nbsp;'+${user.getId()}">id</td>
-                            <td th:text="${user.getFirstname()}">name</td>
-                            <td th:text="${user.getLastname()}">lastname</td>
-                            <td th:text="${user.getAge()}">age</td>
-                            <td th:text="${user.getEmail()}">email</td>
-                            <td th:text="${user.getUsername()}">username</td>
-                          <td th:text="${user.getUserRoleStr()}">role</td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    <div class="p-3 bg-white border border-top-0">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Age</th>
+                                <th>Email</th>
+                                <th>Username</th>
+                                <th>Role</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:object="${user}">
+                                <td th:text="'&nbsp;'+${user.getId()}">id</td>
+                                <td th:text="${user.getFirstname()}">name</td>
+                                <td th:text="${user.getLastname()}">lastname</td>
+                                <td th:text="${user.getAge()}">age</td>
+                                <td th:text="${user.getEmail()}">email</td>
+                                <td th:text="${user.getUsername()}">username</td>
+                              <td th:text="${user.getUserRoleStr()}">role</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-
-
     </div>
-</div>
 </body>
 </html>
 

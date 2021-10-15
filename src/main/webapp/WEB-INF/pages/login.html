@@ -4,11 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title>Please sign in</title>
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="icon" type="image/png" href="/favicon.png"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <link rel="stylesheet" href="/css/signin.css"/>
-  <script src="/js/jquery-3.3.1.slim.min.js"></script>
-  <script src="/js/popper.min.js"></script>
-  <script src="/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+  <script src="/js/common.js"></script>
 </head>
 <body>
 <div class="container">
@@ -32,70 +35,69 @@
 <div id="modalWindow" class="modal" style="font-size: 0.80em;" tabindex="-1" role="dialog" aria-labelledby="modalEditLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <form name="userEditForm" id="userEditForm" class="text-center" th:method="post" th:action="@{/register}" th:object="${user}">
-
+      <form name="userEditForm" id="userEditForm" class="text-center">
         <h4 class="p-2 mt-4">Registration:</h4>
 
         <label for="firstnameEdit" class="font-weight-bolder mt-3 mb-1">First name</label><br>
-        <input id="firstnameEdit" class="border rounded"
-               th:style="${#fields.hasErrors('firstname')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-               th:field="*{firstname}"  type="text" >
-        <div id="firstnameEditError" th:if="${#fields.hasErrors('firstname')}" class="small text-danger"
-             th:utext="${#fields.errors('lastname').get(0)}" ></div>
-        <div th:unless="${#fields.hasErrors('firstname')}"></div>
+        <input id="firstnameEdit" class="border rounded" style="width: 19rem" type="text">
+        <div id="firstnameEditError" class="small text-danger"></div>
 
         <label for="lastnameEdit" class="font-weight-bolder mt-3 mb-1">Last name</label><br>
-        <input id="lastnameEdit" class="border rounded"
-               th:style="${#fields.hasErrors('lastname')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-               th:field="*{lastname}" type="text">
-        <div id="lastnameEditError" th:if="${#fields.hasErrors('lastname')}" class="small text-danger"
-             th:utext="${#fields.errors('lastname').get(0)}"></div>
-        <div th:unless="${#fields.hasErrors('lastname')}"></div>
+        <input id="lastnameEdit" class="border rounded" style="width: 19rem" type="text">
+        <div id="lastnameEditError" class="small text-danger"></div>
 
         <label for="ageEdit" class="font-weight-bolder mt-3 mb-1">Age</label><br>
-        <input id="ageEdit" class="border rounded"
-               th:style="${#fields.hasErrors('age')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-               th:field="*{age}" type="text">
-        <div id="ageEditError" th:if="${#fields.hasErrors('age')}" class="small text-danger">Age should be between 0 and 199
-          years
-        </div>
-        <div th:unless="${#fields.hasErrors('age')}"></div>
+        <input id="ageEdit" class="border rounded" style="width: 19rem" type="text">
+        <div id="ageEditError" class="small text-danger"></div>
 
         <label for="emailEdit" class="font-weight-bolder mt-3 mb-1">Email</label><br>
-        <input id="emailEdit" class="border rounded"
-               th:style="${#fields.hasErrors('email')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-               th:field="*{email}" type="text">
-        <div id="emailEditError" th:if="${#fields.hasErrors('email')}" class="small text-danger"
-             th:utext="${#fields.errors('email').get(0)}"></div>
-        <div th:unless="${#fields.hasErrors('email')}"></div>
+        <input id="emailEdit" class="border rounded" style="width: 19rem" type="text">
+        <div id="emailEditError" class="small text-danger"></div>
 
         <label for="usernameEdit" class="font-weight-bolder mt-3 mb-1">Username</label><br>
-        <input id="usernameEdit" class="border rounded"
-               th:style="${#fields.hasErrors('username')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-               th:field="*{username}" type="text">
-        <div id="usernameEditError" th:if="${#fields.hasErrors('username')}" class="small text-danger"
-             th:utext="${#fields.errors('username').get(0)}"></div>
-        <div th:unless="${#fields.hasErrors('username')}"></div>
+        <input id="usernameEdit" class="border rounded" style="width: 19rem" type="text">
+        <div id="usernameEditError" class="small text-danger"></div>
 
         <label for="passwordEdit" class="font-weight-bolder mt-3 mb-1">Password</label><br>
-        <input id="passwordEdit" class="border rounded"
-               th:style="${#fields.hasErrors('password')}? 'background-color: #ffebb9; width: 19rem;' : 'width: 19rem;'"
-               th:field="*{password}" type="text">
-        <div id="passwordEditError" th:if="${#fields.hasErrors('password')}" class="small text-danger mb-1"
-             th:utext="${#fields.errors('password').get(0)}"></div>
-        <div th:unless="${#fields.hasErrors('password')}" class="mb-2"></div>
+        <input id="passwordEdit" class="border rounded" style="width: 19rem" type="text">
+        <div id="passwordEditError" class="small text-danger"></div>
 
-        <input id='formCancel' class="mt-3 mb-5 btn btn-secondary" type="button" onclick="$('#modalWindow').modal('hide');"
-               value="Close"/>
-        <input id='formSubmit' class="mt-3 mb-5 btn btn-info" type="submit" onclick="$('#modalWindow').modal('hide');"
-               value="Register"/>
+        <input id='formCancel' class="mt-3 mb-5 btn btn-secondary" type="button" onclick="$('#modalWindow').modal('hide');" value="Close"/>
+        <input id='formSubmit' class="mt-3 mb-5 btn btn-info" type="button" onclick="reg()" value="Register"/>
       </form>
     </div>
   </div>
-  <script type="text/javascript" th:inline="javascript">
-    if ([[${modalWindowId}]] === 1) {
-      $('#modalWindow').modal('show');
-    }
-  </script>
 </div>
-</body></html>
+<script type="text/javascript">
+  async function reg() {
+    let response = await fetch('/api/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json;charset=utf-8'
+      },
+      body: JSON.stringify(parseUser("Edit"))
+    });
+
+    let userErrorText = await response.json();
+    setErrorFields(userErrorText, "Edit");
+    if (!userErrorText.errorsPresent) {
+      clearUserFields("Edit");
+      $('#modalWindow').modal('hide');
+    }
+  }
+
+  function parseUser(formName) {
+    return {
+      id: '',
+      firstname: $("#firstname" + formName).val(),
+      lastname: $("#lastname" + formName).val(),
+      age: $("#age" + formName).val(),
+      email: $("#email" + formName).val(),
+      username: $("#username" + formName).val(),
+      password: $("#password" + formName).val(),
+      roleStr: ''
+    }
+  }
+</script>
+</body>
+</html>

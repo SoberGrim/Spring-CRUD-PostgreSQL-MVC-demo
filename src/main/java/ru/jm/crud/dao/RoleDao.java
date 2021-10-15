@@ -3,7 +3,6 @@ package ru.jm.crud.dao;
 import ru.jm.crud.model.UserRole;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 public interface RoleDao {
