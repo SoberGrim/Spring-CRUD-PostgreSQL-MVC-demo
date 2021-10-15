@@ -22,6 +22,7 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+
   thymeleaf:
     enabled: true
     enable-spring-el-compiler: true
