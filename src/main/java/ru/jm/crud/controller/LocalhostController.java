@@ -54,4 +54,9 @@ public class LocalhostController {
         model.addAttribute("user", getPrincipal(pr, authentication, service));
         return "guest";
     }
+
+    @GetMapping("task314")
+    public String task314() {
+        return "task314";
+    }
 }

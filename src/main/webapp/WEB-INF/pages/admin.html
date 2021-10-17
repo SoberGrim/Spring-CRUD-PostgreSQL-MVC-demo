@@ -136,6 +136,7 @@
             });
             currPage=1;
             await update();
+            $('#tabTitle').html('Users [' + link + ']');
             $('#removeFilter').removeClass('d-none');
             $('#modalWindow').modal('hide');
         }
@@ -145,6 +146,7 @@
             if (response.ok) {
                 $('#removeFilter').addClass('d-none');
                 currPage=1;
+                $('#tabTitle').html('All Users');
                 await update();
             }
         }
@@ -322,9 +324,7 @@
                 disableField('idEdit');
             }
             if ((origin==='filterButton')||(origin==='searchButton')) {
-
             }
-
         });
 
         $('#newTab').on('show.bs.tab', function () {

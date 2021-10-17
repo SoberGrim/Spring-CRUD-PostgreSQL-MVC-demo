@@ -45,7 +45,7 @@ public class SecurityConfig {
 
             http
                     .authorizeRequests()
-                    .antMatchers("/register").permitAll()
+                    .antMatchers("/register","task314").permitAll()
                     .antMatchers("/css/*","/js/*").permitAll()
                     .antMatchers("/*.js","/*.css").permitAll();
 

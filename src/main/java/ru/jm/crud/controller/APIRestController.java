@@ -1,18 +1,25 @@
 package ru.jm.crud.controller;
 
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.web.client.RestTemplate;
+import ru.jm.crud.model.HTTPRequest;
 import ru.jm.crud.model.User;
 import ru.jm.crud.model.UserDTO;
 import ru.jm.crud.service.RoleService;
 import ru.jm.crud.service.UserService;
 
 import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static ru.jm.crud.controller.Utils.*;
 
@@ -107,5 +114,27 @@ public class APIRestController {
     void deleteUserById(@RequestBody String idStr) {
         Long id = idStr.matches("\\d+")?Long.parseLong(idStr):0;
         service.delete(id);
+    }
+
+
+    String cookies="";
+    @PostMapping("/proxy")
+    String proxy(@RequestBody HTTPRequest request) {
+        HttpMethod httpMethod =
+                (Objects.equals(request.method, "GET"))? HttpMethod.GET :
+                (Objects.equals(request.method, "PUT"))? HttpMethod.PUT :
+                (Objects.equals(request.method, "DELETE"))? HttpMethod.DELETE : HttpMethod.POST;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set(HttpHeaders.COOKIE, cookies);
+
+        HttpEntity<String> entity = new HttpEntity<>(request.postData, headers);
+        ResponseEntity<String> respEntity = new RestTemplate().exchange(request.url, httpMethod, entity, String.class);
+
+        String tmpCookies = respEntity.getHeaders().getFirst("set-cookie");
+        if (tmpCookies != null) cookies = tmpCookies;
+
+        return respEntity.getBody();
     }
 }
