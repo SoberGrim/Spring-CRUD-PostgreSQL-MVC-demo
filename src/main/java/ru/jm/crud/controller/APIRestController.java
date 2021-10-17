@@ -123,6 +123,7 @@ public class APIRestController {
         HttpMethod httpMethod =
                 (Objects.equals(request.method, "GET"))? HttpMethod.GET :
                 (Objects.equals(request.method, "PUT"))? HttpMethod.PUT :
+                (Objects.equals(request.method, "PATCH"))? HttpMethod.PATCH:
                 (Objects.equals(request.method, "DELETE"))? HttpMethod.DELETE : HttpMethod.POST;
 
         HttpHeaders headers = new HttpHeaders();
