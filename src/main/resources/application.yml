@@ -1,6 +1,6 @@
 spring:
   application:
-    name: springboot
+    name: crud
 
   jpa:
     show-sql: false

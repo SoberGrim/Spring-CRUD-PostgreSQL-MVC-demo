@@ -1601,7 +1601,7 @@ java.lang.IllegalArgumentException: URI is not absolute
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:772)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:602)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:128)
+	at APIRestController.proxy(APIRestController.java:128)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -1615,7 +1615,7 @@ java.lang.IllegalArgumentException: URI is not absolute
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$cce23a48.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$cce23a48.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -1767,7 +1767,7 @@ java.net.SocketException: Network is unreachable: connect
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:776)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:602)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:128)
+	at APIRestController.proxy(APIRestController.java:128)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -1781,7 +1781,7 @@ java.net.SocketException: Network is unreachable: connect
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$7db5ce10.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$7db5ce10.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -1908,7 +1908,7 @@ java.net.SocketException: Network is unreachable: connect
 2021-10-16 13:52:24,167 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Initializing Servlet 'dispatcherServlet'
 2021-10-16 13:52:24,168 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Completed initialization in 0 ms
 2021-10-16 13:52:25,366 WARN org.apache.juli.logging.DirectJDKLog [http-nio-80-exec-3] Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [104] milliseconds.
-2021-10-16 13:52:27,669 WARN org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver [http-nio-80-exec-1] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: java.lang.String ru.jm.crud.controller.APIRestController.proxy(java.lang.String,java.lang.String)]
+2021-10-16 13:52:27,669 WARN org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver [http-nio-80-exec-1] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: Required request body is missing: java.lang.String APIRestController.proxy(java.lang.String,java.lang.String)]
 2021-10-16 13:53:40,210 INFO org.springframework.orm.jpa.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
 2021-10-16 13:53:40,210 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
 2021-10-16 13:53:40,226 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
@@ -1958,7 +1958,7 @@ java.net.URISyntaxException: Illegal character in scheme name at index 0: %22htt
 	at org.springframework.web.util.DefaultUriBuilderFactory.expand(DefaultUriBuilderFactory.java:154)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:710)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:602)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:127)
+	at APIRestController.proxy(APIRestController.java:127)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -1972,7 +1972,7 @@ java.net.URISyntaxException: Illegal character in scheme name at index 0: %22htt
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$5fbc.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$5fbc.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -2112,7 +2112,7 @@ java.net.URISyntaxException: Illegal character in scheme name at index 0: %22htt
 	at org.springframework.web.util.DefaultUriBuilderFactory.expand(DefaultUriBuilderFactory.java:154)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:710)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:602)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:127)
+	at APIRestController.proxy(APIRestController.java:127)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -2126,7 +2126,7 @@ java.net.URISyntaxException: Illegal character in scheme name at index 0: %22htt
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$dfc2c3d8.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$dfc2c3d8.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -2265,7 +2265,7 @@ java.net.URISyntaxException: Illegal character in scheme name at index 0: %22htt
 	at org.springframework.web.util.DefaultUriBuilderFactory.expand(DefaultUriBuilderFactory.java:154)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:710)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:602)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:128)
+	at APIRestController.proxy(APIRestController.java:128)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -2279,7 +2279,7 @@ java.net.URISyntaxException: Illegal character in scheme name at index 0: %22htt
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$9a411633.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$9a411633.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -2462,7 +2462,7 @@ com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize 
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:778)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:602)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:130)
+	at APIRestController.proxy(APIRestController.java:130)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -2476,7 +2476,7 @@ com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize 
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$46ad9484.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$46ad9484.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -2759,7 +2759,7 @@ com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize 
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:778)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:602)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:130)
+	at APIRestController.proxy(APIRestController.java:130)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -2773,7 +2773,7 @@ com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize 
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$e796df8f.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$e796df8f.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -3131,7 +3131,7 @@ com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize 
 2021-10-16 15:37:20,608 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Initializing Servlet 'dispatcherServlet'
 2021-10-16 15:37:20,609 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Completed initialization in 1 ms
 2021-10-16 15:37:29,698 WARN org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver [http-nio-80-exec-5] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`); nested exception is com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`)
- at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: ru.jm.crud.model.HTTPRequest["postData"])]
+ at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: HTTPRequest["postData"])]
 2021-10-16 15:38:28,168 INFO org.springframework.orm.jpa.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
 2021-10-16 15:38:28,168 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
 2021-10-16 15:38:28,168 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
@@ -3176,7 +3176,7 @@ org.springframework.web.client.HttpClientErrorException$UnsupportedMediaType: 41
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:133)
+	at APIRestController.proxy(APIRestController.java:133)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -3190,7 +3190,7 @@ org.springframework.web.client.HttpClientErrorException$UnsupportedMediaType: 41
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$534a92ed.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$534a92ed.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -3395,7 +3395,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [{"tim
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:135)
+	at APIRestController.proxy(APIRestController.java:135)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -3409,7 +3409,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [{"tim
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$c53b610a.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$c53b610a.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -3614,7 +3614,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [{"tim
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:135)
+	at APIRestController.proxy(APIRestController.java:135)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -3628,7 +3628,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [{"tim
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$2155ade3.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$2155ade3.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -3764,7 +3764,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [{"tim
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:135)
+	at APIRestController.proxy(APIRestController.java:135)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -3778,7 +3778,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [{"tim
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$dfe78a1f.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$dfe78a1f.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -3915,7 +3915,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [Да�
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:135)
+	at APIRestController.proxy(APIRestController.java:135)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -3929,7 +3929,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [Да�
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$2e90a4ad.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$2e90a4ad.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -4201,7 +4201,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:135)
+	at APIRestController.proxy(APIRestController.java:135)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -4215,7 +4215,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$2155ade3.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$2155ade3.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -4352,7 +4352,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:135)
+	at APIRestController.proxy(APIRestController.java:135)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -4366,7 +4366,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$be593dea.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$be593dea.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -4502,7 +4502,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:135)
+	at APIRestController.proxy(APIRestController.java:135)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -4516,7 +4516,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$8788946f.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$8788946f.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -4653,7 +4653,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:135)
+	at APIRestController.proxy(APIRestController.java:135)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -4667,7 +4667,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$6accccf2.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$6accccf2.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -4895,9 +4895,9 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 2021-10-16 16:44:21,893 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Completed initialization in 1 ms
 2021-10-16 16:44:23,275 WARN org.apache.juli.logging.DirectJDKLog [http-nio-80-exec-3] Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [102] milliseconds.
 2021-10-16 16:44:25,816 WARN org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver [http-nio-80-exec-3] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`); nested exception is com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`)
- at [Source: (PushbackInputStream); line: 1, column: 72] (through reference chain: ru.jm.crud.model.HTTPRequest["postData"])]
+ at [Source: (PushbackInputStream); line: 1, column: 72] (through reference chain: HTTPRequest["postData"])]
 2021-10-16 16:44:25,816 WARN org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver [http-nio-80-exec-2] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`); nested exception is com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`)
- at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: ru.jm.crud.model.HTTPRequest["postData"])]
+ at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: HTTPRequest["postData"])]
 2021-10-16 16:44:25,990 ERROR org.apache.juli.logging.DirectJDKLog [http-nio-80-exec-4] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [Пользователя с таким id не существует. Возможно вы не использовали необходимый заголовок при запросе.]] with root cause
 org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [Пользователя с таким id не существует. Возможно вы не использовали необходимый заголовок при запросе.]
 	at org.springframework.web.client.HttpClientErrorException.create(HttpClientErrorException.java:101)
@@ -4908,7 +4908,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:134)
+	at APIRestController.proxy(APIRestController.java:134)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -4922,7 +4922,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$9a411633.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$9a411633.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -5050,9 +5050,9 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 2021-10-16 16:46:05,492 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Completed initialization in 1 ms
 2021-10-16 16:46:06,720 WARN org.apache.juli.logging.DirectJDKLog [http-nio-80-exec-3] Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [107] milliseconds.
 2021-10-16 16:46:10,366 WARN org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver [http-nio-80-exec-3] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`); nested exception is com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`)
- at [Source: (PushbackInputStream); line: 1, column: 72] (through reference chain: ru.jm.crud.model.HTTPRequest["postData"])]
+ at [Source: (PushbackInputStream); line: 1, column: 72] (through reference chain: HTTPRequest["postData"])]
 2021-10-16 16:46:10,366 WARN org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver [http-nio-80-exec-2] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`); nested exception is com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`)
- at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: ru.jm.crud.model.HTTPRequest["postData"])]
+ at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: HTTPRequest["postData"])]
 2021-10-16 16:46:10,539 ERROR org.apache.juli.logging.DirectJDKLog [http-nio-80-exec-4] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [Пользователя с таким id не существует. Возможно вы не использовали необходимый заголовок при запросе.]] with root cause
 org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [Пользователя с таким id не существует. Возможно вы не использовали необходимый заголовок при запросе.]
 	at org.springframework.web.client.HttpClientErrorException.create(HttpClientErrorException.java:101)
@@ -5063,7 +5063,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:134)
+	at APIRestController.proxy(APIRestController.java:134)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -5077,7 +5077,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$d6e03733.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$d6e03733.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -5238,9 +5238,9 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 2021-10-16 17:04:42,043 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Completed initialization in 0 ms
 2021-10-16 17:04:44,114 WARN org.apache.juli.logging.DirectJDKLog [http-nio-80-exec-3] Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [112] milliseconds.
 2021-10-16 17:04:46,629 WARN org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver [http-nio-80-exec-2] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`); nested exception is com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`)
- at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: ru.jm.crud.model.HTTPRequest["postData"])]
+ at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: HTTPRequest["postData"])]
 2021-10-16 17:04:46,629 WARN org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver [http-nio-80-exec-3] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`); nested exception is com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`)
- at [Source: (PushbackInputStream); line: 1, column: 72] (through reference chain: ru.jm.crud.model.HTTPRequest["postData"])]
+ at [Source: (PushbackInputStream); line: 1, column: 72] (through reference chain: HTTPRequest["postData"])]
 2021-10-16 17:04:46,803 ERROR org.apache.juli.logging.DirectJDKLog [http-nio-80-exec-4] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [Пользователя с таким id не существует. Возможно вы не использовали необходимый заголовок при запросе.]] with root cause
 org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [Пользователя с таким id не существует. Возможно вы не использовали необходимый заголовок при запросе.]
 	at org.springframework.web.client.HttpClientErrorException.create(HttpClientErrorException.java:101)
@@ -5251,7 +5251,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:134)
+	at APIRestController.proxy(APIRestController.java:134)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -5265,7 +5265,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$a693fc8e.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$a693fc8e.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -5591,9 +5591,9 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 2021-10-16 17:11:16,518 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Initializing Servlet 'dispatcherServlet'
 2021-10-16 17:11:16,519 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Completed initialization in 1 ms
 2021-10-16 17:11:20,415 WARN org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver [http-nio-80-exec-2] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`); nested exception is com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`)
- at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: ru.jm.crud.model.HTTPRequest["postData"])]
+ at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: HTTPRequest["postData"])]
 2021-10-16 17:11:20,438 WARN org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver [http-nio-80-exec-3] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`); nested exception is com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`)
- at [Source: (PushbackInputStream); line: 1, column: 72] (through reference chain: ru.jm.crud.model.HTTPRequest["postData"])]
+ at [Source: (PushbackInputStream); line: 1, column: 72] (through reference chain: HTTPRequest["postData"])]
 2021-10-16 17:11:20,529 ERROR org.apache.juli.logging.DirectJDKLog [http-nio-80-exec-4] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [Пользователя с таким id не существует. Возможно вы не использовали необходимый заголовок при запросе.]] with root cause
 org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [Пользователя с таким id не существует. Возможно вы не использовали необходимый заголовок при запросе.]
 	at org.springframework.web.client.HttpClientErrorException.create(HttpClientErrorException.java:101)
@@ -5604,7 +5604,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:134)
+	at APIRestController.proxy(APIRestController.java:134)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -5618,7 +5618,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$8788946f.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$8788946f.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -5812,7 +5812,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 2021-10-16 17:26:03,780 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Initializing Servlet 'dispatcherServlet'
 2021-10-16 17:26:03,781 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Completed initialization in 1 ms
 2021-10-16 17:26:07,343 WARN org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver [http-nio-80-exec-2] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`); nested exception is com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`)
- at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: ru.jm.crud.model.HTTPRequest["postData"])]
+ at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: HTTPRequest["postData"])]
 2021-10-16 17:26:07,457 ERROR org.apache.juli.logging.DirectJDKLog [http-nio-80-exec-3] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [Пользователя с таким id не существует. Возможно вы не использовали необходимый заголовок при запросе.]] with root cause
 org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [Пользователя с таким id не существует. Возможно вы не использовали необходимый заголовок при запросе.]
 	at org.springframework.web.client.HttpClientErrorException.create(HttpClientErrorException.java:101)
@@ -5823,7 +5823,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:134)
+	at APIRestController.proxy(APIRestController.java:134)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -5837,7 +5837,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$2155ade3.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$2155ade3.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -5940,7 +5940,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:134)
+	at APIRestController.proxy(APIRestController.java:134)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -5954,7 +5954,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$2155ade3.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$2155ade3.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -6114,7 +6114,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 2021-10-16 17:30:29,577 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Initializing Servlet 'dispatcherServlet'
 2021-10-16 17:30:29,578 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Completed initialization in 1 ms
 2021-10-16 17:30:33,793 WARN org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver [http-nio-80-exec-2] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`); nested exception is com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`)
- at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: ru.jm.crud.model.HTTPRequest["postData"])]
+ at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: HTTPRequest["postData"])]
 2021-10-16 17:30:33,881 ERROR org.apache.juli.logging.DirectJDKLog [http-nio-80-exec-3] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [Пользователя с таким id не существует. Возможно вы не использовали необходимый заголовок при запросе.]] with root cause
 org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [Пользователя с таким id не существует. Возможно вы не использовали необходимый заголовок при запросе.]
 	at org.springframework.web.client.HttpClientErrorException.create(HttpClientErrorException.java:101)
@@ -6125,7 +6125,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:134)
+	at APIRestController.proxy(APIRestController.java:134)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -6139,7 +6139,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$f3b8f0d4.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$f3b8f0d4.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -6242,7 +6242,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:134)
+	at APIRestController.proxy(APIRestController.java:134)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -6256,7 +6256,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$f3b8f0d4.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$f3b8f0d4.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -6384,7 +6384,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 2021-10-16 17:31:17,311 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Completed initialization in 1 ms
 2021-10-16 17:31:18,688 WARN org.apache.juli.logging.DirectJDKLog [http-nio-80-exec-3] Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [116] milliseconds.
 2021-10-16 17:31:21,911 WARN org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver [http-nio-80-exec-2] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`); nested exception is com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`)
- at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: ru.jm.crud.model.HTTPRequest["postData"])]
+ at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: HTTPRequest["postData"])]
 2021-10-16 17:31:22,025 ERROR org.apache.juli.logging.DirectJDKLog [http-nio-80-exec-3] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [Пользователя с таким id не существует. Возможно вы не использовали необходимый заголовок при запросе.]] with root cause
 org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [Пользователя с таким id не существует. Возможно вы не использовали необходимый заголовок при запросе.]
 	at org.springframework.web.client.HttpClientErrorException.create(HttpClientErrorException.java:101)
@@ -6395,7 +6395,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:134)
+	at APIRestController.proxy(APIRestController.java:134)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -6409,7 +6409,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$ef4062d3.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$ef4062d3.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -6512,7 +6512,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:777)
 	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:711)
 	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:631)
-	at ru.jm.crud.controller.APIRestController.proxy(APIRestController.java:134)
+	at APIRestController.proxy(APIRestController.java:134)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -6526,7 +6526,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:186)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIRestController$$EnhancerBySpringCGLIB$$ef4062d3.proxy(<generated>)
+	at APIRestController$$EnhancerBySpringCGLIB$$ef4062d3.proxy(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -7023,7 +7023,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 2021-10-16 17:45:11,613 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Completed initialization in 1 ms
 2021-10-16 17:45:12,709 WARN org.apache.juli.logging.DirectJDKLog [http-nio-80-exec-3] Creation of SecureRandom instance for session ID generation using [SHA1PRNG] took [113] milliseconds.
 2021-10-16 17:45:16,448 WARN org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver [http-nio-80-exec-2] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`); nested exception is com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`)
- at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: ru.jm.crud.model.HTTPRequest["postData"])]
+ at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: HTTPRequest["postData"])]
 2021-10-16 17:46:19,562 INFO org.springframework.orm.jpa.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
 2021-10-16 17:46:19,562 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
 2021-10-16 17:46:19,578 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
@@ -7058,7 +7058,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 2021-10-16 17:46:28,201 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Initializing Servlet 'dispatcherServlet'
 2021-10-16 17:46:28,201 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Completed initialization in 0 ms
 2021-10-16 17:46:32,467 WARN org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver [http-nio-80-exec-2] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`); nested exception is com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`)
- at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: ru.jm.crud.model.HTTPRequest["postData"])]
+ at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: HTTPRequest["postData"])]
 2021-10-16 17:46:57,812 INFO org.springframework.orm.jpa.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
 2021-10-16 17:46:57,812 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
 2021-10-16 17:46:57,812 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
@@ -7093,7 +7093,7 @@ org.springframework.web.client.HttpClientErrorException$BadRequest: 400 : [По�
 2021-10-16 17:47:06,839 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Initializing Servlet 'dispatcherServlet'
 2021-10-16 17:47:06,840 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Completed initialization in 1 ms
 2021-10-16 17:47:10,396 WARN org.springframework.web.servlet.handler.AbstractHandlerExceptionResolver [http-nio-80-exec-2] Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`); nested exception is com.fasterxml.jackson.databind.exc.MismatchedInputException: Cannot deserialize value of type `java.lang.String` from Object value (token `JsonToken.START_OBJECT`)
- at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: ru.jm.crud.model.HTTPRequest["postData"])]
+ at [Source: (PushbackInputStream); line: 1, column: 73] (through reference chain: HTTPRequest["postData"])]
 2021-10-16 17:47:56,896 INFO org.springframework.orm.jpa.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
 2021-10-16 17:47:56,912 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
 2021-10-16 17:47:56,928 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.

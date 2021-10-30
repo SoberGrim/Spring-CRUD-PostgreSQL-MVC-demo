@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Test page</title>
+    <link rel="icon" type="image/png" href="/favicon.png"/>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/signin.css"/>
+    <script>
+        function request(url, method, postData) {
+            let HTTPRequest = {
+                url: url,
+                method: method,
+                postData: postData
+            };
+            return fetch('/api/proxy', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json;charset=utf-8',
+                },
+                body: JSON.stringify(HTTPRequest)
+            });
+        }
+
+        async function getHash() {
+            let url = 'http://91.241.64.178:7081/api/users';
+
+            let userPromise = await request(url, 'GET', '');
+            let user = await userPromise.json();
+
+            let part1Promise = await request(url, 'POST', JSON.stringify({id: 3, name: 'James', lastName: 'Brown', age: '33'}));
+            let part1 = await part1Promise.text();
+
+            let part2Promise = await request(url, 'PUT', JSON.stringify({id: 3, name: 'Thomas', lastName: 'Shelby', age: '33'}));
+            let part2 = await part2Promise.text();
+
+            let part3Promise = await request(url + '/3', 'DELETE', '');
+            let part3 = await part3Promise.text();
+
+            $('#userData').html(JSON.stringify(user));
+            $('#resultDiv').html(part1 + part2 + part3);
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <br><br>
+        <form class="form-signin" >
+            <h2>Confirm test request:</h2>
+            <div id="userData">[{}]</div><br>
+            <div id="resultDiv">************</div><br>
+            <button type="button" onclick="getHash()">Get Hash</button>&nbsp;&nbsp;<button type="button" onclick="location.href = '/login';">Return</button>
+        </form>
+    </div>
+</body>
+</html>

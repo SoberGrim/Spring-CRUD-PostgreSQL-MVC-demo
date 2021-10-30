@@ -12407,8 +12407,8 @@ org.attoparser.ParseException: (Line = 394, Column = 50) Malformed markup: Attri
 2021-10-13 14:32:53,180 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-80-exec-1] Completed initialization in 1 ms
 2021-10-13 14:32:59,754 ERROR org.apache.juli.logging.DirectJDKLog [http-nio-80-exec-8] Servlet.service() for servlet [dispatcherServlet] in context with path [] threw exception [Request processing failed; nested exception is java.lang.NullPointerException] with root cause
 java.lang.NullPointerException: null
-	at ru.jm.crud.controller.APIController.getPrincipal(APIController.java:55)
-	at ru.jm.crud.controller.APIController.getGuestHTML(APIController.java:49)
+	at APIController.getPrincipal(APIController.java:55)
+	at APIController.getGuestHTML(APIController.java:49)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -12419,7 +12419,7 @@ java.lang.NullPointerException: null
 	at org.springframework.aop.framework.ReflectiveMethodInvocation.proceed(ReflectiveMethodInvocation.java:163)
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:750)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:692)
-	at ru.jm.crud.controller.APIController$$EnhancerBySpringCGLIB$$750341a6.getGuestHTML(<generated>)
+	at APIController$$EnhancerBySpringCGLIB$$750341a6.getGuestHTML(<generated>)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
@@ -12700,7 +12700,7 @@ org.springframework.beans.factory.BeanCreationException: Error creating bean wit
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:338)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1343)
 	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1332)
-	at ru.jm.crud.Application.main(Application.java:14)
+	at Application.main(Application.java:14)
 Caused by: org.springframework.beans.BeanInstantiationException: Failed to instantiate [javax.servlet.Filter]: Factory method 'springSecurityFilterChain' threw exception; nested exception is java.lang.IllegalStateException: At least one mapping is required (i.e. authorizeRequests().anyRequest().authenticated())
 	at org.springframework.beans.factory.support.SimpleInstantiationStrategy.instantiate(SimpleInstantiationStrategy.java:185)
 	at org.springframework.beans.factory.support.ConstructorResolver.instantiate(ConstructorResolver.java:653)
