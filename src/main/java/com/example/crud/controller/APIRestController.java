@@ -1,7 +1,6 @@
 package com.example.crud.controller;
 
 import com.example.crud.model.User;
-import com.example.crud.repository.UserRepository;
 import com.example.crud.service.UserService;
 import org.springframework.http.*;
 import org.springframework.security.access.annotation.Secured;
@@ -26,7 +25,7 @@ public class APIRestController {
     final RoleService roleService;
 
     @Autowired
-    public APIRestController(UserService service, UserRepository repository , RoleService roleService) {
+    public APIRestController(UserService service , RoleService roleService) {
         this.service = service;
         this.roleService = roleService;
     }

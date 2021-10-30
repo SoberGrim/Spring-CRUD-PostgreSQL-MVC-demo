@@ -65,7 +65,7 @@ public class User implements UserDetails {
     private String password;
 
     @NotNull
-    @Column(name = "firstname", nullable = false, length = 60, columnDefinition = "NVARCHAR(60)")
+    @Column(name = "firstname", nullable = false, length = 60, columnDefinition = "VARCHAR(60)")
     @NotBlank(message = "Name should not be empty")
     @Size(max = 60, message = "Name should be less than 60 characters")
     @Nationalized
